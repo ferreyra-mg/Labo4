@@ -1,6 +1,7 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import dao.ClienteDao;
+import daoImpl.ClienteDaoImpl;
 import entidad.Administrador;
 import entidad.Cliente;
 import negocio.AdministradorNegocio;
@@ -79,6 +82,7 @@ public class ServletBanco extends HttpServlet {
 				} 
 		}
 			
+        cargarClientes(request);
 		if (rd == null) rd = request.getRequestDispatcher("/Login.jsp");
 		rd.forward(request, response);
 		
@@ -86,5 +90,11 @@ public class ServletBanco extends HttpServlet {
 		
 		
 	}
+	
+    private void cargarClientes(HttpServletRequest request) {
+        ClienteDao CliDao = new ClienteDaoImpl();
+        ArrayList<Cliente> listaTClientes = CliDao.obtenerTodosLosClientes();
+        request.setAttribute("listaTClientes", listaTClientes);
+    }
 
 }

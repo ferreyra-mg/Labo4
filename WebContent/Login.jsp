@@ -5,6 +5,18 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" type="text/css" href="CSS/styles.css">
 <title>Login</title>
+<script>
+function TextoPass(id) {
+    var passwordFields = document.querySelectorAll('.password-field');
+    passwordFields.forEach(function(passwordField) {
+    if (passwordField.type === "password") {
+        passwordField.type = "text";
+    } else {
+        passwordField.type = "password";
+    }
+    });
+}
+</script>
 </head>
 <body>
 <div class="page-login">
@@ -14,17 +26,21 @@
                 <form id="login" method="post" action="ServletBanco">
                     <div class="login__field">
                         <i class="login__icon fas fa-user"></i>
-                        <input type="text" class="login__input" placeholder="Ingrese su nombre" name="txt_user" required>
+                        <input type="text" class="login__input" placeholder="Ingrese su usuario" name="txt_user" required>
                     </div>
                     
                     <div class="login__field">
                         <i class="login__icon fas fa-lock"></i>
-                        <input type="password" class="login__input" placeholder="Contrasenia" name="psw1" required>
+                        <input type="password" class="login__input password-field" placeholder="Contrasenia" name="psw1" required>
                     </div>
                     
                     <div class="login__field">
                         <i class="login__icon fas fa-lock"></i>
-                        <input type="password" class="login__input" placeholder="Repita su contrasenia" name="psw2" required>
+                        <input type="password" class="login__input password-field" placeholder="Repita su contrasenia" name="psw2" required>
+                    </div>
+                    
+					<div class="login__field">
+                        <input type="checkbox" onclick="TextoPass()"> Mostrar contraseñas
                     </div>
 
                     <div class="error-message">

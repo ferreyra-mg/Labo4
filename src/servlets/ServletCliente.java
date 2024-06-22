@@ -35,8 +35,7 @@ public class ServletCliente extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+
 	}
 
 	/**
@@ -49,8 +48,7 @@ public class ServletCliente extends HttpServlet {
 		boolean confirmacionInsert = false;
 		
 		ClienteDao CliDao = new ClienteDaoImpl();
-		ArrayList<Cliente> listaTClientes = CliDao.obtenerTodosLosClientes();
-		request.setAttribute("listaTClientes", listaTClientes);
+
 
 		if(request.getParameter("btnAceptar")!=null) 
 		{
@@ -90,10 +88,19 @@ public class ServletCliente extends HttpServlet {
 				// TODO: handle exception
 			}
 			 
+	        cargarClientes(request);
+	        rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
+	        rd.forward(request, response);
 		}
 				
 		rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
 		rd.forward(request, response);
 	}
+	
+    private void cargarClientes(HttpServletRequest request) {
+        ClienteDao CliDao = new ClienteDaoImpl();
+        ArrayList<Cliente> listaTClientes = CliDao.obtenerTodosLosClientes();
+        request.setAttribute("listaTClientes", listaTClientes);
+    }
 
 }

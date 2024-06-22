@@ -110,23 +110,38 @@
 <div class="tr2">
  
  <% 
- 	ArrayList<Cliente>listaClientes = null;
+/*  	ArrayList<Cliente>listaClientes = null;
  	if(request.getAttribute("listaTClientes")!=null)
  	{
 		listaClientes = (ArrayList<Cliente>) request.getAttribute("listaTClientes");
- 	} %>
- 
- 
- 
- <table border="1">
- 	<tr> <th>DNI</th> <th>NOMBRE</th> <th>APELLIDO</th> </tr>
+ 	}  */
  	
- 	<%if(listaClientes != null)
- 	for(Cliente cliente : listaClientes)
- 	{
+ 	ArrayList<Cliente> listaClientes = (ArrayList<Cliente>) request.getAttribute("listaTClientes");
+ 	
  	%>
- 	<tr> <td><%=cliente.getDni() %></td>  <td><%=cliente.getNombre() %></td> <td><%=cliente.getApellido() %></td> </tr>
- 	<% } %>
+ 	
+ 	
+ 	
+ 
+ 
+ 
+ <table border="1" class="display">
+ 	<tr> 
+ 		<th>DNI</th> 
+ 		<th>NOMBRE</th> 
+ 		<th>APELLIDO</th> 
+ 	</tr>
+ 	
+ 	<%if(listaClientes != null){
+ 	for(Cliente cliente : listaClientes)
+ 		{ %>
+ 	<tr> 
+ 		<td><%=cliente.getDni() %></td>  
+ 		<td><%=cliente.getNombre() %></td> 
+ 		<td><%=cliente.getApellido() %></td> 
+ 	</tr>
+ 	<% } 
+ 	}%>
  </table>
 	
 
