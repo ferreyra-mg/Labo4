@@ -41,8 +41,7 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 
 	@Override
 	public ArrayList<Cuenta> obtenerTodasLasCuentas(int dni) {
-		// TODO Auto-generated method stub
-		return null;
+		return (new CuentaDaoImpl()).obtenerTodasLasCuentas(dni);
 	}
 
 	@Override

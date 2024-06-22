@@ -3,8 +3,7 @@ package entidad;
 import java.util.ArrayList;
 import java.util.Date;
 
-import daoImpl.ClienteDaoImpl;
-import daoImpl.CuentaDaoImpl;
+import negocioImpl.CuentaNegocioImpl;
 
 public class Cliente {
 
@@ -83,6 +82,6 @@ public class Cliente {
 	public void setContrasena(String contrasena) { this.contrasena = contrasena; }
 	
 	public ArrayList<Cuenta> cuentas() {
-		return (new CuentaDaoImpl()).obtenerTodasLasCuentas(this.dni) ;
+		return (new CuentaNegocioImpl()).obtenerTodasLasCuentas(this.dni) ;
 	}
 }
