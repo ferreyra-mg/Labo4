@@ -18,6 +18,11 @@ public class ClienteDaoImpl implements ClienteDao {
 	
 	private static final String listarClientes = "SELECT * FROM bdbanco.cliente";
 	
+	private static final String update = "UPDATE cliente SET cuil = ?, nombre = ?, apellido = ?, sexo = ?, nacionalidad = ?, "
+			+ "fechaNacimiento = ?, direccion = ?, localidad = ?, provincia = ?, correoElectronico = ?, telefono = ?, contrasena = ? WHERE dni = ?;";
+	
+	private static final String clienteXdni = "SELECT * FROM cliente WHERE dni = ?;";
+	
 	@Override
 	public boolean agregarCliente(Cliente cliente) {
 		
@@ -27,13 +32,12 @@ public class ClienteDaoImpl implements ClienteDao {
 		    try {
 		        
 		    	statement = conexion.prepareStatement(insert);
-		        statement.setInt(1, cliente.getDni()); 
+		    	statement.setInt(1, cliente.getDni()); 
 		        statement.setString(2, cliente.getCuil()); 
 		        statement.setString(3, cliente.getNombre()); 
 		        statement.setString(4, cliente.getApellido()); 
 		        statement.setBoolean(5, cliente.getSexo()); 
 		        statement.setString(6, cliente.getNacionalidad()); 
-		        //statement.setDate(7, new java.sql.Date(cliente.getFechaNacimiento().getTime()));
 		        statement.setDate(7, (Date) cliente.getFechaNacimiento());
 		        statement.setString(8, cliente.getDireccion()); 
 		        statement.setString(9, cliente.getLocalidad()); 
@@ -41,6 +45,7 @@ public class ClienteDaoImpl implements ClienteDao {
 		        statement.setString(11, cliente.getCorreoElectronico()); 
 		        statement.setInt(12, cliente.getTelefono()); 
 		        statement.setString(13, cliente.getContrasena()); 
+		        
 		    			        
       
 		        if (statement.executeUpdate() > 0) {
@@ -60,9 +65,41 @@ public class ClienteDaoImpl implements ClienteDao {
 	}
 
 	@Override
-	public void modificarCliente(Cliente cliente) {
-		// TODO Auto-generated method stub
-		
+	public boolean modificarCliente(Cliente cliente) {
+		PreparedStatement statement;
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		boolean esExitoso = false;
+	    try {
+	    	statement = conexion.prepareStatement(update);  
+	        statement.setString(1, cliente.getCuil()); 
+	        statement.setString(2, cliente.getNombre()); 
+	        statement.setString(3, cliente.getApellido()); 
+	        statement.setBoolean(4, cliente.getSexo()); 
+	        statement.setString(5, cliente.getNacionalidad()); 
+	        statement.setDate(6, (Date) cliente.getFechaNacimiento());
+	        statement.setString(7, cliente.getDireccion()); 
+	        statement.setString(8, cliente.getLocalidad()); 
+	        statement.setString(9, cliente.getProvincia()); 
+	        statement.setString(10, cliente.getCorreoElectronico()); 
+	        statement.setInt(11, cliente.getTelefono()); 
+	        statement.setString(12, cliente.getContrasena());
+	        statement.setInt(13, cliente.getDni()); 
+	        
+	        
+	        
+	        if (statement.executeUpdate() > 0) {
+	            conexion.commit();
+	            esExitoso = true;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        try {
+	            conexion.rollback();
+	        } catch (SQLException e1) {
+	            e1.printStackTrace();
+	        }
+	    }
+	    return esExitoso;
 	}
 
 	@Override
@@ -119,8 +156,48 @@ public class ClienteDaoImpl implements ClienteDao {
 	
 	@Override
 	public Cliente obtenerCliente(int dni) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con = Conexion.getConexion().getSQLConexion();
+		PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Cliente cli = new Cliente();
+        
+        try {
+			stmt = con.prepareStatement(clienteXdni);
+			stmt.setInt(1, dni);
+			rs = stmt.executeQuery();
+			
+			
+			
+			if(rs.next()){		
+				
+				cli.setDni(rs.getInt("dni"));
+				cli.setCuil(rs.getString("cuil"));
+				cli.setNombre(rs.getString("nombre"));
+				cli.setApellido(rs.getString("apellido"));
+				cli.setSexo(rs.getBoolean("sexo"));
+				cli.setNacionalidad(rs.getString("nacionalidad"));
+				cli.setFechaNacimiento(rs.getDate("fechaNacimiento"));
+				cli.setDireccion(rs.getString("direccion"));
+				cli.setLocalidad(rs.getString("localidad"));
+				cli.setProvincia(rs.getString("provincia"));
+				cli.setCorreoElectronico(rs.getString("correoElectronico"));
+				cli.setTelefono(rs.getInt("telefono"));
+				cli.setContrasena(rs.getString("contrasena"));				
+
+			}
+		} catch (Exception e5) {
+			e5.printStackTrace();
+		}
+        finally {
+        	 try {
+             	if (rs != null) rs.close();
+                 if (stmt != null) stmt.close();
+             } catch (SQLException e) {
+                 e.printStackTrace();
+             }
+		}
+        
+        return cli;
 	}
 	
 	@Override

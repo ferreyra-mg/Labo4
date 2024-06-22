@@ -120,10 +120,6 @@
  	
  	%>
  	
- 	
- 	
- 
- 
  
  <table border="1" class="display">
  	<tr> 
@@ -136,9 +132,12 @@
  	for(Cliente cliente : listaClientes)
  		{ %>
  	<tr> 
- 		<td><%=cliente.getDni() %></td>  
+ 		<form action="ServletCliente" method="Post">
+ 		<td><%=cliente.getDni() %><input type="hidden" name="dniCliente" value="<%=cliente.getDni() %>"> </td>  
  		<td><%=cliente.getNombre() %></td> 
- 		<td><%=cliente.getApellido() %></td> 
+ 		<td><%=cliente.getApellido() %></td>
+ 		<td><input type="submit" name="btnModificar" value="Modificar"></td>
+ 		</form>
  	</tr>
  	<% } 
  	}%>
@@ -146,6 +145,83 @@
 	
 
 </div>
+
+<% Cliente clienteModif = null;
+   clienteModif = (Cliente)request.getAttribute("clienteModificar");%>
+
+<%if(clienteModif != null){ %>
+
+<div class="tr3">
+		<p>Modificar Cliente</p>
+		
+        <form action="ServletCliente" method="post" style="display:grid; grid-template-columns: repeat(3, 1fr)">
+                
+            <label for="dniM">DNI:
+            	<input type="text" id="dniM" name="dniM" value="<%= clienteModif.getDni() %>" readonly>
+            </label>
+            
+            <label for="cuilM">CUIL:
+            	<input type="text" id="cuilM" name="cuilM" value="<%= clienteModif.getCuil() %>">
+            </label>
+            
+            <label for="nombreM">NOMBRE:
+            	<input type="text" id="nombreM" name="nombreM" value="<%= clienteModif.getNombre() %>">
+           	</label>
+           	
+            <label for="apellidoM">APELLIDO:
+            	<input type="text" id="apellidoM" name="apellidoM" value="<%= clienteModif.getApellido() %>">
+            </label>
+            
+            <label for="sexoM" style="display: flex; align-items: center;">SEXO:
+    		<input type="radio" id="sexoMM" name="sexM" value="true" style="margin-left: 30px;" <%= clienteModif.getSexo() ? "checked" : "" %>>
+    		<label for="sexoMM" style="margin-left: 5px; font-weight: normal; font-size: small;">Masculino</label>
+    		<input type="radio" id="sexoFM" name="sexM" value="false" style="margin-left: 10px;" <%= !clienteModif.getSexo() ? "checked" : "" %>>
+    		<label for="sexoFM" style="margin-left: 5px; font-weight: normal; font-size: small;">Femenino</label>
+			</label>
+            
+            <label for="direccionM">DIRECCION:
+	            <input type="text" id="direccionM" name="direccionM" value="<%= clienteModif.getDireccion() %>">
+            </label>
+            
+            <label for="nacionalidadM">NACIONALIDAD:
+            	<input type="text" id="nacionalidadM" name="nacionalidadM" value="<%= clienteModif.getNacionalidad() %>">
+            </label>
+            
+            <label for="fechaNacimientoM">FECHA NAC.:
+            	<input type="date" id="fechaNacimientoM" name="fechaNacimientoM" value="<%= clienteModif.getFechaNacimiento() != null ? clienteModif.getFechaNacimiento().toString() : "" %>">
+            </label>
+            
+            
+             <label for="localidadM">LOCALIDAD:
+            	<input type="text" id="localidadM" name="localidadM" value="<%= clienteModif.getLocalidad() %>">
+            </label>
+            
+            <label for="provinciaM">PROVINCIA:
+            	<input type="text" id="provinciaM" name="provinciaM" value="<%= clienteModif.getProvincia() %>">
+            </label>
+            
+            <label for="correoM">CORREO:
+            	<input type="email" id="correoM" name="correoM" value="<%= clienteModif.getCorreoElectronico() %>">
+            </label>
+            
+            <label for="telefonoM">TELEFONO:
+           		<input type="text" id="telefonoM" name="telefonoM" value="<%= clienteModif.getTelefono() %>">
+            </label>
+  
+            
+            <br><br>            
+            
+            <label for="contra1M">CONTRASEÑA:
+            	<input type="password" id="contra1M" name="contra1M" value="<%= clienteModif.getContrasena() %>">
+            </label>
+            <label for="contra2M">REPETIR CONTRASEÑA:
+            	<input type="password" id="contra2M" name="contra2M" value="<%= clienteModif.getContrasena() %>">
+            </label>
+            <br><br>
+            <input type="submit" name="btnConfirModif" class="btn-aceptar" value="Confirmar modificacion">
+        </form>
+</div>
+<%} %>
 
 </body>
 </html>
