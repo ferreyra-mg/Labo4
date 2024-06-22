@@ -14,10 +14,9 @@
 
 	
 	<nav class="mask">
-		[nombre del usuario]
 		
 		<div class="name-user">
-			<%= request.getAttribute("nm_user") != null ? request.getAttribute("msj_error") : "" %>
+			<%= session.getAttribute("nm_user") != null ? session.getAttribute("nm_user") : "" %>
 		</div>
 		
 		<ul class="list">

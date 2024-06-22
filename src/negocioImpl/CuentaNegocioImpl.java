@@ -12,9 +12,7 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	
 	@Override 
 	public String obtenerUsuario(int dni) {
-		String user_name = "No existen cuentas";
-		
-		return user_name;
+		return cuentaDao.obtenerUsuario(dni);
 	}
 
 	@Override

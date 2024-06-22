@@ -12,7 +12,9 @@
 <body class="cl">
 	
 	<nav class="mask">
-		[nombre del usuario]
+		<div class="name-user">
+			<%= session.getAttribute("nm_user") != null ? session.getAttribute("nm_user") : "" %>
+		</div>
 		<ul class="list">
 			<li><a href="Cliente_Transferencia.jsp">Transferencia</a></li>
 			<li><a href="Cliente_Home.jsp">Historial</a></li>

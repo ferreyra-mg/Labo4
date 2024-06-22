@@ -22,8 +22,10 @@
 	%>
 
 	<nav class="mask">
-		
-		<%= cli.getApellido() + ", " + cli.getNombre() %>
+		<div class="name-user">
+			<%= session.getAttribute("nm_user") != null ? session.getAttribute("nm_user") : "" %>
+		</div>
+		<!-- <%= cli.getApellido() + ", " + cli.getNombre() %> -->
 		<ul class="list">
 			<li><a href="Cliente_Transferencia.jsp">Transferencia</a></li>
 			<li><a href="Cliente_Home.jsp">Historial</a></li>

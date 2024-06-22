@@ -14,8 +14,10 @@ import entidad.Administrador;
 import entidad.Cliente;
 import negocio.AdministradorNegocio;
 import negocio.ClienteNegocio;
+import negocio.CuentaNegocio;
 import negocioImpl.AdministradorNegocioImpl;
 import negocioImpl.ClienteNegocioImpl;
+import negocioImpl.CuentaNegocioImpl;
 
 
 @WebServlet("/ServletBanco")
@@ -23,6 +25,7 @@ public class ServletBanco extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	private ClienteNegocio clNeg = new ClienteNegocioImpl();
+	private CuentaNegocio cuNeg = new CuentaNegocioImpl();
 	private AdministradorNegocio adNeg = new AdministradorNegocioImpl();
        
     public ServletBanco() {
@@ -50,7 +53,6 @@ public class ServletBanco extends HttpServlet {
 		
 		
 		Administrador ad = adNeg.logear(usuario, contra1);
-		
 		if(ad != null)
 		{
 			HttpSession session = request.getSession();
@@ -66,7 +68,8 @@ public class ServletBanco extends HttpServlet {
 				session.setAttribute("usuarioLogueado", cl);
 				session.setAttribute("tipoUsuario", "cliente");
 				// almaceno el nombre de la primera cuenta
-				request.setAttribute("nm_user", clNeg.obtenerUsuario(cl.getDni()));
+				request.setAttribute("nm_user", cuNeg.obtenerUsuario(cl.getDni()));
+				session.setAttribute("nm_user", request.getAttribute("nm_user"));
 			//se logeo el cliente
 			rd = request.getRequestDispatcher("/Cliente_Home.jsp");
 			}
@@ -78,6 +81,9 @@ public class ServletBanco extends HttpServlet {
 			
 		if (rd == null) rd = request.getRequestDispatcher("/Login.jsp");
 		rd.forward(request, response);
+		
+		
+		
 		
 	}
 
