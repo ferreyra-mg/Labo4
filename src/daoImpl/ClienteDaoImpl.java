@@ -164,9 +164,7 @@ public class ClienteDaoImpl implements ClienteDao {
         try {
 			stmt = con.prepareStatement(clienteXdni);
 			stmt.setInt(1, dni);
-			rs = stmt.executeQuery();
-			
-			
+			rs = stmt.executeQuery();					
 			
 			if(rs.next()){		
 				
