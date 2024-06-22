@@ -1,0 +1,189 @@
+CREATE DATABASE bdBanco;
+USE bdBanco;
+
+/* TABLAS PARA USAR DE TIPO LISTA */
+
+CREATE TABLE Pais (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    pais VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE tipo_cuenta(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    descripcion VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE tipo_movimiento (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    descripcion VARCHAR(50)
+);
+
+/* LAS TABLAS QUE SE USAN */
+
+CREATE TABLE administrador (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(50) NOT NULL,
+    contrasena VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE cliente (
+    dni INT AUTO_INCREMENT PRIMARY KEY,
+    cuil VARCHAR(12) NOT NULL UNIQUE,
+    nombre VARCHAR(50) NOT NULL,
+    apellido VARCHAR(50) NOT NULL,
+    sexo bit,
+    nacionalidad VARCHAR(100),
+    fechaNacimiento DATE NOT NULL,
+    direccion VARCHAR(100),
+    localidad VARCHAR(100),
+    provincia VARCHAR(100),
+    correoElectronico VARCHAR(100) NOT NULL,
+    telefono INT,
+    contrasena VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE cuenta (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario VARCHAR(50) NOT NULL,
+    dni INT NOT NULL,
+    cbu VARCHAR(22) NOT NULL UNIQUE,
+    fechaCreacion DATE NOT NULL,
+    tipoCuenta VARCHAR(50) NOT NULL,
+    numeroCuenta TINYINT NOT NULL UNIQUE,
+    saldo DECIMAL(15, 2) DEFAULT 10000,
+    estado BIT NOT NULL DEFAULT 1,
+    FOREIGN KEY (dni) REFERENCES cliente(dni)
+);
+
+CREATE TABLE prestamo (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_Cuenta INT,
+    cant_Meses INT NOT NULL,
+    fecha DATE NOT NULL,
+    capitalPedido DECIMAL(15, 2) NOT NULL,
+    montoMensual DECIMAL(15, 2) NOT NULL,
+    montoTotal DECIMAL(15,2) NOT NULL,
+    pagado BIT DEFAULT 0,
+    peticion BIT,
+    FOREIGN KEY (id_Cuenta) REFERENCES Cuenta(id)
+);
+
+CREATE TABLE cuota(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_prestamo INT NOT NULL,
+    pagado DECIMAL(15,2) NOT NULL,
+    fecha DATE,
+    FOREIGN KEY (id_prestamo) REFERENCES prestamo(id)
+);
+
+CREATE TABLE movimiento (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    id_Cuenta INT,
+    fecha DATE NOT NULL,
+    tipo VARCHAR(50) NOT NULL,
+    FOREIGN KEY (id_Cuenta) REFERENCES cuenta(id)
+);
+
+CREATE TABLE transferencia (
+    id_movimiento INT NOT NULL,
+    id_recibe INT NOT NULL,
+    monto DECIMAL(15,2) NOT NULL,
+    PRIMARY KEY (id_movimiento),
+    FOREIGN KEY (id_movimiento) REFERENCES movimiento(id)
+);
+
+/*  TIPO DE CUENTA */
+INSERT INTO tipo_cuenta (id, descripcion) VALUES (1, 'caja ahorro');
+INSERT INTO tipo_cuenta (id, descripcion) VALUES (2, 'cuenta corriente');
+
+/* PAIS */
+INSERT INTO Pais (pais) VALUES ('Argentina');
+INSERT INTO Pais (pais) VALUES ('Bolivia');
+INSERT INTO Pais (pais) VALUES ('Brasil');
+INSERT INTO Pais (pais) VALUES ('Chile');
+INSERT INTO Pais (pais) VALUES ('Colombia');
+INSERT INTO Pais (pais) VALUES ('Costa Rica');
+
+/* TIPO DE MOVIMIENTO */
+INSERT INTO tipo_movimiento (descripcion) VALUES ('Alta cuenta');
+INSERT INTO tipo_movimiento (descripcion) VALUES ('Alta de prestamo');
+INSERT INTO tipo_movimiento (descripcion) VALUES ('Pago Prestamo');
+INSERT INTO tipo_movimiento (descripcion) VALUES ('Transferencia');
+
+/* ADMIN */
+INSERT INTO administrador (usuario, contrasena) VALUES ('adminPRO', '1234');
+
+/* CLIENTES */
+INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
+VALUES ('11222222', '20345678901', 'Juan', 'Perez', 1, 'Argentina', '1990-05-15', 'Calle Falsa 123', 'Ciudad Autonoma de Buenos Aires', 'Buenos Aires', 'juanperez@gmail.com', 112334455, 'contrasena123');
+INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
+VALUES ('33222222', '40567890123', 'Luis', 'Martinez', 1, 'Chile', '1995-01-10', 'Ruta 7 km 89', 'Rosario', 'Santa Fe', 'luismartinez@yahoo.com', 334455667, 'contrasenia456');
+INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
+VALUES ('22222222', '50678901234', 'Ana', 'Rodriguez', 0, 'Chile', '1988-11-25', 'Av. Libertador 789', 'Mendoza', 'Mendoza', 'anarodriguez@gmail.com', 445667788, 'pass1234');
+INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
+VALUES ('44222222', '60789012345', 'Diego', 'Lopez', 1, 'Chile', '1983-04-30', 'Calle Real 567', 'La Plata', 'Buenos Aires', 'diegolopez@hotmail.com', 556677899, 'clave5678');
+INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
+VALUES ('55222222', '70890123456', 'Carla', 'Garcia', 0, 'Chile', '1992-08-05', 'Av. Central 234', 'San Miguel de Tucuman', 'Tucuman', 'carlagarcia@yahoo.com', 667789900, 'segura789');
+INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
+VALUES ('66222222', '80901234567', 'Javier', 'Diaz', 1, 'Argentina', '1997-02-18', 'Rivadavia 456', 'Salta', 'Salta', 'javierdiaz@gmail.com', 778990011, 'password2022');
+INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
+VALUES ('77222222', '91012345678', 'Laura', 'Fernandez', 0, 'Argentina', '1980-09-12', 'Av. 9 de Julio 789', 'Quilmes', 'Buenos Aires', 'laurafernandez@hotmail.com', 889901122, 'pass123abc');
+INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
+VALUES ('88222222', '10123456789', 'Gabriel', 'Lopez', 1, 'Argentina', '1982-03-05', 'San Martin 123', 'Mar del Plata', 'Buenos Aires', 'gabriellopez@yahoo.com', 990012233, 'contrasena456xyz');
+INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
+VALUES ('99222222', '11123456780', 'Mariana', 'Suarez', 0, 'Argentina', '1993-06-28', 'Av. 25 de Mayo 567', 'Neuquen', 'Neuquen', 'marianasuarez@gmail.com', 112234455, 'clave789xyz');
+
+
+/* CUENTAS */
+INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, numeroCuenta, saldo, estado)
+VALUES ('usuario1', 11222222, '1234567890123456789012', '2023-01-15', 'cuenta corriente', 1, 15000.00, 1);
+INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, numeroCuenta, saldo, estado)
+VALUES ('usuario2', 33222222, '2345678901234567890123', '2023-02-20', 'caja ahorro', 2, 8000.00, 1);
+INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, numeroCuenta, saldo, estado)
+VALUES ('usuario3', 22222222, '3456789012345678901234', '2023-03-10', 'cuenta corriente', 3, 12000.00, 1);
+INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, numeroCuenta, saldo, estado)
+VALUES ('usuario4', 44222222, '4567890123456789012345', '2023-04-25', 'caja ahorro', 4, 20000.00, 1);
+INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, numeroCuenta, saldo, estado)
+VALUES ('usuario5', 77222222, '5678901234567890123456', '2023-05-30', 'cuenta corriente', 5, 5000.00, 1);
+
+/* PRESTAMOS */
+INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion)
+VALUES (1, 12, '2023-02-01', 5000.00, 500.00, 6000.00, 0, 1);
+INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion)
+VALUES (2, 24, '2023-03-15', 10000.00, 500.00, 12000.00, 0, 1);
+INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion)
+VALUES (3, 6, '2023-04-10', 6000.00, 1000.00, 6000.00, 0, 1);
+INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion)
+VALUES (4, 36, '2023-05-20', 15000.00, 500.00, 18000.00, 0, 1);
+INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion)
+VALUES (5, 18, '2023-06-30', 8000.00, 600.00, 10800.00, 0, 1);
+
+/* MOVIMIENTOS */
+INSERT INTO movimiento (id_Cuenta, fecha, tipo)
+VALUES (1, '2023-02-01', 'Alta cuenta');
+INSERT INTO movimiento (id_Cuenta, fecha, tipo)
+VALUES (2, '2023-03-15', 'Alta de prestamo');
+INSERT INTO movimiento (id_Cuenta, fecha, tipo)
+VALUES (3, '2023-04-10', 'Pago Prestamo');
+INSERT INTO movimiento (id_Cuenta, fecha, tipo)
+VALUES (4, '2023-05-20', 'Transferencia');
+INSERT INTO movimiento (id_Cuenta, fecha, tipo)
+VALUES (5, '2023-06-30', 'Alta cuenta');
+
+/* TRANSFERENCIAS */
+INSERT INTO transferencia (id_movimiento, id_recibe, monto)
+VALUES (4, 3, 5000.00);
+INSERT INTO transferencia (id_movimiento, id_recibe, monto)
+VALUES (5, 1, 3000.00);
+
+/* CUOTAS */
+INSERT INTO cuota (id_prestamo, pagado, fecha)
+VALUES (1, 500.00, '2023-03-01');
+INSERT INTO cuota (id_prestamo, pagado, fecha)
+VALUES (2, 500.00, '2023-04-15');
+INSERT INTO cuota (id_prestamo, pagado, fecha)
+VALUES (3, 1000.00, '2023-05-10');
+INSERT INTO cuota (id_prestamo, pagado, fecha)
+VALUES (4, 500.00, '2023-06-25');
+INSERT INTO cuota (id_prestamo, pagado, fecha)
+VALUES (5, 600.00, '2023-07-10');
