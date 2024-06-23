@@ -23,12 +23,14 @@
 
 
 <nav class="mask">
-		[nombre del usuario]
+		<div class="name-user">
+			<%= session.getAttribute("nm_user") != null ? session.getAttribute("nm_user") : "" %>
+		</div>
 		<ul class="list">
 			<li><a href="Admin_Perfiles.jsp">Perfiles</a></li>
-			<li><a href="ServletPrestamos">Prestamos</a></li>
-			<li><a href="">estadisticas</a></li>
-			<li><a href="">Movimientos</a></li>
+			<li><a href="Admin_Prestamos.jsp">Prestamos</a></li>
+			<li><a href="Admin_Estadisticas.jsp">estadisticas</a></li>
+			<li><a href="Admin_Cuentas.jsp">Cuentas</a></li>
 		</ul>
 	</nav>
 

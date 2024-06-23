@@ -61,6 +61,8 @@ public class ServletBanco extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.setAttribute("usuarioLogueado", ad);
 			session.setAttribute("tipoUsuario", "administrador");
+			
+			session.setAttribute("nm_user", usuario);
 			//se logeo el admin
 			rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
 		}

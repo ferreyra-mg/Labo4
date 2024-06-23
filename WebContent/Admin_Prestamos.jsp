@@ -8,7 +8,9 @@
 </head>
 <body class="cl">
 	<nav class="mask">
-		[nombre del usuario]
+		<div class="name-user">
+			<%= session.getAttribute("nm_user") != null ? session.getAttribute("nm_user") : "" %>
+		</div>
 		<ul class="list">
 			<li><a href="Admin_Perfiles.jsp">Perfiles</a></li>
 			<li><a href="Admin_Prestamos.jsp">Prestamos</a></li>
