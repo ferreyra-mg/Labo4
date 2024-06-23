@@ -13,8 +13,8 @@ import entidad.Cliente;
 public class ClienteDaoImpl implements ClienteDao {
 
 	
-	private static final String insert = "INSERT INTO cliente(dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)"
-			+ " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String insert = "INSERT INTO cliente(dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena, activo)"
+			+ " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	
 	private static final String listarClientes = "SELECT * FROM bdbanco.cliente";
 	
@@ -22,6 +22,8 @@ public class ClienteDaoImpl implements ClienteDao {
 			+ "fechaNacimiento = ?, direccion = ?, localidad = ?, provincia = ?, correoElectronico = ?, telefono = ?, contrasena = ? WHERE dni = ?;";
 	
 	private static final String clienteXdni = "SELECT * FROM cliente WHERE dni = ?;";
+	
+	private static final String deleteLogico = "UPDATE cliente SET activo = false WHERE dni =?;";
 	
 	@Override
 	public boolean agregarCliente(Cliente cliente) {
@@ -45,6 +47,7 @@ public class ClienteDaoImpl implements ClienteDao {
 		        statement.setString(11, cliente.getCorreoElectronico()); 
 		        statement.setInt(12, cliente.getTelefono()); 
 		        statement.setString(13, cliente.getContrasena()); 
+		        statement.setBoolean(14, true);  
 		        
 		    			        
       
@@ -103,9 +106,28 @@ public class ClienteDaoImpl implements ClienteDao {
 	}
 
 	@Override
-	public void eliminarCliente(int dni) { //no hay bajas fisicas, solo logicas
-		// TODO Auto-generated method stub
-		
+	public boolean eliminarCliente(int dni) {
+		PreparedStatement statement;
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		boolean esExitoso = false;
+	    try {
+	    	statement = conexion.prepareStatement(deleteLogico);  
+	        statement.setInt(1, dni); 
+	        	        
+	        
+	        if (statement.executeUpdate() > 0) {
+	            conexion.commit();
+	            esExitoso = true;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        try {
+	            conexion.rollback();
+	        } catch (SQLException e1) {
+	            e1.printStackTrace();
+	        }
+	    }
+	    return esExitoso;
 	}
 
 	@Override
