@@ -24,8 +24,8 @@
 		<input type="text">
 		<br><br>
 		<div class="btn-filtrar-prestamos">
-			<button type="button">Aceptar</button>
-			<button type="button">Remover filtros</button>
+			<button type="button" name="aceptar-f">Aceptar</button>
+			<button type="button" name="remover-f">Remover filtros</button>
 		</div>
 		<br><br>
 	</div>
@@ -60,8 +60,8 @@
         <td> [capital pedido]		</td>
         <td> [meses en los que va a pagar] 	</td>
         <td> [monto a pagar]  	</td>
-        <td> <button type="button">Aceptar</button> 	</td>
-        <td> [<button type="button">Rechazar</button>   	</td>
+        <td> <button type="button" name="aceptar">Aceptar</button> 	</td>
+        <td> <button type="button" name="rechazar">Rechazar</button>   	</td>
     </tr>
     <!-- } --> 
 </table>
