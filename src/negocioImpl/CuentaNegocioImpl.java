@@ -41,13 +41,11 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 
 	@Override
 	public ArrayList<Cuenta> obtenerTodasLasCuentas(int dni) {
-		// TODO Auto-generated method stub
-		return null;
+		return cuentaDao.obtenerTodasLasCuentas(dni);
 	}
 
 	@Override
 	public Cuenta obtenerCuenta(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		return cuentaDao.obtenerCuenta(id);
 	}
 }

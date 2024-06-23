@@ -306,7 +306,7 @@ select {
   &::-ms-expand { display: none };
 }
 
-// remove dotted firefox border
+/* remove dotted firefox border*/
 @-moz-document url-prefix() {
   select {
     color: rgba(0,0,0,0);
@@ -314,7 +314,7 @@ select {
   }
 }
 
-// Codepen Layout
+/*Codepen Layout*/
 @import url(https://fonts.googleapis.com/css?family=Lato:300,400);
 select {
     margin: 50px auto 0;
@@ -725,8 +725,6 @@ font-family: Helvetica, Verdana, sans-serif;
 	color: #252525;
 }
 
-
-
 .montos,
 	.montos > div {
 	display: grid;
@@ -761,15 +759,31 @@ font-family: Helvetica, Verdana, sans-serif;
 	min-width: 80%;
 }
 
+.exito-menssage {
+	background-color: green;
+	color: white;
+	padding: 20px;
+	width: 100%;
+	display:block;
+}
+
+.tabla-prestamos > thead > tr:first-child > th {
+	background-color: #b97800;
+	text-align: center;
+	text-transform: uppercase;
+}
+
 .btn-filtrar-prestamos {
 	text-align: center;
 }
+
 button[name="aceptar-f"] {
 	background-color: green;
 	padding: 20px;
 	font-size:22px;
 	font-family: 'Liu Jian Mao Cao', cursive;
 }
+
 button[name="remover-f"] {
 	background-color: red;
 	padding: 20px;
@@ -806,4 +820,7 @@ button[name="remover-f"] {
 	padding: 20px;
 	width: 150px;
 	margin: 20px auto;
+}
+select[name="cuenta"] {
+	margin: 0;
 }

@@ -1,5 +1,10 @@
 package entidad;
 
+import java.util.Date;
+
+import negocioImpl.CuentaNegocioImpl;
+import negocioImpl.PrestamoNegocioImpl;
+
 public class Prestamo {
 
     private int id;
@@ -10,10 +15,13 @@ public class Prestamo {
     private float monto_total;
     private boolean pagado;
     private boolean autorizado;
+    private Date fecha;
+    
+    private Cuenta cuenta;
 
     public Prestamo() { }
 
-    public Prestamo(int id, float prestamo, int idCuenta, int cantMeses, float monto_mensual, float monto_total, boolean pagado, boolean autorizado) {
+    public Prestamo(int id, float prestamo, int idCuenta, int cantMeses, float monto_mensual, float monto_total, boolean pagado, boolean autorizado, Date fecha) {
         this.id = id;
         this.prestamo = prestamo;
         this.idCuenta = idCuenta;
@@ -22,6 +30,7 @@ public class Prestamo {
         this.autorizado = autorizado;
         this.monto_mensual = monto_mensual;
         this.monto_total = monto_total;
+        this.fecha = fecha;
     }
     
     public Prestamo(float prestamo, int idCuenta, int cantMeses, float monto_mensual, float monto_total) {
@@ -51,9 +60,13 @@ public class Prestamo {
     public void setMontoMensual(float monto) { this.monto_mensual = monto; }
     public void setMontoTotal(float monto) { this.monto_total = monto; }
     
-    public void solicitar() {
-    	if (this.id == 0) {
-    		// Grabamos
-    	}
+    public void setFecha(Date fecha) { this.fecha = fecha; }
+    public Date getFecha() { return this.fecha; }
+    
+    public void setCuenta(Cuenta cuenta) { this.cuenta = cuenta; }
+    public Cuenta getCuenta() { return this.cuenta; }
+    
+    public boolean solicitar() {
+    	return (new PrestamoNegocioImpl()).grabar(this);
     }
 }

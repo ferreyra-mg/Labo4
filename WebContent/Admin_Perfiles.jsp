@@ -26,7 +26,7 @@
 		[nombre del usuario]
 		<ul class="list">
 			<li><a href="Admin_Perfiles.jsp">Perfiles</a></li>
-			<li><a href="">Prestamos</a></li>
+			<li><a href="ServletPrestamos">Prestamos</a></li>
 			<li><a href="">estadisticas</a></li>
 			<li><a href="">Movimientos</a></li>
 		</ul>
