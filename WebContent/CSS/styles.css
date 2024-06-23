@@ -824,3 +824,8 @@ button[name="remover-f"] {
 select[name="cuenta"] {
 	margin: 0;
 }
+.estadisticas {
+	font-size: 40px;
+	text-align: center;
+	font-family: 'Playfair Display', serif;
+}

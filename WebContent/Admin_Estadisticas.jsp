@@ -19,5 +19,28 @@
 		</ul>
 	</nav>
 
+	<div class="estadisticas">Estadisticas</div>
+	
+	<label for="startDate">Fecha de inicio:</label>
+	<input type="date" id="startDate" name="startDate" required>
+	<label for="endDate">Fecha de fin:</label>
+    <input type="date" id="endDate" name="endDate" required>
+    <button type="button" name="generar_datos">Aceptar</button>
+    <div>
+    	Monto: [VALOR]
+    </div>
+    <div>
+    	Cuentas: [VALOR]
+    </div>
+    <div>
+    	Movimientos: [VALOR]
+    </div>
+    <div>
+    	Transferencias: [VALOR]
+    </div>
+    <div>
+    	Prestamos: [VALOR]
+    </div>
+    
 </body>
 </html>
