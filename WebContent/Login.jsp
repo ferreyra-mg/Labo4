@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css" href="CSS/styles.css">
 <title>Login</title>
 <script>
-function TextoPass(id) {
+function TextoPass() {
     var passwordFields = document.querySelectorAll('.password-field');
     passwordFields.forEach(function(passwordField) {
     if (passwordField.type === "password") {

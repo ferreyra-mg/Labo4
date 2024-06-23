@@ -96,7 +96,6 @@
 								<option value="Colombia">Colombia</option>
 								<option value="Venezuela">Venezuela</option>
 						</select>
-            </label>
             
             <label for="fechaNacimiento">FECHA NAC.:
             	<input type="date" id="fechaNacimiento" name="fechaNacimiento" placeholder="Ingresar fecha de nacimiento">
@@ -130,9 +129,12 @@
             </label>
             <br><br>
             <input type="submit" name="btnAceptar" class="btn-aceptar" value="Aceptar">
+            
+            <div class="error-message">
+            	<%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>
+            </div>
         </form>
 </div>
-		
 		
 <div class="tr2">
  
@@ -215,9 +217,17 @@
 	            <input type="text" id="direccionM" name="direccionM" value="<%= clienteModif.getDireccion() %>" required>
             </label>
             
-            <label for="nacionalidadM">NACIONALIDAD:
-            	<input type="text" id="nacionalidadM" name="nacionalidadM" value="<%= clienteModif.getNacionalidad() %>" required>
-            </label>
+            <b>NACIONALIDAD:</b>
+            			<select name="Nacionalidad">
+								<option value="Argentina">Argentina</option>
+								<option value="Brasil">Brasil</option>
+								<option value="Chile">Chile</option>
+								<option value="Paraguay">Paraguay</option>
+								<option value="Uruguay">Uruguay</option>
+								<option value="Bolivia">Bolivia</option>
+								<option value="Colombia">Colombia</option>
+								<option value="Venezuela">Venezuela</option>
+						</select>
             
             <label for="fechaNacimientoM">FECHA NAC.:
             	<input type="date" id="fechaNacimientoM" name="fechaNacimientoM" value="<%= clienteModif.getFechaNacimiento() != null ? clienteModif.getFechaNacimiento().toString() : "" %>" required>

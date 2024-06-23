@@ -79,6 +79,15 @@ public class ServletCliente extends HttpServlet {
 			    cli.setProvincia(request.getParameter("provincia")); // String para provincia
 			    cli.setCorreoElectronico(request.getParameter("correo")); // String para correoElectronico
 			    cli.setTelefono(Integer.parseInt(request.getParameter("telefono"))); // int para telefono
+			    
+				String contra1 = request.getParameter("contra1");
+				String contra2 = request.getParameter("contra2");
+			    
+				if(!contra1.equals(contra2)) {
+					request.setAttribute("msj_error", "Las contrasenias no coinciden");
+					return;
+				}
+			    
 			    cli.setContrasena(request.getParameter("contra1")); // String para contrasena
 
 		        
@@ -122,7 +131,7 @@ public class ServletCliente extends HttpServlet {
 				    String sexoStr = request.getParameter("sexM");
 				    boolean sexo = Boolean.parseBoolean(sexoStr); // Convierte la cadena "true" o "false" a booleano
 				    cli.setSexo(sexo);
-				    cli.setNacionalidad(request.getParameter("nacionalidadM")); // String para nacionalidad
+				    cli.setNacionalidad(request.getParameter("nacionalidadM").toString()); // String para nacionalidad
 
 				    String fechaNacimientoStr = request.getParameter("fechaNacimientoM");
 				    java.sql.Date fechaNacimiento = java.sql.Date.valueOf(fechaNacimientoStr);
