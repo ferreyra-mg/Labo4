@@ -136,7 +136,10 @@
  		<td><%=cliente.getDni() %><input type="hidden" name="dniCliente" value="<%=cliente.getDni() %>"> </td>  
  		<td><%=cliente.getNombre() %></td> 
  		<td><%=cliente.getApellido() %></td>
- 		<td><input type="submit" name="btnModificar" value="Modificar"></td>
+ 		<td>
+ 		<input type="submit" name="btnModificar" value="Modificar">
+ 		<input type="submit" name="btnEliminar" value="Eliminar">
+ 		</td>
  		</form>
  	</tr>
  	<% } 

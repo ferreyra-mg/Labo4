@@ -148,6 +148,17 @@ public class ServletCliente extends HttpServlet {
 		        rd.forward(request, response);
 			}
 		
+			
+			if(request.getParameter("btnEliminar")!=null) 
+			{
+				int dni = Integer.parseInt(request.getParameter("dniCliente").toString());
+				if(CliDao.obtenerCliente(dni)!=null) 
+				{
+					boolean confirmDelete = false;
+					confirmDelete = CliDao.eliminarCliente(dni);
+					request.setAttribute("confirmDelete", confirmDelete);
+				}
+			}
 		
 		
 		
