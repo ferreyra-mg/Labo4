@@ -67,7 +67,7 @@ public class ServletCliente extends HttpServlet {
 			    boolean sexo = Boolean.parseBoolean(sexoStr); // Convierte la cadena "true" o "false" a booleano
 			    cli.setSexo(sexo);
 
-			    cli.setNacionalidad(request.getParameter("nacionalidad")); // String para nacionalidad
+			    cli.setNacionalidad(request.getParameter("Nacionalidad").toString());
 
 			    String fechaNacimientoStr = request.getParameter("fechaNacimiento");
 			    java.sql.Date fechaNacimiento = java.sql.Date.valueOf(fechaNacimientoStr);

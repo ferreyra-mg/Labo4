@@ -16,7 +16,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	private static final String insert = "INSERT INTO cliente(dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena, activo)"
 			+ " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	
-	private static final String listarClientes = "SELECT * FROM bdbanco.cliente";
+	private static final String listarClientes = "SELECT * FROM bdbanco.cliente where activo = 1";
 	
 	private static final String update = "UPDATE cliente SET cuil = ?, nombre = ?, apellido = ?, sexo = ?, nacionalidad = ?, "
 			+ "fechaNacimiento = ?, direccion = ?, localidad = ?, provincia = ?, correoElectronico = ?, telefono = ?, contrasena = ? WHERE dni = ?;";

@@ -2,12 +2,28 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<link rel="stylesheet" type="text/css" href="CSS/styles.css">
+
 <title>Admin_Perfiles</title>
+
+<link rel="stylesheet" type="text/css" href="CSS/styles.css">
+<!-- <link rel="stylesheet" type="text/css"
+	href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+	
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8"
+	src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#tabla').DataTable();
+	});
+</script> -->
+
 </head>
 <body class="cl">
 
@@ -69,8 +85,17 @@
 	            <input type="text" id="direccion" name="direccion" placeholder="">
             </label>
             
-            <label for="nacionalidad">NACIONALIDAD:
-            	<input type="text" id="nacionalidad" name="nacionalidad" placeholder="Ingresar nacionalidad">
+            <b>NACIONALIDAD:</b>
+            			<select name="Nacionalidad">
+								<option value="Argentina">Argentina</option>
+								<option value="Brasil">Brasil</option>
+								<option value="Chile">Chile</option>
+								<option value="Paraguay">Paraguay</option>
+								<option value="Uruguay">Uruguay</option>
+								<option value="Bolivia">Bolivia</option>
+								<option value="Colombia">Colombia</option>
+								<option value="Venezuela">Venezuela</option>
+						</select>
             </label>
             
             <label for="fechaNacimiento">FECHA NAC.:
@@ -112,23 +137,24 @@
 <div class="tr2">
  
  <% 
-/*  	ArrayList<Cliente>listaClientes = null;
+  	ArrayList<Cliente>listaClientes = null;
  	if(request.getAttribute("listaTClientes")!=null)
  	{
 		listaClientes = (ArrayList<Cliente>) request.getAttribute("listaTClientes");
- 	}  */
- 	
- 	ArrayList<Cliente> listaClientes = (ArrayList<Cliente>) request.getAttribute("listaTClientes");
+ 	} 
  	
  	%>
  	
+
  
- <table border="1" class="display">
+ <table border="1" id="tabla" class="table table-striped table-bordered" style="width:100%">
  	<tr> 
  		<th>DNI</th> 
  		<th>NOMBRE</th> 
  		<th>APELLIDO</th> 
+ 		<th>ACCIÓN</th> 
  	</tr>
+	<tbody>
  	
  	<%if(listaClientes != null){
  	for(Cliente cliente : listaClientes)
@@ -146,6 +172,7 @@
  	</tr>
  	<% } 
  	}%>
+ 	</tbody>
  </table>
 	
 
@@ -166,15 +193,15 @@
             </label>
             
             <label for="cuilM">CUIL:
-            	<input type="text" id="cuilM" name="cuilM" value="<%= clienteModif.getCuil() %>">
+            	<input type="text" id="cuilM" name="cuilM" value="<%= clienteModif.getCuil() %>" required>
             </label>
             
             <label for="nombreM">NOMBRE:
-            	<input type="text" id="nombreM" name="nombreM" value="<%= clienteModif.getNombre() %>">
+            	<input type="text" id="nombreM" name="nombreM" value="<%= clienteModif.getNombre() %>" required>
            	</label>
            	
             <label for="apellidoM">APELLIDO:
-            	<input type="text" id="apellidoM" name="apellidoM" value="<%= clienteModif.getApellido() %>">
+            	<input type="text" id="apellidoM" name="apellidoM" value="<%= clienteModif.getApellido() %>" required>
             </label>
             
             <label for="sexoM" style="display: flex; align-items: center;">SEXO:
@@ -185,42 +212,42 @@
 			</label>
             
             <label for="direccionM">DIRECCION:
-	            <input type="text" id="direccionM" name="direccionM" value="<%= clienteModif.getDireccion() %>">
+	            <input type="text" id="direccionM" name="direccionM" value="<%= clienteModif.getDireccion() %>" required>
             </label>
             
             <label for="nacionalidadM">NACIONALIDAD:
-            	<input type="text" id="nacionalidadM" name="nacionalidadM" value="<%= clienteModif.getNacionalidad() %>">
+            	<input type="text" id="nacionalidadM" name="nacionalidadM" value="<%= clienteModif.getNacionalidad() %>" required>
             </label>
             
             <label for="fechaNacimientoM">FECHA NAC.:
-            	<input type="date" id="fechaNacimientoM" name="fechaNacimientoM" value="<%= clienteModif.getFechaNacimiento() != null ? clienteModif.getFechaNacimiento().toString() : "" %>">
+            	<input type="date" id="fechaNacimientoM" name="fechaNacimientoM" value="<%= clienteModif.getFechaNacimiento() != null ? clienteModif.getFechaNacimiento().toString() : "" %>" required>
             </label>
             
             
              <label for="localidadM">LOCALIDAD:
-            	<input type="text" id="localidadM" name="localidadM" value="<%= clienteModif.getLocalidad() %>">
+            	<input type="text" id="localidadM" name="localidadM" value="<%= clienteModif.getLocalidad() %>" required>
             </label>
             
             <label for="provinciaM">PROVINCIA:
-            	<input type="text" id="provinciaM" name="provinciaM" value="<%= clienteModif.getProvincia() %>">
+            	<input type="text" id="provinciaM" name="provinciaM" value="<%= clienteModif.getProvincia() %>" required>
             </label>
             
             <label for="correoM">CORREO:
-            	<input type="email" id="correoM" name="correoM" value="<%= clienteModif.getCorreoElectronico() %>">
+            	<input type="email" id="correoM" name="correoM" value="<%= clienteModif.getCorreoElectronico() %>" required>
             </label>
             
             <label for="telefonoM">TELEFONO:
-           		<input type="text" id="telefonoM" name="telefonoM" value="<%= clienteModif.getTelefono() %>">
+           		<input type="text" id="telefonoM" name="telefonoM" value="<%= clienteModif.getTelefono() %>" required>
             </label>
   
             
             <br><br>            
             
             <label for="contra1M">CONTRASEÑA:
-            	<input type="password" id="contra1M" name="contra1M" value="<%= clienteModif.getContrasena() %>">
+            	<input type="password" id="contra1M" name="contra1M" value="<%= clienteModif.getContrasena() %>" required>
             </label>
             <label for="contra2M">REPETIR CONTRASEÑA:
-            	<input type="password" id="contra2M" name="contra2M" value="<%= clienteModif.getContrasena() %>">
+            	<input type="password" id="contra2M" name="contra2M" value="<%= clienteModif.getContrasena() %>" required>
             </label>
             <br><br>
             <input type="submit" name="btnConfirModif" class="btn-aceptar" value="Confirmar modificacion">
