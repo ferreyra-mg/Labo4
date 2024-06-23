@@ -3,8 +3,8 @@ package entidad;
 import java.util.ArrayList;
 import java.util.Date;
 
-import daoImpl.ClienteDaoImpl;
-import daoImpl.CuentaDaoImpl;
+import negocioImpl.CuentaNegocioImpl;
+import negocioImpl.PrestamoNegocioImpl;
 
 public class Cliente {
 
@@ -87,6 +87,10 @@ public class Cliente {
 	public void setActivo(boolean activo) { this.activo = activo; }
 	
 	public ArrayList<Cuenta> cuentas() {
-		return (new CuentaDaoImpl()).obtenerTodasLasCuentas(this.dni) ;
+		return (new CuentaNegocioImpl()).obtenerTodasLasCuentas(this.dni) ;
+	}
+	
+	public ArrayList<Prestamo> prestamos() {
+		return (new PrestamoNegocioImpl()).traerTodos(this.dni) ;
 	}
 }

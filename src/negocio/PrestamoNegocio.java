@@ -1,7 +1,11 @@
 package negocio;
 
+import java.util.ArrayList;
+
 import entidad.Prestamo;
 
 public interface PrestamoNegocio {
-	void grabar(Prestamo prestamo);
+	boolean grabar(Prestamo prestamo);
+	
+	ArrayList<Prestamo> traerTodos(int dni);
 }
