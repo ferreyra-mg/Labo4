@@ -119,18 +119,15 @@ public class ServletCliente extends HttpServlet {
 					cli.setCuil(request.getParameter("cuilM")); // String para cuil
 				    cli.setNombre(request.getParameter("nombreM")); // String para nombre
 				    cli.setApellido(request.getParameter("apellidoM")); // String para apellido
-				    
 				    String sexoStr = request.getParameter("sexM");
 				    boolean sexo = Boolean.parseBoolean(sexoStr); // Convierte la cadena "true" o "false" a booleano
 				    cli.setSexo(sexo);
-
 				    cli.setNacionalidad(request.getParameter("nacionalidadM")); // String para nacionalidad
 
 				    String fechaNacimientoStr = request.getParameter("fechaNacimientoM");
 				    java.sql.Date fechaNacimiento = java.sql.Date.valueOf(fechaNacimientoStr);
 				    cli.setFechaNacimiento(fechaNacimiento);
-				    
-				    
+				    				    
 				    cli.setDireccion(request.getParameter("direccionM")); // String para direccion
 				    cli.setLocalidad(request.getParameter("localidadM")); // String para localidad
 				    cli.setProvincia(request.getParameter("provinciaM")); // String para provincia
@@ -142,15 +139,26 @@ public class ServletCliente extends HttpServlet {
 				    confirmacionUpdate = CliDao.modificarCliente(cli);
 				    request.setAttribute("clienteModificar", null);
 					
-				} catch (Exception e) {
+					} catch (Exception e) {
 					// TODO: handle exception
-				}
+						}
 				 
 		        cargarClientes(request);
 		        rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
 		        rd.forward(request, response);
 			}
 		
+			
+			if(request.getParameter("btnEliminar")!=null) 
+			{
+				int dni = Integer.parseInt(request.getParameter("dniCliente").toString());
+				if(CliDao.obtenerCliente(dni)!=null) 
+				{
+					boolean confirmDelete = false;
+					confirmDelete = CliDao.eliminarCliente(dni);
+					request.setAttribute("confirmDelete", confirmDelete);
+				}
+			}
 		
 		
 		

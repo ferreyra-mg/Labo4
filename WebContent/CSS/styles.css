@@ -44,13 +44,13 @@
   clip-path: inset(0 0 0 0);
 }
 
-.page-login .screen__background__shape {
+.page-login .screen_background_shape {
   transform: rotate(45deg);
   position: absolute;
   transition: all 0.5s ease-in-out;
 }
 
-.page-login .screen__background__shape1 {
+.page-login .screen_background_shape1 {
   height: 520px;
   width: 520px;
   background: #FFF;
@@ -59,7 +59,7 @@
   border-radius: 0 72px 0 0;
 }
 
-.page-login .screen__background__shape2 {
+.page-login .screen_background_shape2 {
   height: 220px;
   width: 220px;
   background: #6C63AC;
@@ -68,7 +68,7 @@
   border-radius: 32px;
 }
 
-.page-login .screen__background__shape3 {
+.page-login .screen_background_shape3 {
   height: 540px;
   width: 190px;
   background: linear-gradient(270deg, #5D54A4, #6A679E);
@@ -77,7 +77,7 @@
   border-radius: 32px;
 }
 
-.page-login .screen__background__shape4 {
+.page-login .screen_background_shape4 {
   height: 400px;
   width: 200px;
   background: #7E7BB9;
@@ -306,7 +306,7 @@ select {
   &::-ms-expand { display: none };
 }
 
-// remove dotted firefox border
+/* remove dotted firefox border*/
 @-moz-document url-prefix() {
   select {
     color: rgba(0,0,0,0);
@@ -314,7 +314,7 @@ select {
   }
 }
 
-// Codepen Layout
+/*Codepen Layout*/
 @import url(https://fonts.googleapis.com/css?family=Lato:300,400);
 select {
     margin: 50px auto 0;
@@ -725,8 +725,6 @@ font-family: Helvetica, Verdana, sans-serif;
 	color: #252525;
 }
 
-
-
 .montos,
 	.montos > div {
 	display: grid;
@@ -775,8 +773,25 @@ font-family: Helvetica, Verdana, sans-serif;
 	text-transform: uppercase;
 }
 
+.btn-filtrar-prestamos {
+	text-align: center;
+}
 
+button[name="aceptar-f"] {
+	background-color: green;
+	padding: 20px;
+	font-size:22px;
+	font-family: 'Liu Jian Mao Cao', cursive;
+}
 
+button[name="remover-f"] {
+	background-color: red;
+	padding: 20px;
+	font-size:22px;
+	font-family: 'Liu Jian Mao Cao', cursive;
+	margin-left:30px;
+}
 
-
-
+select[name="cuenta"] {
+	margin: 0;
+}

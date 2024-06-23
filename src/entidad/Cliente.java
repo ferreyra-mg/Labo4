@@ -21,6 +21,7 @@ public class Cliente {
     private String correoElectronico;
     private int telefono;
     private String contrasena;
+    private boolean activo;
     
     public Cliente() {
     }
@@ -42,6 +43,7 @@ public class Cliente {
 		this.correoElectronico = cor;
 		this.telefono = tel;
 		this.contrasena = psw;
+		this.activo = true;
 	}
 	
 	
@@ -81,6 +83,8 @@ public class Cliente {
 	public void setTelefono(int telefono) { this.telefono = telefono; }
 	public String getContrasena() { return contrasena; }
 	public void setContrasena(String contrasena) { this.contrasena = contrasena; }
+	public boolean getActivo() { return activo; }
+	public void setActivo(boolean activo) { this.activo = activo; }
 	
 	public ArrayList<Cuenta> cuentas() {
 		return (new CuentaNegocioImpl()).obtenerTodasLasCuentas(this.dni) ;
