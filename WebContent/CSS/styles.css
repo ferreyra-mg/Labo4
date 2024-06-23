@@ -777,3 +777,33 @@ button[name="remover-f"] {
 	font-family: 'Liu Jian Mao Cao', cursive;
 	margin-left:30px;
 }
+
+.adm-cuentas {
+	display: flex;
+	flex-direction: column;
+	height: auto;
+	width: 800px;
+	background: red;
+	border: solid white 3px;
+	border-radius: 30px;
+	margin: 100px;
+	padding: 20px;
+	text-align:center;
+	animation: colorChange 10s infinite;
+}
+
+.adm-cuentas div {
+	margin: 10px 0px;
+}
+@keyframes colorChange {
+     0% { background-color: rgba(255, 165, 0, 0.3); }   /* Naranja */
+    33% { background-color: rgba(255, 69, 0, 0.3); }   /* Rojo Naranja */
+    66% { background-color: rgba(255, 215, 0, 0.3); }  /* Dorado */
+    100% { background-color: rgba(255, 165, 0, 0.3); } /* Naranja */
+  }
+
+.c-cuenta {
+	padding: 20px;
+	width: 150px;
+	margin: 20px auto;
+}

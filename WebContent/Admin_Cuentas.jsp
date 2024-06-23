@@ -19,5 +19,29 @@
 		</ul>
 	</nav>
 
+	<div class="adm-cuentas">
+	
+		<div>Cliente: <input type="text" name="dni-cliente"></div>
+		<div>Nombre de la cuente: <input type="text" name="nm-cliente"></div>
+		<div>contraseña: <input type="password" name="psw-cliente"></div>
+		<div>repita la contraseña: contraseña: <input type="password" name="psw-cliente2"></div>
+		<div>CBU: <input type="text" name="cbu-cliente"></div>
+		<div>
+			Tipo de cuenta:
+			<select name="tipo" id="tipo">
+			    <option value="1">[tipo 1]</option>
+		        <option value="2">[tipo 2]</option>
+				<option value="3">[tipo 3]</option>
+			</select>
+		</div>
+		
+		<button type="button" name="aceptar" class="c-cuenta">Aceptar</button>
+		
+	</div>
+
+
+	<div class="error-message">
+		<%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>
+	</div>
 </body>
 </html>

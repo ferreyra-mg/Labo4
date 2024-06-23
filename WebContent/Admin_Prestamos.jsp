@@ -66,7 +66,9 @@
     <!-- } --> 
 </table>
 	
-	
+	<div class="error-message">
+		<%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>
+	</div>
 	
 </body>
 </html>
