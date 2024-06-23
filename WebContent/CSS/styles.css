@@ -761,3 +761,11 @@ font-family: Helvetica, Verdana, sans-serif;
 	min-width: 80%;
 }
 
+.exito-menssage {
+	background-color: green;
+	color: white;
+	padding: 20px;
+	width: 100%;
+	display:block;
+}
+

@@ -1,44 +1,45 @@
-package dao;
+package daoImpl;
 
 
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 
 import dao.PrestamoDao;
-import daoImpl.Conexion;
-import entidad.Cliente;
-import entidad.Cuenta;
 import entidad.Prestamo;
 
 public class PrestamoDaoImpl implements PrestamoDao {
-	private static final String insert = "INSERT INTO prestamo(id_cuenta, cant_meses, fecha, capital_pedido, monto_mensual, monto_total)"
-			+ " VALUES(?, ?, ?, ?, ?, ?)";
+	private static final String insert = "INSERT INTO prestamo(id_cuenta, cant_meses, fecha, capital_pedido, monto_mensual, monto_total,peticion) VALUES(?, ?, ?, ?, ?, ?, 0)";
 	
 	@Override
 	public boolean grabar(Prestamo prestamo) {
 		
-			PreparedStatement statement;
+			PreparedStatement st;
 			Connection conexion = Conexion.getConexion().getSQLConexion();
 			boolean isInsertExitoso = false;
 		    try {
 
 		        
-		    	statement = conexion.prepareStatement(insert);
-		    	
-		        statement.setInt(1, prestamo.getIdCuenta()); 
+		    	st = conexion.prepareStatement(insert);
+		    			    	
+		        st.setInt(1, prestamo.getIdCuenta());
+		        st.setInt(2, prestamo.getCantMeses());
+		        st.setDate(3, new Date((new java.util.Date()).getTime()));
+		        st.setFloat(4, prestamo.getPrestamo());
+		        st.setFloat(5, prestamo.getMontoMensual());
+		        st.setFloat(6, prestamo.getMontoTotal());
 		        
       
-		        if (statement.executeUpdate() > 0) {
+		        if (st.executeUpdate() > 0) {
 		            conexion.commit();
 		            isInsertExitoso = true;
 		        }
 		        
 		    } catch (SQLException e) {
+		    	System.out.print(e.getMessage());
 		        e.printStackTrace();
 		        try {
 		            conexion.rollback();

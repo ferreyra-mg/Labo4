@@ -15,6 +15,11 @@
 	
 	<nav class="mask">
 		
+		
+		<div class="exito-message">
+			<%= request.getAttribute("exito_error") != null ? request.getAttribute("exito_error") : "" %>
+		</div>
+		
 		<div class="name-user">
 			<%= session.getAttribute("nm_user") != null ? session.getAttribute("nm_user") : "" %>
 		</div>
@@ -22,7 +27,7 @@
 		<ul class="list">
 			<li><a href="Cliente_Transferencia.jsp">Transferencia</a></li>
 			<li><a href="Cliente_Home.jsp">Historial</a></li>
-			<li><a href="prestamos">Prestamo</a></li>
+			<li><a href="ServletPrestamos">Prestamo</a></li>
 			<li><a href="Cliente_Perfil.jsp">Perfil</a></li>
 		</ul>
 	</nav>

@@ -25,15 +25,18 @@
 		<div class="name-user">
 			<%= session.getAttribute("nm_user") != null ? session.getAttribute("nm_user") : "" %>
 		</div>
-		<!-- <%= cli.getApellido() + ", " + cli.getNombre() %> -->
 		<ul class="list">
 			<li><a href="Cliente_Transferencia.jsp">Transferencia</a></li>
 			<li><a href="Cliente_Home.jsp">Historial</a></li>
-			<li><a href="prestamos">Prestamo</a></li>
+			<li><a href="ServletPrestamos">Prestamo</a></li>
 			<li><a href="Cliente_Perfil.jsp">Perfil</a></li>
 		</ul>
 	</nav>
+
 	<div class="prestamo">
+		<div class="prestamos-error-message">
+	        <%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>
+	    </div>
 		<div class="pedir_prestamo">
 
 			
@@ -41,9 +44,9 @@
 			
 				<div class="inputs">
 					<label for="capital">Capital:</label>
-					<input type="number" id="capital" placeholder="Ingrese el capital" min="100" step="100.00" required autofocus="autofocus">			
+					<input type="number" id="capital" name="capital" placeholder="Ingrese el capital" min="100" step="100.00" required autofocus="autofocus">			
 					<label for="meses">Meses:</label>
-					<input type="number" id="meses" placeholder="Ingrese meses" min="1" step="1" required value="12" >				
+					<input type="number" id="meses" name="meses" placeholder="Ingrese meses" min="1" step="1" required value="12" >				
 				</div>
 	
 
@@ -67,7 +70,7 @@
 					</div>				
 				</div>
 				
-				<input type="submit" class="btn-aceptar btn-solicitar-prestamo" value="SOLICITAR">
+				<input type="submit" class="btn-aceptar btn-solicitar-prestamo" name="solicitar" value="SOLICITAR">
 			
 			</form>
 			

@@ -1,5 +1,7 @@
 package entidad;
 
+import negocioImpl.PrestamoNegocioImpl;
+
 public class Prestamo {
 
     private int id;
@@ -51,9 +53,7 @@ public class Prestamo {
     public void setMontoMensual(float monto) { this.monto_mensual = monto; }
     public void setMontoTotal(float monto) { this.monto_total = monto; }
     
-    public void solicitar() {
-    	if (this.id == 0) {
-    		// Grabamos
-    	}
+    public boolean solicitar() {
+    	return (new PrestamoNegocioImpl()).grabar(this);
     }
 }
