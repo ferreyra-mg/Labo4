@@ -4,6 +4,7 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="entidad.Cliente"%>
 <%@ page import="entidad.Cuenta"%>
+<%@ page import="entidad.Prestamo"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -107,22 +108,32 @@
     // Sublista para la página actual
     List<String[]> pageItems = movimientos.subList(startIndex, endIndex);
 %>
-
-
-			<table>
-				<tr>
-					<th>Cuota Nro.</th>
-					<th>Monto</th>
-					<th>Pagar</th>
-				</tr>
-				<% for (String[] movimiento : pageItems) { %>
-				<tr>
-					<td><%= movimiento[0] %></td>
-					<td><%= movimiento[1] %></td>
-					<td>
-						<button>Ir a Pagar</button>
-					</td>
-				</tr>
+			
+			<table class="tabla-prestamos">
+				<thead>
+					<tr>
+						<th colspan="5">Historial de Prestamos</th>
+					</tr>
+					<tr>
+						<th>Prestamo Nro.</th>
+						<th>Fecha</th>
+						<th>Monto</th>
+						<th>Estado</th>
+						<th>Cuotas Pendientes</th>
+					</tr>
+				</thead>
+				<% for (Prestamo prestamo : cli.prestamos()) { %>
+					<tr>
+						<td><%= prestamo.getId() %></td>
+						<td><%= prestamo.getFecha() %></td>
+						<td><%= prestamo.getPrestamo() %></td>
+						<% if (prestamo.autorizado()) { %> 
+							<td>Otorgado</td>
+						<% } else {%>
+							<td>Pendiente</td>
+						<% } %>
+						<td>05/12</td>
+					</tr>
 				<% } %>
 			</table>
 

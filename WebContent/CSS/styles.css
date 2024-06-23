@@ -769,3 +769,14 @@ font-family: Helvetica, Verdana, sans-serif;
 	display:block;
 }
 
+.tabla-prestamos > thead > tr:first-child > th {
+	background-color: #b97800;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+
+
+
+
+

@@ -33,6 +33,7 @@ public class ServletPrestamos extends HttpServlet {
 		if (request.getSession().getAttribute("usuarioLogueado") == null) {
 			request.getRequestDispatcher("/Login.jsp").forward(request, response);
 		}
+		request.getRequestDispatcher("/Cliente_Prestamo.jsp").forward(request, response);
 	}
 
 	/**

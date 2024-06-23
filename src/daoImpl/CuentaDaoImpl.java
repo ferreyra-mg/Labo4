@@ -49,18 +49,14 @@ public class CuentaDaoImpl implements CuentaDao {
 
 			ResultSet rs = stmt.executeQuery();
 
-			if (rs.next()) {
-
-				// int id, String usuario, int dni, String CBU, Date creacion, String tipo,
-				// float saldo, boolean estado
-
+			while (rs.next()) {
 				Cuenta cuenta = new Cuenta(rs.getInt("id"), rs.getString("usuario"), rs.getInt("dni"),
 						rs.getString("cbu"), rs.getDate("fechaCreacion"), rs.getString("tipoCuenta"),
 						rs.getFloat("saldo"), rs.getBoolean("estado"));
 
 				cuentas.add(cuenta);
-
 			}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Error: No pudieron recuperar las cuentas del cliente [" + dni + "]");
@@ -71,8 +67,28 @@ public class CuentaDaoImpl implements CuentaDao {
 
 	@Override
 	public Cuenta obtenerCuenta(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		Cuenta cuenta = null;
+
+		String sql = "SELECT id, usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado FROM cuenta WHERE id = ?";
+		try (Connection conexion = Conexion.getConexion().getSQLConexion();
+				PreparedStatement stmt = conexion.prepareStatement(sql)) {
+
+			stmt.setInt(1, id);
+
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				cuenta = new Cuenta(rs.getInt("id"), rs.getString("usuario"), rs.getInt("dni"),
+						rs.getString("cbu"), rs.getDate("fechaCreacion"), rs.getString("tipoCuenta"),
+						rs.getFloat("saldo"), rs.getBoolean("estado"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error: No pudo recuperar la cuenta [" + id + "]");
+		}
+
+		return cuenta;
 	}
 
 	@Override

@@ -1,14 +1,14 @@
 package daoImpl;
 
-
-
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
+import java.util.ArrayList;
 
 import dao.PrestamoDao;
+import entidad.Cuenta;
 import entidad.Prestamo;
 
 public class PrestamoDaoImpl implements PrestamoDao {
@@ -49,5 +49,41 @@ public class PrestamoDaoImpl implements PrestamoDao {
 		    }
 		    return isInsertExitoso;
 		
+	}
+
+	@Override
+	public ArrayList<Prestamo> traerTodos(int dni) {
+		ArrayList<Prestamo> prestamos = new ArrayList<>();
+
+		String sql = "SELECT p.id, p.capital_pedido, p.id_cuenta, p.cant_meses, p.monto_mensual, p.monto_total, p.pagado, p.peticion, p.fecha FROM bdbanco.prestamo p inner join cuenta cta on cta.id = p.id_cuenta inner join cliente cli on cli.dni = cta.dni where cli.dni = ?";
+		try (Connection conexion = Conexion.getConexion().getSQLConexion();
+				PreparedStatement stmt = conexion.prepareStatement(sql)) {
+
+			stmt.setInt(1, dni);
+
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				Prestamo prestamo = new Prestamo(rs.getInt("id"), rs.getFloat("capital_pedido"), rs.getInt("id_cuenta"), rs.getInt("cant_meses"), rs.getFloat("monto_mensual"),
+						rs.getFloat("monto_total"), rs.getBoolean("pagado"), rs.getBoolean("peticion"), rs.getDate("fecha"));
+
+				prestamos.add(prestamo);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error: No pudieron recuperar las cuentas del cliente [" + dni + "]");
+		}
+		
+		if (prestamos.size() > 0) {
+			CuentaDaoImpl ctaDao = new CuentaDaoImpl();
+			
+			for (Prestamo p: prestamos) {
+				p.setCuenta(ctaDao.obtenerCuenta(p.getIdCuenta()));
+			}
+		}
+		
+
+		return prestamos;
 	}
 }
