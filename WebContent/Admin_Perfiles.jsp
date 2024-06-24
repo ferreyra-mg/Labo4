@@ -21,7 +21,7 @@
     }
     </script>
     
-    
+
 
 <!-- <script>
 function validateForm() {
@@ -123,11 +123,11 @@ function validateForm() {
                 
                 <input type="hidden" id="confirmacion" name="confirmacion" value="false">
             <label for="dni">DNI:
-            	<input type="text" id="dni" name="dni" placeholder="Ingrese DNI" maxlength="8" value="<%= dniValue  %>" required>
+            	<input type="number" id="dni" name="dni" placeholder="Ingrese DNI" maxlength="8" min="0" value="<%= dniValue  %>" required>
             </label>
             
             <label for="cuil">CUIL:
-            	<input type="text" id="cuil" name="cuil" placeholder="Ingrese CUIL" maxlength="12" value="<%= cuilValue %>" required>
+            	<input type="number" id="cuil" name="cuil" placeholder="Ingrese CUIL" maxlength="12" min="0" value="<%= cuilValue %>" required>
             </label>
             
             <label for="nombre">NOMBRE:
