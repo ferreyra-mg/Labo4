@@ -24,17 +24,20 @@
 	<div class="transferencia">
 		<div class="tr1">
 			<p>Transferir</p>
+			<form action="ServletTransferencia" method="post">
 			<label for="cbu">CBU:</label>
-        	<input type="text" id="cbu" placeholder="Ingrese CBU">
+        	<input type="text" id="cbu" name="cbuDestino" placeholder="Ingrese CBU">
         	<br><br>
         	<label for="monto1">Monto:</label>
-        	<input type="number" id="monto_1" placeholder="Ingrese el Monto">
+        	<input type="number" id="monto_1" name="monto" placeholder="Ingrese el Monto">
         	<br><br>
-        	<button class="btn-aceptar">Aceptar</button>
+        	<button type="submit" name="enviarMonto" value="transferirOtro" class="btn-aceptar">Aceptar</button>
+        	</form>
 		</div>
 
 		<div class="tr2">
 			<p>Transferir a tus cuentas</p>
+			<form action="ServletTransferencia" method="post">
 			<div class="filtrar_cuentas">
 				<label>Elige una cuenta:</label> 
 				<select name="cuenta" id="cuenta">
@@ -47,15 +50,11 @@
         	<label for="monto2">Monto:</label>
         	<input type="number" id="monto_2" placeholder="Ingrese el Monto">
         	<br><br>
-        	<button class="btn-aceptar">Aceptar</button>
+        	<button type="submit" name="enviarMonto" value="transferir_propia" class="btn-aceptar">Aceptar</button>
+        	 </form>
 			
 		</div>
 		<div class="tr3">
-			<div class="error-message">
-				<%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>
-			</div>
-		</div>
-		<div class="tr4">
 			<div class="error-message">
 				<%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>
 			</div>

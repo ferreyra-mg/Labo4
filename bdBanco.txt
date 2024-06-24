@@ -81,6 +81,8 @@ CREATE TABLE movimiento (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_Cuenta INT,
     fecha DATE NOT NULL,
+    concepto VARCHAR(100),
+    importe DECIMAL(15,2),
     tipo VARCHAR(50) NOT NULL,
     FOREIGN KEY (id_Cuenta) REFERENCES cuenta(id)
 );
@@ -160,16 +162,16 @@ INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual,
 VALUES (5, 18, '2023-06-30', 8000.00, 600.00, 10800.00, 0, 1);
 
 /* MOVIMIENTOS */
-INSERT INTO movimiento (id_Cuenta, fecha, tipo)
-VALUES (1, '2023-02-01', 'Alta cuenta');
-INSERT INTO movimiento (id_Cuenta, fecha, tipo)
-VALUES (2, '2023-03-15', 'Alta de prestamo');
-INSERT INTO movimiento (id_Cuenta, fecha, tipo)
-VALUES (3, '2023-04-10', 'Pago Prestamo');
-INSERT INTO movimiento (id_Cuenta, fecha, tipo)
-VALUES (4, '2023-05-20', 'Transferencia');
-INSERT INTO movimiento (id_Cuenta, fecha, tipo)
-VALUES (5, '2023-06-30', 'Alta cuenta');
+INSERT INTO movimiento (id_Cuenta, concepto, importe, fecha, tipo)
+VALUES (1, 'transferencia','5000','2023-02-01', 'Alta cuenta');
+INSERT INTO movimiento (id_Cuenta, concepto, importe,fecha, tipo)
+VALUES (2, 'pago','350','2023-03-15', 'Alta de prestamo');
+INSERT INTO movimiento (id_Cuenta,concepto, importe, fecha, tipo)
+VALUES (3, '','6500','2023-04-10', 'Pago Prestamo');
+INSERT INTO movimiento (id_Cuenta,concepto, importe, fecha, tipo)
+VALUES (4, 'abono','2542','2023-05-20', 'Transferencia');
+INSERT INTO movimiento (id_Cuenta, concepto, importe,fecha, tipo)
+VALUES (5, 'salida', '1500','2023-06-30',  'Alta cuenta');
 
 /* TRANSFERENCIAS */
 INSERT INTO transferencia (id_movimiento, id_recibe, monto)

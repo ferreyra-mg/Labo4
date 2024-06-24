@@ -24,7 +24,7 @@
 	<div class="adm-cuentas">
 	
 		<div>Cliente: <input type="text" name="dni-cliente"></div>
-		<div>Nombre de la cuente: <input type="text" name="nm-cliente"></div>
+		<div>Nombre de la cuenta: <input type="text" name="nm-cliente"></div>
 		<div>contraseña: <input type="password" name="psw-cliente"></div>
 		<div>repita la contraseña: contraseña: <input type="password" name="psw-cliente2"></div>
 		<div>CBU: <input type="text" name="cbu-cliente"></div>

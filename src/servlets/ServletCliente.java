@@ -129,6 +129,7 @@ public class ServletCliente extends HttpServlet {
 		
 			if(request.getParameter("btnModificar")!=null) 
 			{
+				
 				int dni = Integer.parseInt(request.getParameter("dniCliente").toString());
 				if(CliDao.obtenerCliente(dni)!=null) 
 				{
@@ -182,12 +183,16 @@ public class ServletCliente extends HttpServlet {
 			
 			if(request.getParameter("btnEliminar")!=null) 
 			{
+				String confirmacionEliminar = request.getParameter("confirmacionEliminar");
+				
+				if ("true".equals(confirmacionEliminar)) {
 				int dni = Integer.parseInt(request.getParameter("dniCliente").toString());
-				if(CliDao.obtenerCliente(dni)!=null) 
-				{
-					boolean confirmDelete = false;
-					confirmDelete = CliDao.eliminarCliente(dni);
-					request.setAttribute("confirmDelete", confirmDelete);
+					if(CliDao.obtenerCliente(dni)!=null) 
+					{
+						boolean confirmDelete = false;
+						confirmDelete = CliDao.eliminarCliente(dni);
+						request.setAttribute("confirmDelete", confirmDelete);
+					}
 				}
 			}
 		
