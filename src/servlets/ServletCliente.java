@@ -53,7 +53,9 @@ public class ServletCliente extends HttpServlet {
 
 		if(request.getParameter("btnAceptar")!=null) 
 		{
+			String confirmacion = request.getParameter("confirmacion");
 							
+			if ("true".equals(confirmacion)) {
 			Cliente cli = new Cliente();
 		        
 			try {
@@ -64,6 +66,13 @@ public class ServletCliente extends HttpServlet {
 			    cli.setApellido(request.getParameter("apellido")); // String para apellido
 			    
 			    String sexoStr = request.getParameter("sex");
+	               if (sexoStr == null) {
+	                    request.setAttribute("msj_error", "Debe seleccionar un sexo.");
+	                    cargarClientes(request);
+	                    rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
+	                    rd.forward(request, response);
+	                    return;
+	                }
 			    boolean sexo = Boolean.parseBoolean(sexoStr); // Convierte la cadena "true" o "false" a booleano
 			    cli.setSexo(sexo);
 
@@ -85,24 +94,37 @@ public class ServletCliente extends HttpServlet {
 			    
 				if(!contra1.equals(contra2)) {
 					request.setAttribute("msj_error", "Las contrasenias no coinciden");
-					return;
+					cargarClientes(request);
+			        rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
+			        rd.forward(request, response);
 				}
 			    
-			    cli.setContrasena(request.getParameter("contra1")); // String para contrasena
-
+			    cli.setContrasena(contra1); // String para contrasena
 		        
 		        confirmacionInsert = CliDao.agregarCliente(cli);
+		        
+
 				
 				
 			} catch (Exception e) {
-				// TODO: handle exception
+				request.setAttribute("msj_error", "Error: " + e.getMessage());
 			}
-			 
+			
+	        if(confirmacionInsert) {
+	        	request.setAttribute("msj_error", "Cliente agregado exitosamente");
+	        } else {
+	        	request.setAttribute("msj_error", "Error al agregar el cliente");
+	        }
+
+        } else {
+            request.setAttribute("msj_error", "Acción cancelada por el usuario");
+        }
+			
+			
 	        cargarClientes(request);
 	        rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
 	        rd.forward(request, response);
-		}
-			
+	    }
 		
 		
 			if(request.getParameter("btnModificar")!=null) 
