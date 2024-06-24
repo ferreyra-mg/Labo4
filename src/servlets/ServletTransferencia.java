@@ -51,7 +51,7 @@ public class ServletTransferencia extends HttpServlet {
 	        String cbuDestino = request.getParameter("cbuDestino");
 	        String cuentaSeleccionada = request.getParameter("cuenta");
 	        double monto = Double.parseDouble(request.getParameter("monto"));
-	        
+	        //.
 	        boolean exito = false;
 	        if ("transferirOtroCbu".equals(enviarMonto)) {
 	            try {
