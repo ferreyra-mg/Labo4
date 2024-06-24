@@ -829,3 +829,19 @@ select[name="cuenta"] {
 	text-align: center;
 	font-family: 'Playfair Display', serif;
 }
+
+.filtrar_cuentas.a-debitar {
+	grid-template-columns: 37% 59%;
+}
+
+.monto-a-debitar {
+	display: grid;
+	grid-template-columns: 13% 87%; 
+}
+
+.monto-a-debitar > input[name="cuota"] {
+	max-width: 150px; 
+}
+.monto-a-debitar > label {
+	margin-top: 20px; 
+}

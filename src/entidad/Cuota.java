@@ -2,6 +2,8 @@ package entidad;
 
 import java.util.Date;
 
+import negocioImpl.CuotaNegocioImpl;
+
 public class Cuota {
 
     private int id;
@@ -11,6 +13,13 @@ public class Cuota {
 
     public Cuota() { }
 
+    public Cuota(int idPrestamo, float pagado) {
+        this.id = 0;
+        this.idPrestamo = idPrestamo;
+        this.pagado = pagado;
+        this.fecha = new Date();
+    }
+    
     public Cuota(int id, int idPrestamo, float pagado, Date fecha) {
         this.id = id;
         this.idPrestamo = idPrestamo;
@@ -26,4 +35,8 @@ public class Cuota {
     public void setPagado(float pagado) { this.pagado = pagado; }
     public Date getFecha() { return fecha; }
     public void setFecha(Date fecha) { this.fecha = fecha; }
+    
+    public boolean grabar() {
+    	return (new CuotaNegocioImpl()).grabar(this);
+    }
 }

@@ -1,5 +1,6 @@
 package entidad;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import negocioImpl.CuentaNegocioImpl;
@@ -18,6 +19,8 @@ public class Prestamo {
     private Date fecha;
     
     private Cuenta cuenta;
+    
+    private ArrayList<Cuota> cuotas;
 
     public Prestamo() { }
 
@@ -31,6 +34,8 @@ public class Prestamo {
         this.monto_mensual = monto_mensual;
         this.monto_total = monto_total;
         this.fecha = fecha;
+        
+        this.cuotas = new ArrayList<Cuota>();
     }
     
     public Prestamo(float prestamo, int idCuenta, int cantMeses, float monto_mensual, float monto_total) {
@@ -39,6 +44,7 @@ public class Prestamo {
         this.cantMeses = cantMeses;
         this.monto_mensual = monto_mensual;
         this.monto_total = monto_total;
+        this.cuotas = new ArrayList<Cuota>();
     }
 
     public int getId() { return id; }
@@ -65,6 +71,14 @@ public class Prestamo {
     
     public void setCuenta(Cuenta cuenta) { this.cuenta = cuenta; }
     public Cuenta getCuenta() { return this.cuenta; }
+    
+    public void setCoutas(ArrayList<Cuota> cuotas) {
+    	this.cuotas = cuotas;
+    }
+    
+    public ArrayList<Cuota> getCuotas() {
+    	return this.cuotas;
+    }
     
     public boolean solicitar() {
     	return (new PrestamoNegocioImpl()).grabar(this);

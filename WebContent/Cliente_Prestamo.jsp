@@ -35,45 +35,74 @@
 	</nav>
 
 	<div class="prestamo">
-		<div class="prestamos-error-message">
-	        <%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>
-	    </div>
 		<div class="pedir_prestamo">
 
-			
-			<form action="ServletPrestamos" method="post" class="nuevo-prestamo">
-			
-				<div class="inputs">
-					<label for="capital">Capital:</label>
-					<input type="number" id="capital" name="capital" placeholder="Ingrese el capital" min="100" step="100.00" required autofocus="autofocus">			
-					<label for="meses">Meses:</label>
-					<input type="number" id="meses" name="meses" placeholder="Ingrese meses" min="1" step="1" required value="12" >				
-				</div>
-	
-
-			<div class="filtrar_cuentas">
-					<label>Elige una cuenta:</label>
-					<select name="cuenta" id="cuenta">
-						<% for (Cuenta cta : cli.cuentas()) {%>
-							<option value="<%= cta.getId() %>"><%= cta.getTipo() + " [" + cta.getCBU() + "]"   %></option>	
-						<%} %>
-					</select>
-				</div>                 
+			<% if (request.getAttribute("prestamo_a_pagar") != null) { 
+				Prestamo prestamo = (Prestamo) request.getAttribute("prestamo_a_pagar"); 
+			%>
+				<form action="ServletPrestamos" method="post" class="nuevo-prestamo">
+					
+					<input type="hidden" name="prestamo-id-a-pagar" value="<%= prestamo.getId() %>" />
 				
-				<div class="montos">
-					<div class="monto-mensual">
-						<span>Monto Mensual:</span>
-						<span id="total-mensual"></span>
+					<div class="inputs">
+						<label for="capital">Cuota:</label>
+						<input type="number" id="capital" name="capital" placeholder="Ingrese el capital" value="<%= prestamo.getCuotas().size() + 1 %>" required>			
+						<label for="meses">De:</label>
+						<input type="number" id="meses" name="meses" placeholder="Ingrese meses" min="1" step="1" required value="<%= prestamo.getCantMeses() %>" >				
 					</div>
-					<div class="monto-total">
-						<span>Monto Total:</span>
-						<span id="total"></span>
-					</div>				
-				</div>
+		
+					<div class="filtrar_cuentas a-debitar">
+						<label>Elige una cuenta desde la que debitar el pago:</label>
+						<select name="cuenta" id="cuenta">
+							<% for (Cuenta cta : cli.cuentas()) {%>
+								<option value="<%= cta.getId() %>"><%= cta.getTipo() + " [" + cta.getCBU() + "]"   %></option>	
+							<%} %>
+						</select>
+					</div>                 
+					
+					<div class="monto-a-debitar">
+						<label for="meses">Monto a debitar:</label>
+						<input type="number" id="cuota" name="cuota" required value="<%= prestamo.getMontoMensual() %>" >
+					</div>
+					
+					<input type="submit" class="btn-aceptar btn-solicitar-prestamo" name="pagar" value="CONFIRMAR PAGO">
 				
-				<input type="submit" class="btn-aceptar btn-solicitar-prestamo" name="solicitar" value="SOLICITAR">
-			
-			</form>
+				</form>
+			<% } else {%>			
+				<form action="ServletPrestamos" method="post" class="nuevo-prestamo">
+				
+					<div class="inputs">
+						<label for="capital">Capital:</label>
+						<input type="number" id="capital" name="capital" placeholder="Ingrese el capital" min="100" step="100.00" required autofocus="autofocus">			
+						<label for="meses">Meses:</label>
+						<input type="number" id="meses" name="meses" placeholder="Ingrese meses" min="1" step="1" required value="12" >				
+					</div>
+		
+	
+				<div class="filtrar_cuentas">
+						<label>Elige una cuenta:</label>
+						<select name="cuenta" id="cuenta">
+							<% for (Cuenta cta : cli.cuentas()) {%>
+								<option value="<%= cta.getId() %>"><%= cta.getTipo() + " [" + cta.getCBU() + "]"   %></option>	
+							<%} %>
+						</select>
+					</div>                 
+					
+					<div class="montos">
+						<div class="monto-mensual">
+							<span>Monto Mensual:</span>
+							<span id="total-mensual"></span>
+						</div>
+						<div class="monto-total">
+							<span>Monto Total:</span>
+							<span id="total"></span>
+						</div>				
+					</div>
+					
+					<input type="submit" class="btn-aceptar btn-solicitar-prestamo" name="solicitar" value="SOLICITAR">
+				
+				</form>
+			<% } %>
 			
 
 			<div class="error-message">
@@ -84,30 +113,30 @@
 
 		<div class="lista_prestamo">
 
-
+			
 			<%
-    // Simulamos datos de movimientos para este ejemplo
-    List<String[]> movimientos = new ArrayList<String[]>();
-    for (int i = 1; i <= 50; i++) {
-        movimientos.add(new String[]{ "" + i, "$" + (i*69.69 + 1), ""});
-    }
-
-    // Parámetros de paginación
-    int pageSize = 10; // Número de elementos por página
-    int pageNumber = 1; // Número de la página actual
-    if (request.getParameter("page") != null) {
-        pageNumber = Integer.parseInt(request.getParameter("page"));
-    }
-
-    // Cálculo de la paginación
-    int totalItems = movimientos.size();
-    int totalPages = (int) Math.ceil((double) totalItems / pageSize);
-    int startIndex = (pageNumber - 1) * pageSize;
-    int endIndex = Math.min(startIndex + pageSize, totalItems);
-
-    // Sublista para la página actual
-    List<String[]> pageItems = movimientos.subList(startIndex, endIndex);
-%>
+			    // Simulamos datos de movimientos para este ejemplo
+			    List<String[]> movimientos = new ArrayList<String[]>();
+			    for (int i = 1; i <= 50; i++) {
+			        movimientos.add(new String[]{ "" + i, "$" + (i*69.69 + 1), ""});
+			    }
+			
+			    // Parámetros de paginación
+			    int pageSize = 10; // Número de elementos por página
+			    int pageNumber = 1; // Número de la página actual
+			    if (request.getParameter("page") != null) {
+			        pageNumber = Integer.parseInt(request.getParameter("page"));
+			    }
+			
+			    // Cálculo de la paginación
+			    int totalItems = movimientos.size();
+			    int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+			    int startIndex = (pageNumber - 1) * pageSize;
+			    int endIndex = Math.min(startIndex + pageSize, totalItems);
+			
+			    // Sublista para la página actual
+			    List<String[]> pageItems = movimientos.subList(startIndex, endIndex);
+			%>
 			
 			<table class="tabla-prestamos">
 				<thead>
@@ -118,8 +147,9 @@
 						<th>Prestamo Nro.</th>
 						<th>Fecha</th>
 						<th>Monto</th>
-						<th>Estado</th>
 						<th>Cuotas Pendientes</th>
+						<th>Estado</th>
+						<th>Acción</th>
 					</tr>
 				</thead>
 				<% for (Prestamo prestamo : cli.prestamos()) { %>
@@ -127,12 +157,16 @@
 						<td><%= prestamo.getId() %></td>
 						<td><%= prestamo.getFecha() %></td>
 						<td><%= prestamo.getPrestamo() %></td>
+						<td>05/12</td>
 						<% if (prestamo.autorizado()) { %> 
 							<td>Otorgado</td>
+							<td>
+								<a href="ServletPrestamos?pagar_cuota_prestamo=<%= prestamo.getId() %>" >Pagar</a>
+							</td>
 						<% } else {%>
 							<td>Pendiente</td>
+							<td></td>
 						<% } %>
-						<td>05/12</td>
 					</tr>
 				<% } %>
 			</table>

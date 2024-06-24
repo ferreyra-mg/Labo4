@@ -72,18 +72,53 @@ public class PrestamoDaoImpl implements PrestamoDao {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("Error: No pudieron recuperar las cuentas del cliente [" + dni + "]");
+			System.out.println("Error: No pudieron recuperar los prestamos del cliente [" + dni + "]");
 		}
 		
 		if (prestamos.size() > 0) {
 			CuentaDaoImpl ctaDao = new CuentaDaoImpl();
+			CuotaDaoImpl cuotaDao = new CuotaDaoImpl();
 			
 			for (Prestamo p: prestamos) {
 				p.setCuenta(ctaDao.obtenerCuenta(p.getIdCuenta()));
+				p.setCoutas(cuotaDao.traerCuotas(p.getId()));
 			}
 		}
 		
 
 		return prestamos;
+	}
+
+	@Override
+	public Prestamo traerPrestamo(int id) {
+		Prestamo prestamo = null;
+
+		String sql = "SELECT p.id, p.capital_pedido, p.id_cuenta, p.cant_meses, p.monto_mensual, p.monto_total, p.pagado, p.peticion, p.fecha FROM bdbanco.prestamo p where p.id = ?";
+		try (Connection conexion = Conexion.getConexion().getSQLConexion();
+				PreparedStatement stmt = conexion.prepareStatement(sql)) {
+
+			stmt.setInt(1, id);
+
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				prestamo = new Prestamo(rs.getInt("id"), rs.getFloat("capital_pedido"), rs.getInt("id_cuenta"), rs.getInt("cant_meses"), rs.getFloat("monto_mensual"),
+						rs.getFloat("monto_total"), rs.getBoolean("pagado"), rs.getBoolean("peticion"), rs.getDate("fecha"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error: No pudieron recuperar los datos del Prestamo [" + id + "]");
+		}
+		
+		if (prestamo != null ) {
+			CuentaDaoImpl ctaDao = new CuentaDaoImpl();
+			CuotaDaoImpl cuotaDao = new CuotaDaoImpl();
+			
+			prestamo.setCuenta(ctaDao.obtenerCuenta(prestamo.getIdCuenta()));
+			prestamo.setCoutas(cuotaDao.traerCuotas(prestamo.getId()));
+		}
+
+		return prestamo;
 	}
 }

@@ -8,7 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entidad.Cliente;
+import entidad.Cuota;
 import entidad.Prestamo;
+import negocioImpl.PrestamoNegocioImpl;
 
 /**
  * Servlet implementation class ServletPrestamos
@@ -33,6 +35,16 @@ public class ServletPrestamos extends HttpServlet {
 		if (request.getSession().getAttribute("usuarioLogueado") == null) {
 			request.getRequestDispatcher("/Login.jsp").forward(request, response);
 		}
+		
+		Prestamo prestamo = null;
+		
+		if (request.getParameter("pagar_cuota_prestamo") != null) {
+			int id = Integer.parseInt(request.getParameter("pagar_cuota_prestamo"));
+			prestamo = (new PrestamoNegocioImpl()).traerPrestamo(id);
+		}
+		
+		request.setAttribute("prestamo_a_pagar", prestamo);
+		
 		request.getRequestDispatcher("/Cliente_Prestamo.jsp").forward(request, response);
 	}
 
@@ -80,9 +92,22 @@ public class ServletPrestamos extends HttpServlet {
 			}
 			
 			request.setAttribute("msj_error", "No se pudo procesar la solicitud del prestamo. Pruebe nuevamente mas tarde.");
-			request.getRequestDispatcher("/Cliente_Prestamo.jsp").forward(request, response);
 		}
 		
+		if (request.getAttribute("prestamo-id-a-pagar") != null) {
+			int idPrestamo = (int) request.getAttribute("prestamo-id-a-pagar");
+			float monto = (float) request.getAttribute("cuota");
+			
+			Cuota cuota = new Cuota(idPrestamo, monto);
+			
+			if (cuota.grabar()) {
+				request.setAttribute("msj_error", "Pago realizado con exito.");
+				request.getRequestDispatcher("/Cliente_Home.jsp").forward(request, response);
+			}
+			request.setAttribute("msj_error", "No se pudo procesar el pago de la cuota. Pruebe nuevamente mas tarde.");
+		}
+		
+		request.getRequestDispatcher("/Cliente_Prestamo.jsp").forward(request, response);
 		//doGet(request, response);
 	}
 
