@@ -5,25 +5,29 @@ import java.util.Date;
 public class Movimiento {
 
     private int id;
-    private int idCuenta;
     private String movimiento;
+    private String detalle;
+    private float importe;
     private Date fecha;
 
     public Movimiento() { }
 
-    public Movimiento(int id, int idCuenta, String movimiento, Date fecha) {
+    public Movimiento(int id, float importe, String movimiento, Date fecha, String detalle) {
         this.id = id;
-        this.idCuenta = idCuenta;
+        this.importe = importe;
+        this.detalle = detalle;
         this.movimiento = movimiento;
         this.fecha = fecha;
     }
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
-    public int getIdCuenta() { return idCuenta; }
-    public void setIdCuenta(int idCuenta) { this.idCuenta = idCuenta; }
     public String getMovimiento() { return movimiento; }
     public void setMovimiento(String movimiento) { this.movimiento = movimiento; }
     public Date getFecha() { return fecha; }
     public void setFecha(Date fecha) { this.fecha = fecha; }
+	public float getImporte() { return importe; }
+	public void setImporte(float importe) { this.importe = importe; }
+	public String getDetalle() { return detalle; }
+	public void setDetalle(String detalle) { this.detalle = detalle; }
 }

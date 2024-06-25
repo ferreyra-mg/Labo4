@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="entidad.Movimiento" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -53,54 +54,64 @@
 		</div>
 	</div>
 	
+	<form action="ServletMovimiento" method="post">
+		<input type="submit" name="btn_traerMovimientos" value="Traer movimientos">
+	</form>
 	
-	
-	<%
-    // Simulamos datos de movimientos para este ejemplo
-    List<String[]> movimientos = new ArrayList<String[]>();
-    for (int i = 1; i <= 50; i++) {
-        movimientos.add(new String[]{"Tipo " + i, "2024-06-" + (i % 30 + 1), "" + (i * 100), "Recibe " + i});
-    }
+ <% 
 
-    // Parámetros de paginación
-    int pageSize = 10; // Número de elementos por página
-    int pageNumber = 1; // Número de la página actual
-    if (request.getParameter("page") != null) {
-        pageNumber = Integer.parseInt(request.getParameter("page"));
-    }
+ ArrayList<Movimiento> listMovimiento = null;
+ if(request.getAttribute("listMovimientos") != null) {
+	 listMovimiento = (ArrayList<Movimiento>) request.getAttribute("listMovimientos");
+ } 
+ 
+ int MOVIMIENTOS_POR_PAGINA = 10;
+ int totalMovimientos = (listMovimiento != null) ? listMovimiento.size() : 0;
+ int totalPages = (int) Math.ceil((double) totalMovimientos / MOVIMIENTOS_POR_PAGINA);
+ int pageNumber = 1;
 
-    // Cálculo de la paginación
-    int totalItems = movimientos.size();
-    int totalPages = (int) Math.ceil((double) totalItems / pageSize);
-    int startIndex = (pageNumber - 1) * pageSize;
-    int endIndex = Math.min(startIndex + pageSize, totalItems);
+ if (request.getParameter("page") != null) {
+     pageNumber = Integer.parseInt(request.getParameter("page"));
+ }
 
-    // Sublista para la página actual
-    List<String[]> pageItems = movimientos.subList(startIndex, endIndex);
-%>
-	
-	
-	<table>
-    <tr>
-        <th>Tipo de Movimiento</th>
+ int start = (pageNumber - 1) * MOVIMIENTOS_POR_PAGINA;
+ int end = Math.min(start + MOVIMIENTOS_POR_PAGINA, totalMovimientos);
+ ArrayList<Movimiento> paginatedList = new ArrayList<>();
+
+ if (listMovimiento != null) {
+     paginatedList = new ArrayList<>(listMovimiento.subList(start, end));
+ }
+ %>
+
+
+<table border="1" id="tabla" class="table table-striped table-bordered" style="width:100%">
+    <tr> 
         <th>Fecha</th>
-        <th>Cantidad</th>
-        <th>Recibe</th>
+        <th>Detalle</th>
+        <th>Importe</th>
+        <th>Tipo de Movimiento</th>
     </tr>
-    <% for (String[] movimiento : pageItems) { %>
-    <tr>
-        <td><%= movimiento[0] %></td>
-        <td><%= movimiento[1] %></td>
-        <td><%= movimiento[2] %></td>
-        <td><%= movimiento[3] %></td>
-    </tr>
-    <% } %>
-	</table>
+    <tbody>
+    <% if(listMovimiento != null) {
+        for(Movimiento mv : listMovimiento) { %>
+            <tr> 
+                <td><%= mv.getFecha() %></td>
+		        <td><%= mv.getDetalle() %></td>
+		        <td><%= mv.getImporte() %></td>
+		        <td><%= mv.getMovimiento() %></td>
+            </tr>
+        <% }
+    } %>
+    </tbody>
+</table>
 
 		<div class="pagination">
 		    <% for (int i = 1; i <= totalPages; i++) { %>
-		        <a href="?page=<%= i %>" class="<%= (i == pageNumber) ? "active" : "" %>"><%= i %></a>
-		    <% } %>
+            <form action="Cliente_Home.jsp" method="post" style="display:inline;">
+                <input type="hidden" name="page" value="<%= i %>">
+                <input type="submit" value="<%= i %>" class="<%= (i == pageNumber) ? "active" : "" %>">
+            </form>
+        <% } %>
 		</div>
       </body>
 </html>

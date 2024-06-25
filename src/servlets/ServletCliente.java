@@ -16,6 +16,8 @@ import javax.servlet.http.HttpSession;
 import dao.ClienteDao;
 import daoImpl.ClienteDaoImpl;
 import entidad.Cliente;
+import negocio.ClienteNegocio;
+import negocioImpl.ClienteNegocioImpl;
 
 /**
  * Servlet implementation class ServletCliente
@@ -221,8 +223,8 @@ public class ServletCliente extends HttpServlet {
 	}
 	
     private void cargarClientes(HttpServletRequest request) {
-        ClienteDao CliDao = new ClienteDaoImpl();
-        ArrayList<Cliente> listaTClientes = CliDao.obtenerTodosLosClientes();
+        ClienteNegocio cliNeg = new ClienteNegocioImpl();
+        ArrayList<Cliente> listaTClientes = cliNeg.obtenerTodosLosClientes();
         request.setAttribute("listaTClientes", listaTClientes);
     }
 

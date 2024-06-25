@@ -2,7 +2,6 @@ package entidad;
 
 import java.util.Date;
 
-import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.PrestamoNegocioImpl;
 
 public class Prestamo {
