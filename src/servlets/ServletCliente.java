@@ -47,6 +47,7 @@ public class ServletCliente extends HttpServlet {
 		RequestDispatcher rd = null;
 		boolean confirmacionInsert = false;
 		boolean confirmacionUpdate = false;
+		String confirmacionEliminar = request.getParameter("confirmacionEliminar");
 		
 		ClienteDao CliDao = new ClienteDaoImpl();
 
@@ -60,7 +61,7 @@ public class ServletCliente extends HttpServlet {
 		        
 			try {
 				
-				cli.setDni(Integer.parseInt(request.getParameter("dni")));
+				
 				cli.setCuil(request.getParameter("cuil")); // String para cuil
 			    cli.setNombre(request.getParameter("nombre")); // String para nombre
 			    cli.setApellido(request.getParameter("apellido")); // String para apellido
@@ -98,7 +99,17 @@ public class ServletCliente extends HttpServlet {
 			        rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
 			        rd.forward(request, response);
 				}
-			    
+				
+				
+				
+				if(CliDao.obtenerCliente(Integer.parseInt(request.getParameter("dni"))) != null) 
+				{
+					request.setAttribute("msj_error", "Ya existe un cliente con ese DNI");
+					cargarClientes(request);
+			        rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
+			        rd.forward(request, response);					
+				}
+				cli.setDni(Integer.parseInt(request.getParameter("dni")));
 			    cli.setContrasena(contra1); // String para contrasena
 		        
 		        confirmacionInsert = CliDao.agregarCliente(cli);
@@ -180,10 +191,8 @@ public class ServletCliente extends HttpServlet {
 		        rd.forward(request, response);
 			}
 		
+					
 			
-			if(request.getParameter("btnEliminar")!=null) 
-			{
-				String confirmacionEliminar = request.getParameter("confirmacionEliminar");
 				
 				if ("true".equals(confirmacionEliminar)) {
 				int dni = Integer.parseInt(request.getParameter("dniCliente").toString());
@@ -194,9 +203,8 @@ public class ServletCliente extends HttpServlet {
 						request.setAttribute("confirmDelete", confirmDelete);
 					}
 				}
-			}
-		
-		
+			
+					
 		
 		cargarClientes(request);
 		rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");

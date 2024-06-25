@@ -159,7 +159,7 @@ function validateForm() {
 	            <input type="text" id="direccion" name="direccion" placeholder="" value="<%= direccionValue %>" required>
             </label>
             
-            <b>NACIONALIDAD:</b>
+             <label for="Nacionalidad">NACIONALIDAD:
             			<select name="Nacionalidad">
 								<option value="Argentina" <%= "Argentina".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Argentina</option>
 								<option value="Brasil" <%= "Brasil".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Brasil</option>
@@ -170,7 +170,7 @@ function validateForm() {
 								<option value="Colombia" <%= "Colombia".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Colombia</option>
 								<option value="Venezuela" <%= "Venezuela".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Venezuela</option>
 						</select>
-            
+            </label>
             <label for="fechaNacimiento">FECHA NAC.:
             	<input type="date" id="fechaNacimiento" name="fechaNacimiento" placeholder="Ingresar fecha de nacimiento" value="<%= fechaNacimientoValue %>" required>
             </label>
