@@ -72,13 +72,15 @@ function validateForm() {
 <body class="cl">
 
 
-<%
-    HttpSession Session = request.getSession(false);
-    if (Session == null || Session.getAttribute("usuarioLogueado") == null || !"administrador".equals(Session.getAttribute("tipoUsuario"))) {
-        response.sendRedirect("Cliente_Home.jsp");
-        return;
-    }
-%>
+	<% //revisa que el usuario sea Admin
+		if(session.getAttribute("tipoUsuario") != "administrador"  )
+		{
+			RequestDispatcher rd = null;
+			rd = request.getRequestDispatcher("/Login.jsp");
+			rd.forward(request, response);
+		}
+	%>
+
 
 <%
 	//esto es para se limpien los inputs cuando se agregue el cliente, ya que si no se agrega el cliente por x motivo, no se limpian los inputs

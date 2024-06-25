@@ -8,6 +8,17 @@
 <title>Insert title here</title>
 </head>
 <body class="cl">
+
+	<% //revisa que el usuario sea Admin
+		if(session.getAttribute("tipoUsuario") != "administrador"  )
+		{
+			RequestDispatcher rd = null;
+			rd = request.getRequestDispatcher("/Login.jsp");
+			rd.forward(request, response);
+		}
+	%>
+	
+
 	<nav class="mask">
 		<div class="name-user">
 			<%= session.getAttribute("nm_user") != null ? session.getAttribute("nm_user") : "" %>

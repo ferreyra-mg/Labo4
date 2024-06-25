@@ -14,6 +14,16 @@
 </head>
 <body class="cl">
 
+	<% //revisa que el usuario sea cliente
+		if(session.getAttribute("tipoUsuario") != "cliente"  )
+		{
+			RequestDispatcher rd = null;
+			rd = request.getRequestDispatcher("/Login.jsp");
+			rd.forward(request, response);
+		}
+	%>
+	
+
 	<%
 		Cliente cli = null;
 	
