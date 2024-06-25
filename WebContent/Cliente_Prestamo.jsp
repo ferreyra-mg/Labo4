@@ -23,14 +23,15 @@
 		}
 	%>
 	
+	
+	ï»¿
 
-	<%
-		Cliente cli = null;
-	
-		if (session.getAttribute("usuarioLogueado") != null)
-			cli = (Cliente) session.getAttribute("usuarioLogueado");
-	
+	<% //no borrar
+	Cliente cli = null;
+	if (session.getAttribute("usuarioLogueado") != null)
+		cli = (Cliente) session.getAttribute("usuarioLogueado");
 	%>
+	
 
 	<nav class="mask">
 		<div class="name-user">
@@ -56,12 +57,13 @@
 				<div class="inputs">
 					<label for="capital">Capital:</label>
 					<input type="number" id="capital" name="capital" placeholder="Ingrese el capital" min="100" step="100.00" required autofocus="autofocus">			
+					
 					<label for="meses">Meses:</label>
-					<input type="number" id="meses" name="meses" placeholder="Ingrese meses" min="1" step="1" required value="12" >				
+					<input type="number" id="meses" name="meses" placeholder="Ingrese meses" min="1" step="1" max="12" required value="12" >				
 				</div>
 	
 
-			<div class="filtrar_cuentas">
+				<div class="filtrar_cuentas">
 					<label>Elige una cuenta:</label>
 					<select name="cuenta" id="cuenta">
 						<% for (Cuenta cta : cli.cuentas()) {%>
@@ -102,20 +104,20 @@
         movimientos.add(new String[]{ "" + i, "$" + (i*69.69 + 1), ""});
     }
 
-    // Parámetros de paginación
-    int pageSize = 10; // Número de elementos por página
-    int pageNumber = 1; // Número de la página actual
+    // ParÃ¡metros de paginaciÃ³n
+    int pageSize = 10; // NÃºmero de elementos por pÃ¡gina
+    int pageNumber = 1; // NÃºmero de la pÃ¡gina actual
     if (request.getParameter("page") != null) {
         pageNumber = Integer.parseInt(request.getParameter("page"));
     }
 
-    // Cálculo de la paginación
+    // CÃ¡lculo de la paginaciÃ³n
     int totalItems = movimientos.size();
     int totalPages = (int) Math.ceil((double) totalItems / pageSize);
     int startIndex = (pageNumber - 1) * pageSize;
     int endIndex = Math.min(startIndex + pageSize, totalItems);
 
-    // Sublista para la página actual
+    // Sublista para la pÃ¡gina actual
     List<String[]> pageItems = movimientos.subList(startIndex, endIndex);
 %>
 			

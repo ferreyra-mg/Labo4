@@ -210,51 +210,53 @@ function validateForm() {
             	<%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>
             </div>
         </form>
+        
+        
 </div>
-		
+	
+<form action="ServletCliente" method="post">
+	<input type="submit" name="btn_traerClientes" value="Traer Clientes">
+</form>	
 
 <div class="tr2">
  
  <% 
-  	ArrayList<Cliente>listaClientes = null;
- 	if(request.getAttribute("listaTClientes")!=null)
- 	{
-		listaClientes = (ArrayList<Cliente>) request.getAttribute("listaTClientes");
- 	} 
- 	
- 	%>
- 	
 
- 
- <table border="1" id="tabla" class="table table-striped table-bordered" style="width:100%">
- 	<tr> 
- 		<th>DNI</th> 
- 		<th>NOMBRE</th> 
- 		<th>APELLIDO</th> 
- 		<th>ACCIÓN</th> 
- 	</tr>
-	<tbody>
- 	
- 	<%if(listaClientes != null){
- 	for(Cliente cliente : listaClientes)
- 		{ %>
- 	<tr> 
- 		<form action="ServletCliente" method="Post">
- 		<td><%=cliente.getDni() %><input type="hidden" name="dniCliente" value="<%=cliente.getDni() %>"> </td>  
- 		<td><%=cliente.getNombre() %></td> 
- 		<td><%=cliente.getApellido() %></td>
- 		<td>
- 		
- 		<input type="hidden" id="confirmacionEliminar" name="confirmacionEliminar" value="false">
- 		<input type="submit" name="btnModificar" value="Modificar">
- 		<input type="submit" name="btnEliminar" value="Eliminar" onclick="return confirmarEliminacion()">
- 		</td>
- 		
- 	</tr>
- 	<% } 
- 	}%>
- 	</tbody>
- </table>
+ ArrayList<Cliente> listaClientes = null;
+ if(request.getAttribute("listaTClientes") != null) {
+     listaClientes = (ArrayList<Cliente>) request.getAttribute("listaTClientes");
+ } 
+ %>
+
+
+<table border="1" id="tabla" class="table table-striped table-bordered" style="width:100%">
+    <tr> 
+        <th>DNI</th> 
+        <th>NOMBRE</th> 
+        <th>APELLIDO</th> 
+        <th>ACCIÓN</th> 
+    </tr>
+    <tbody>
+    <% if(listaClientes != null) {
+        for(Cliente cliente : listaClientes) { %>
+            <tr> 
+                <form action="ServletCliente" method="Post">
+                    <td><%=cliente.getDni() %><input type="hidden" name="dniCliente" value="<%=cliente.getDni() %>"> </td>  
+                    <td><%=cliente.getNombre() %></td> 
+                    <td><%=cliente.getApellido() %></td>
+                    <td>
+                        <input type="hidden" id="confirmacionEliminar" name="confirmacionEliminar" value="false">
+                        <input type="submit" name="btnModificar" value="Modificar">
+                        <input type="submit" name="btnEliminar" value="Eliminar" onclick="return confirmarEliminacion()">
+                    </td>
+                </form>
+            </tr>
+        <% }
+    } %>
+    </tbody>
+</table>
+
+
 	
 
 </div>

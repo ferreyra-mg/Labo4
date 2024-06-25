@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.ClienteDao;
 import daoImpl.ClienteDaoImpl;
@@ -48,6 +49,14 @@ public class ServletCliente extends HttpServlet {
 		boolean confirmacionInsert = false;
 		boolean confirmacionUpdate = false;
 		String confirmacionEliminar = request.getParameter("confirmacionEliminar");
+
+		if(request.getParameter("btn_traerClientes") != null)
+		{
+			cargarClientes(request);
+		    rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
+		    rd.forward(request, response);
+		    return;
+		}
 		
 		ClienteDao CliDao = new ClienteDaoImpl();
 

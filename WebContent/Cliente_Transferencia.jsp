@@ -47,19 +47,19 @@
 		<div class="tr2">
 			<p>Transferir a tus cuentas</p>
 			<form action="ServletTransferencia" method="post">
-			<div class="filtrar_cuentas">
-				<label>Elige una cuenta:</label> 
-				<select name="cuenta" id="cuenta">
-			        <option value="1">[cuenta 1]</option>
-			        <option value="2">[cuenta 2]</option>
-					<option value="3">[cuenta 3]</option>
-				</select>
-			</div>
+				<div class="filtrar_cuentas">
+					<label>Elige una cuenta:</label> 
+					<select name="cuenta" id="cuenta">
+				        <option value="1">[cuenta 1]</option>
+				        <option value="2">[cuenta 2]</option>
+						<option value="3">[cuenta 3]</option>
+					</select>
+				</div>
 
-        	<label for="monto2">Monto:</label>
-        	<input type="number" id="monto_2" placeholder="Ingrese el Monto">
-        	<br><br>
-        	<button type="submit" name="enviarMonto" value="transferir_propia" class="btn-aceptar">Aceptar</button>
+	        	<label for="monto2">Monto:</label>
+	        	<input type="number" id="monto_2" placeholder="Ingrese el Monto">
+	        	<br><br>
+	        	<button type="submit" name="enviarMonto" value="transferir_propia" class="btn-aceptar">Aceptar</button>
         	 </form>
 			
 		</div>
