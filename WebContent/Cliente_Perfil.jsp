@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="entidad.Cuenta" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,8 +35,20 @@
 		</ul>
 	</nav>
 
+	<form action="ServletDescolgable" method="post">
+		<input type="submit" name="btn_TCPe" value="Traer Cuentas"> <!--  ABREVIATURA Traer Cliente Home-->
+	</form>
+
+	<% 
+	ArrayList<Cuenta> cuentas = null;
+	if(request.getAttribute("cuentas") != null) {
+		cuentas = (ArrayList<Cuenta>) request.getAttribute("cuentas");
+	}
+	%>
+
 	<div class="container-cperfil">
 		<div class="perfil">
+		
 			Nombre: [APELLIDO, NOMBRE] <br><br>
 			DNI: [VALOR] <br><br>
 			Cuil: [VALOR] <br><br>
@@ -46,53 +60,29 @@
 			
 		</div>
 		
-		
+		<%
+			if (cuentas != null) {
+			for (Cuenta cuenta : cuentas) {
+		%>
 		<div class = "btn-c1">
 		    <img src="img/cuenta_bg.jpg" alt="">
 		    <div class="card-content">
 		      <h2>
-		        [CUENTA 1]
+		        <%=cuenta.getUsuario() %>
 		      </h2>
 		      <p>
-				USUARIO: [VALOR] <br>
-				CBU: [VALOR] <br>
-				FECHA DE CREACION: [VALOR] <br>
-				TIPO DE CUENTA: [VALOR] <br>
-				SALDO: [VALOR]
+				CBU: <%=cuenta.getCBU() %> 				<br>
+				FECHA DE CREACION: <%=cuenta.getCreacion()%> 	<br>
+				TIPO DE CUENTA: <%=cuenta.getTipo()%> 	<br>
+				SALDO: <%=cuenta.getSaldo()%>
 		      </p>
 		    </div>
 		  </div>
+		<%
+			}
+		}
+		%>
 		
-		<div class = "btn-c2">
-		    <img src="img/cuenta_bg.jpg" alt="">
-		    <div class="card-content">
-		      <h2>
-		        [CUENTA 2]
-		      </h2>
-		      <p>
-				USUARIO: [VALOR] <br>
-				CBU: [VALOR] <br>
-				FECHA DE CREACION: [VALOR] <br>
-				TIPO DE CUENTA: [VALOR] <br>
-				SALDO: [VALOR]
-		      </p>
-		    </div>
-		  </div>
-		  
-		  <div class = "btn-c3">
-		    <img src="img/cuenta_bg.jpg" alt="">
-		    <div class="card-content">
-		      <h2>
-		        [CUENTA 3]
-		      </h2>
-		      <p>
-				USUARIO: [VALOR] <br>
-				CBU: [VALOR] <br>
-				FECHA DE CREACION: [VALOR] <br>
-				TIPO DE CUENTA: [VALOR] <br>
-				SALDO: [VALOR]
-		      </p>
-		    </div>
 		  </div>
 		  
 		<div class="valores">

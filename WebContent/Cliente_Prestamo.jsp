@@ -52,6 +52,10 @@
 		<div class="pedir_prestamo">
 
 			
+			<form action="ServletDescolgable" method="post">
+				<input type="submit" name="btn_TCPr" value="Traer Cuentas"> <!--  ABREVIATURA Traer Cliente Home-->
+			</form>
+			
 			<form action="ServletPrestamos" method="post" class="nuevo-prestamo">
 			
 				<div class="inputs">
@@ -62,13 +66,25 @@
 					<input type="number" id="meses" name="meses" placeholder="Ingrese meses" min="1" step="1" max="12" required value="12" >				
 				</div>
 	
+				<% 
+				ArrayList<Cuenta> cuentas = null;
+				if(request.getAttribute("cuentas") != null) {
+					cuentas = (ArrayList<Cuenta>) request.getAttribute("cuentas");
+				}
+				%>
 
 				<div class="filtrar_cuentas">
 					<label>Elige una cuenta:</label>
 					<select name="cuenta" id="cuenta">
-						<% for (Cuenta cta : cli.cuentas()) {%>
-							<option value="<%= cta.getId() %>"><%= cta.getTipo() + " [" + cta.getCBU() + "]"   %></option>	
-						<%} %>
+					<%
+						if (cuentas != null) {
+						for (Cuenta cuenta : cuentas) {
+					%>
+					<option value="<%= cuenta.getId() %>"><%= cuenta.getUsuario() %></option>
+					<%
+						}
+					}
+					%>
 					</select>
 				</div>                 
 				

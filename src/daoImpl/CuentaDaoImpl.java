@@ -10,8 +10,8 @@ import entidad.Cuenta;
 
 public class CuentaDaoImpl implements CuentaDao {
 
-	private static final String CUENTA_DNI = "SELECT * FROM bdbanco.cuenta where dni = ?";
-	private static final String CUENTA_CLIENTE= "SELECT * FROM bdbanco.cuenta where id = ?";
+	private static final String CUENTA_DNI = "SELECT * FROM bdbanco.cuenta where dni = ? LIMIT 1";
+	private static final String CUENTA_CLIENTE= "SELECT * FROM bdbanco.cuenta where dni = ? LIMIT 3";
 	@Override
 	public void crearCuenta(Cuenta cuenta) {
 		// TODO Auto-generated method stub

@@ -53,7 +53,7 @@
 	}
 	%>
 	
-	<div class="filtrar_cuentas">
+		<div class="filtrar_cuentas">
 		Elige una cuenta: 
 		<select name="cuenta" id="cuenta">
 		<%

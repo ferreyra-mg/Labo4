@@ -48,13 +48,15 @@
 
 		<div class="tr2">
 			<p>Transferir a tus cuentas</p>
+			<form action="ServletDescolgable" method="post">
+				<input type="submit" name="btn_TCT" value="Traer Cuentas"> <!--  ABREVIATURA Traer Cliente Home-->
+			</form>	
+			
 			<form action="ServletTransferencia" method="post">
 				
 
 
-		<form action="ServletDescolgable" method="post">
-				<input type="submit" name="btn_TCT" value="Traer Cuentas"> <!--  ABREVIATURA Traer Cliente Home-->
-			</form>	
+			
 			
 				<% 
 				ArrayList<Cuenta> cuentas = null;
