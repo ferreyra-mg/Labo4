@@ -12,7 +12,7 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	
 	@Override 
 	public Cuenta obtenerUsuario(int dni) {
-		return cuentaDao.obtenerCuenta(dni);
+		return cuentaDao.obtenerUsuario(dni);
 	}
 
 	@Override

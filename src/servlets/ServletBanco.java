@@ -67,7 +67,6 @@ public class ServletBanco extends HttpServlet {
 			Administrador ad = adNeg.logear(usuario, contra1);
 			if(ad != null)
 			{
-				session.setAttribute("nm_user", "" );
 				session.setAttribute("usuarioLogueado", ad);  //TODO: borrar
 				session.setAttribute("tipoUsuario", "administrador");
 				session.setAttribute("nm_user", usuario);
@@ -79,7 +78,8 @@ public class ServletBanco extends HttpServlet {
 			if(cl != null) {
 				session.setAttribute("usuarioLogueado", cl);
                 session.setAttribute("tipoUsuario", "cliente");
-                session.setAttribute("nm_user", cuNeg.obtenerUsuario(cl.getDni()));
+                String aux = cuNeg.obtenerUsuario( cl.getDni() ).getUsuario();
+                session.setAttribute("nm_user", aux);
                 session.setAttribute("dni", cl.getDni());
                 rd = request.getRequestDispatcher("/Cliente_Home.jsp");
                 rd.forward(request, response);
