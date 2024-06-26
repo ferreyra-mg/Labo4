@@ -128,6 +128,19 @@ function validateForm() {
 
 <h1 style="text-align: center; text-decoration: underline;">PERFILES</h1>
 
+<form action="ServletDescolgable" method="post">
+	<input type="submit" name="btn_traerPaises" value="Traer Paises">
+</form>	
+
+<% 
+
+ ArrayList<String> paises = null;
+ if(request.getAttribute("paises") != null) {
+	 paises = (ArrayList<String>) request.getAttribute("paises");
+ } 
+ %>
+
+
 <div class="tr1">
 		<p>Agregar Cliente</p>
 		
@@ -161,13 +174,21 @@ function validateForm() {
 	            <input type="text" id="direccion" name="direccion" placeholder="" value="<%= direccionValue %>" required>
             </label>
             
-             <label for="Nacionalidad">NACIONALIDAD:
-            			<select name="Nacionalidad">
-							<option value="Argentina" <%= "Argentina".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Argentina</option>
-							<option value="Brasil" <%= "Brasil".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Brasil</option>
-							<option value="Chile" <%= "Chile".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Chile</option>
-						</select>
-            </label>
+            <label for="nacionalidad">NACIONALIDAD:
+	            <select name="nacionalidad">
+	                <%
+	                    if (paises != null) {
+	                        for (String pais : paises) {
+	                %>
+	                <option value="<%= pais %>"><%= pais %></option>
+	                <%
+	                        }
+	                    }
+	                %>
+	            </select>
+        	</label>
+            
+            
             <label for="fechaNacimiento">FECHA NAC.:
             	<input type="date" id="fechaNacimiento" name="fechaNacimiento" placeholder="Ingresar fecha de nacimiento" value="<%= fechaNacimientoValue %>" required>
             </label>
