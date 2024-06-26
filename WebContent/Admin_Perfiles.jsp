@@ -33,40 +33,7 @@
     
 
 
-<!-- <script>
-function validateForm() {
-    var sexM = document.getElementById('sexoM').checked;
-    var sexF = document.getElementById('sexoF').checked;
-    var contra1 = document.getElementById('contra1').value;
-    var contra2 = document.getElementById('contra2').value;
 
-    if (!sexM && !sexF) {
-        alert("Debe seleccionar un sexo.");
-        return false;
-    }
-
-    if (contra1 !== contra2) {
-        alert("Las contraseñas no coinciden.");
-        return false;
-    }
-
-    return true;
-}
-</script> -->
-
-<!-- <link rel="stylesheet" type="text/css"
-	href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
-	
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script type="text/javascript" charset="utf8"
-	src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('#tabla').DataTable();
-	});
-</script> -->
 
 </head>
 <body class="cl">

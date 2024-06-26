@@ -31,7 +31,7 @@ public class ServletCliente extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int dni = 0;
+		int dni = Integer.parseInt(request.getSession().getAttribute("dni").toString());
 		if(request.getParameter("dni")!=null) {
 			dni = Integer.parseInt(request.getParameter("dni").toString());
 		}
@@ -39,7 +39,7 @@ public class ServletCliente extends HttpServlet {
 		boolean confirmacionInsert = false;
 		boolean confirmacionUpdate = false;
 		String confirmacionEliminar = request.getParameter("confirmacionEliminar");
-
+		System.out.println(confirmacionEliminar);
 		if(request.getParameter("btn_traerClientes") != null)
 		{
 			cargarClientes(request);
@@ -231,11 +231,13 @@ public class ServletCliente extends HttpServlet {
 			}
 
 			
-				int dniEliminar = 0;			
+							
 				if ("true".equals(confirmacionEliminar)) {
+					int dniEliminar = 0;
 					dniEliminar = Integer.parseInt(request.getParameter("dniCliente").toString());
-					if(cliNeg.obtenerCliente(dniEliminar)!=null) 
+					if(cliNeg.obtenerCliente(dniEliminar)!=null)
 					{
+						System.out.println(dniEliminar);
 						boolean confirmDelete = false;
 						confirmDelete = cliNeg.eliminarCliente(dniEliminar);
 						request.setAttribute("confirmDelete", confirmDelete);

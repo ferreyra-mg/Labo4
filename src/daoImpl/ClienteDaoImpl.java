@@ -16,12 +16,12 @@ public class ClienteDaoImpl implements ClienteDao {
 	private static final String insert = "INSERT INTO cliente(dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena, activo)"
 			+ " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	
-	private static final String listarClientes = "SELECT * FROM bdbanco.cliente where activo = 1";
+	private static final String listarClientes = "SELECT * FROM cliente WHERE cliente.activo = 1;";
 	
 	private static final String update = "UPDATE cliente SET cuil = ?, nombre = ?, apellido = ?, sexo = ?, nacionalidad = ?, "
 			+ "fechaNacimiento = ?, direccion = ?, localidad = ?, provincia = ?, correoElectronico = ?, telefono = ?, contrasena = ? WHERE dni = ?;";
 	
-	private static final String clienteXdni = "SELECT * FROM cliente WHERE dni = ?;";
+	private static final String clienteXdni = "SELECT * FROM cliente WHERE dni = ? and activo = 1;";
 	
 	private static final String deleteLogico = "UPDATE cliente SET activo = false WHERE dni =?;";
 	
@@ -222,33 +222,6 @@ public class ClienteDaoImpl implements ClienteDao {
 	
 	@Override
 	public Cliente logear(String user, String psw) {
-		
-		//private static final String _obtenerCliente = "SELECT * FROM usuario WHERE nombreUsuario = ? AND contrasena = ?";
-		// TODO Auto-generated method stub
-		/*Connection conexion = Conexion.getConexion().getSQLConexion();
-		Cliente cl = null;
-		
-		try {
-			PreparedStatement stmt = conexion.prepareStatement(obtenerUsu);
-			stmt.setString(1, nombreUsuario);
-			stmt.setString(2, contra);
-			ResultSet rs = stmt.executeQuery();
-			if(rs.next()) {
-				cl = new Cliente();
-				cl.setId(rs.getInt("id"));
-				cl.setNombreUsuario(rs.getString("nombreUsuario"));
-				cl.setContrasena(rs.getString("contrasena"));
-				cl.setTipoUsuario(rs.getString("tipoUsuario"));
-			}
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return Cliente;*/
-		
-		
 		String sql = "SELECT dni, contrasena FROM cliente WHERE dni = ? AND contrasena = ?";
         try (Connection conexion = Conexion.getConexion().getSQLConexion();
              PreparedStatement stmt = conexion.prepareStatement(sql)) {
