@@ -81,13 +81,13 @@ public class ServletCliente extends HttpServlet {
                     cargarClientes(request);
                     rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
                     rd.forward(request, response);
-                    //throw new ClienteInvalidoException();
+                    throw new ClienteInvalidoException();
                 }
 			    boolean sexo = Boolean.parseBoolean(sexoStr); // Convierte la cadena "true" o "false" a booleano
 			    cli.setSexo(sexo);
 			    if(cli.getTelefono() < 0)
 			    {
-                    //throw new ClienteInvalidoException();
+                    throw new ClienteInvalidoException();
 			    }
 			    
 				String contra1 = request.getParameter("contra1");
