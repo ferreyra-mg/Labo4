@@ -47,8 +47,7 @@ function TextoPass() {
                         <%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>
                     </div>
 
-
-                    <button type="submit" class="button login__submit">
+                    <button type="submit" class="button login__submit" name="btn_logear">
                         <span class="button__text">Iniciar sesion</span>
                         <i class="button__icon fas fa-chevron-right"></i>
                     </button>

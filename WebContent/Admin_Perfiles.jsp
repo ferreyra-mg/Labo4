@@ -163,14 +163,9 @@ function validateForm() {
             
              <label for="Nacionalidad">NACIONALIDAD:
             			<select name="Nacionalidad">
-								<option value="Argentina" <%= "Argentina".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Argentina</option>
-								<option value="Brasil" <%= "Brasil".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Brasil</option>
-								<option value="Chile" <%= "Chile".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Chile</option>
-								<option value="Paraguay" <%= "Paraguay".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Paraguay</option>
-								<option value="Uruguay" <%= "Uruguay".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Uruguay</option>
-								<option value="Bolivia" <%= "Bolivia".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Bolivia</option>
-								<option value="Colombia" <%= "Colombia".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Colombia</option>
-								<option value="Venezuela" <%= "Venezuela".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Venezuela</option>
+							<option value="Argentina" <%= "Argentina".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Argentina</option>
+							<option value="Brasil" <%= "Brasil".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Brasil</option>
+							<option value="Chile" <%= "Chile".equals(request.getParameter("nacionalidadValue")) ? "selected" : "" %>>Chile</option>
 						</select>
             </label>
             <label for="fechaNacimiento">FECHA NAC.:
@@ -272,14 +267,6 @@ function validateForm() {
 		<p>Modificar Cliente</p>
 		
         <form action="ServletCliente" method="post" style="display:grid; grid-template-columns: repeat(3, 1fr)">
-                
-            <label for="dniM">DNI:
-            	<input type="text" id="dniM" name="dniM" value="<%= clienteModif.getDni() %>" readonly>
-            </label>
-            
-            <label for="cuilM">CUIL:
-            	<input type="text" id="cuilM" name="cuilM" value="<%= clienteModif.getCuil() %>" required>
-            </label>
             
             <label for="nombreM">NOMBRE:
             	<input type="text" id="nombreM" name="nombreM" value="<%= clienteModif.getNombre() %>" required>
@@ -305,16 +292,7 @@ function validateForm() {
 								<option value="Argentina">Argentina</option>
 								<option value="Brasil">Brasil</option>
 								<option value="Chile">Chile</option>
-								<option value="Paraguay">Paraguay</option>
-								<option value="Uruguay">Uruguay</option>
-								<option value="Bolivia">Bolivia</option>
-								<option value="Colombia">Colombia</option>
-								<option value="Venezuela">Venezuela</option>
 						</select>
-            
-            <label for="fechaNacimientoM">FECHA NAC.:
-            	<input type="date" id="fechaNacimientoM" name="fechaNacimientoM" value="<%= clienteModif.getFechaNacimiento() != null ? clienteModif.getFechaNacimiento().toString() : "" %>" required>
-            </label>
             
             
              <label for="localidadM">LOCALIDAD:
@@ -332,10 +310,7 @@ function validateForm() {
             <label for="telefonoM">TELEFONO:
            		<input type="text" id="telefonoM" name="telefonoM" value="<%= clienteModif.getTelefono() %>" required>
             </label>
-  
-            
             <br><br>            
-            
             <label for="contra1M">CONTRASEÑA:
             	<input type="password" id="contra1M" name="contra1M" value="<%= clienteModif.getContrasena() %>" required>
             </label>

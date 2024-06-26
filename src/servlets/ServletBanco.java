@@ -43,60 +43,58 @@ public class ServletBanco extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		RequestDispatcher rd = null;
-		String usuario = request.getParameter("txt_user");
-		String contra1 = request.getParameter("psw1");
-		String contra2 = request.getParameter("psw2");
+		HttpSession session = request.getSession();
 		
-		if(!contra1.equals(contra2)) {
-			request.setAttribute("msj_error", "Las contrasenias no coinciden");
-			rd = request.getRequestDispatcher("Login.jsp");
-			rd.forward(request, response);
-			return;
-		}
-		
-		
-		Administrador ad = adNeg.logear(usuario, contra1);
-		if(ad != null)
+		if(request.getParameter("btn_logear")!=null)
 		{
-			HttpSession session = request.getSession();
-			session.setAttribute("usuarioLogueado", ad);
-			session.setAttribute("tipoUsuario", "administrador");
+			String usuario = request.getParameter("txt_user");
+			String contra1 = request.getParameter("psw1");
+			String contra2 = request.getParameter("psw2");
 			
-			session.setAttribute("nm_user", usuario);
-			//se logeo el admin
-			rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
-		}
-		 else {
-			Cliente cl = clNeg.logear(usuario, contra1);
-			if(cl != null) {
-				HttpSession session = request.getSession();
-				session.setAttribute("usuarioLogueado", cl);
-				session.setAttribute("tipoUsuario", "cliente");
-				// almaceno el nombre de la primera cuenta
-				request.setAttribute("nm_user", cuNeg.obtenerUsuario(cl.getDni()));
-				session.setAttribute("nm_user", request.getAttribute("nm_user"));
-			//se logeo el cliente
-			rd = request.getRequestDispatcher("/Cliente_Home.jsp");
-			}
-			else {
-				request.setAttribute("msj_error", "Usuario y/o contrasenia incorrecta");
-				rd = request.getRequestDispatcher("/Login.jsp");
-				} 
-		}
-			
-        cargarClientes(request);
-		if (rd == null) rd = request.getRequestDispatcher("/Login.jsp");
-		rd.forward(request, response);
-		
-		
-		
-		
-	}
-	
-    private void cargarClientes(HttpServletRequest request) {
-        ClienteDao CliDao = new ClienteDaoImpl();
-        ArrayList<Cliente> listaTClientes = CliDao.obtenerTodosLosClientes();
-        request.setAttribute("listaTClientes", listaTClientes);
-    }
+			System.out.println("Usuario: " + usuario);
+			System.out.println("Contraseña 1: " + contra1);
+			System.out.println("Contraseña 2: " + contra2);
 
+			// comprobar si las contraseñas son iguales
+			if(!contra1.equals(contra2))
+			{
+				request.setAttribute("msj_error", "Las contraseñas no coinciden");
+				rd = request.getRequestDispatcher("Login.jsp");
+				rd.forward(request, response);
+				return;
+			}
+			
+			// logear al admin
+			Administrador ad = adNeg.logear(usuario, contra1);
+			if(ad != null)
+			{
+				session.setAttribute("usuarioLogueado", ad);
+				session.setAttribute("tipoUsuario", "administrador");
+				session.setAttribute("nm_user", usuario);
+				rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
+				rd.forward(request, response);
+				return;
+			}
+			else { // logea al cliente
+				Cliente cl = clNeg.logear(usuario, contra1);
+				if(cl != null) {
+					session.setAttribute("usuarioLogueado", cl);
+					session.setAttribute("tipoUsuario", "cliente");
+					request.setAttribute("nm_user", cuNeg.obtenerUsuario(cl.getDni()));
+					session.setAttribute("dni", cl.getDni());
+					rd = request.getRequestDispatcher("/Cliente_Home.jsp");
+					rd.forward(request, response);
+					return;
+				}
+				else
+				{
+					request.setAttribute("msj_error", "Usuario y/o contraseña incorrecta");
+					rd = request.getRequestDispatcher("/Login.jsp");
+				} 
+			}
+		}
+			
+		//if (rd == null) rd = request.getRequestDispatcher("/Login.jsp");
+		rd.forward(request, response);
+	}
 }

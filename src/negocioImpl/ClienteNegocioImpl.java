@@ -11,19 +11,19 @@ public class ClienteNegocioImpl implements ClienteNegocio{
 	private ClienteDao clienteDao = new ClienteDaoImpl();
 
 	
-	public void agregarCliente(Cliente cliente) {
-		clienteDao.agregarCliente(cliente);
+	public boolean agregarCliente(Cliente cliente) {
+		return clienteDao.agregarCliente(cliente);
 		
 	}
 
 	@Override
-	public void modificarCliente(Cliente cliente) {
-		clienteDao.modificarCliente(cliente);
+	public boolean modificarCliente(Cliente cliente) {
+		return clienteDao.modificarCliente(cliente);
 	}
 
 	@Override
-	public void eliminarCliente(int dni) {//no hay bajas fisicas, solo logicas
-		clienteDao.eliminarCliente(dni);
+	public boolean eliminarCliente(int dni) {//no hay bajas fisicas, solo logicas
+		return clienteDao.eliminarCliente(dni);
 		
 	}
 
