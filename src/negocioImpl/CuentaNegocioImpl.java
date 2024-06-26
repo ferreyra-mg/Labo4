@@ -11,8 +11,8 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	private CuentaDao cuentaDao = new CuentaDaoImpl();
 	
 	@Override 
-	public String obtenerUsuario(int dni) {
-		return cuentaDao.obtenerUsuario(dni);
+	public Cuenta obtenerUsuario(int dni) {
+		return cuentaDao.obtenerCuenta(dni);
 	}
 
 	@Override

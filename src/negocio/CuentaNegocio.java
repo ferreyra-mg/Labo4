@@ -10,8 +10,8 @@ public interface CuentaNegocio {
 	void crearCuenta(Cuenta cuenta);
 	void modificarCuenta(Cuenta cuenta);
 	void cambiarEstadoCuenta(int id); //no hay bajas fisicas, solo logicas
-	ArrayList<Cuenta> obtenerTodasLasCuentas();
-	ArrayList<Cuenta> obtenerTodasLasCuentas(int dni);
+	ArrayList<Cuenta> obtenerTodasLasCuentas(); //trae todos
+	ArrayList<Cuenta> obtenerTodasLasCuentas(int dni); //trae de un solo usuario todas sus cuentas
 	Cuenta obtenerCuenta(int id);
-	String obtenerUsuario(int dni);
+	Cuenta obtenerUsuario(int dni);
 }

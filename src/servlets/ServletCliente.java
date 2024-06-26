@@ -1,8 +1,7 @@
 package servlets;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -11,10 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import dao.ClienteDao;
-import daoImpl.ClienteDaoImpl;
 import entidad.Cliente;
 import excepcion.ClienteInvalidoException;
 import negocio.ClienteNegocio;
@@ -52,7 +48,7 @@ public class ServletCliente extends HttpServlet {
 		    return;
 		}
 		
-		ClienteDaoImpl cliNeg = new ClienteDaoImpl();
+		ClienteNegocio cliNeg = new ClienteNegocioImpl();
 
 
 		if(request.getParameter("btnAceptar")!=null) 
@@ -226,7 +222,7 @@ public class ServletCliente extends HttpServlet {
 				    request.setAttribute("clienteModificar", null);
 					
 					} catch (Exception e) {
-					// TODO: handle exception
+						e.getMessage();
 						}
 				 
 		        cargarClientes(request);

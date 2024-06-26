@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    <%@ page import="java.util.ArrayList" %>
+<%@ page import="entidad.Cuenta" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,14 +49,33 @@
 		<div class="tr2">
 			<p>Transferir a tus cuentas</p>
 			<form action="ServletTransferencia" method="post">
+				
+
+
+		<form action="ServletDescolgable" method="post">
+				<input type="submit" name="btn_TCT" value="Traer Cuentas"> <!--  ABREVIATURA Traer Cliente Home-->
+			</form>	
+			
+				<% 
+				ArrayList<Cuenta> cuentas = null;
+				if(request.getAttribute("cuentas") != null) {
+					cuentas = (ArrayList<Cuenta>) request.getAttribute("cuentas");
+				}
+				%>
+			
 				<div class="filtrar_cuentas">
-					<label>Elige una cuenta:</label> 
+					Elige una cuenta: 
 					<select name="cuenta" id="cuenta">
-				        <option value="1">[cuenta 1]</option>
-				        <option value="2">[cuenta 2]</option>
-						<option value="3">[cuenta 3]</option>
-					</select>
-				</div>
+					<%
+						if (cuentas != null) {
+						for (Cuenta cuenta : cuentas) {
+					%>
+					<option value="<%= cuenta.getUsuario() %>"><%= cuenta.getUsuario() %></option>
+					<%
+						}
+					}
+					%>
+				</select>
 
 	        	<label for="monto2">Monto:</label>
 	        	<input type="number" id="monto_2" placeholder="Ingrese el Monto">

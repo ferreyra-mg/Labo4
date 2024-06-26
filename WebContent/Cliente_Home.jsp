@@ -3,6 +3,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="entidad.Movimiento" %>
+<%@ page import="entidad.Cuenta" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,14 +41,31 @@
 			<li><a href="Cliente_Perfil.jsp">Perfil</a></li>
 		</ul>
 	</nav>
+	
+	<form action="ServletDescolgable" method="post">
+		<input type="submit" name="btn_TCH" value="Traer Cuentas"> <!--  ABREVIATURA Traer Cliente Home-->
+	</form>	
+	
+	<% 
+	ArrayList<Cuenta> cuentas = null;
+	if(request.getAttribute("cuentas") != null) {
+		cuentas = (ArrayList<Cuenta>) request.getAttribute("cuentas");
+	}
+	%>
+	
 	<div class="filtrar_cuentas">
 		Elige una cuenta: 
 		<select name="cuenta" id="cuenta">
-	        <option value="1">[cuenta 1]</option>
-	        <option value="2">[cuenta 2]</option>
-			<option value="3">[cuenta 3]</option>
+		<%
+			if (cuentas != null) {
+			for (Cuenta cuenta : cuentas) {
+		%>
+		<option value="<%= cuenta.getId() %>"><%= cuenta.getUsuario() %></option>
+		<%
+			}
+		}
+		%>
 		</select>
-		
 		
 		<div class="error-message">
 			<%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>

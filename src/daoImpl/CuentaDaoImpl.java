@@ -1,7 +1,6 @@
 package daoImpl;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,12 +10,11 @@ import entidad.Cuenta;
 
 public class CuentaDaoImpl implements CuentaDao {
 
-	private static final String user_name = "SELECT usuario FROM bdbanco.cuenta where dni = ?";
-
+	private static final String CUENTA_DNI = "SELECT * FROM bdbanco.cuenta where dni = ?";
+	private static final String CUENTA_CLIENTE= "SELECT * FROM bdbanco.cuenta where id = ?";
 	@Override
 	public void crearCuenta(Cuenta cuenta) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -40,28 +38,20 @@ public class CuentaDaoImpl implements CuentaDao {
 	@Override
 	public ArrayList<Cuenta> obtenerTodasLasCuentas(int dni) {
 		ArrayList<Cuenta> cuentas = new ArrayList<>();
-
-		String sql = "SELECT id, usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado FROM cuenta WHERE dni = ?";
 		try (Connection conexion = Conexion.getConexion().getSQLConexion();
-				PreparedStatement stmt = conexion.prepareStatement(sql)) {
-
+				PreparedStatement stmt = conexion.prepareStatement(CUENTA_CLIENTE)) {
 			stmt.setInt(1, dni);
-
 			ResultSet rs = stmt.executeQuery();
-
 			while (rs.next()) {
-				Cuenta cuenta = new Cuenta(rs.getInt("id"), rs.getString("usuario"), rs.getInt("dni"),
+				Cuenta cuenta = new Cuenta(rs.getInt("id"),rs.getString("usuario"), rs.getInt("dni"),
 						rs.getString("cbu"), rs.getDate("fechaCreacion"), rs.getString("tipoCuenta"),
 						rs.getFloat("saldo"), rs.getBoolean("estado"));
-
 				cuentas.add(cuenta);
 			}
-			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Error: No pudieron recuperar las cuentas del cliente [" + dni + "]");
 		}
-
 		return cuentas;
 	}
 
@@ -92,22 +82,29 @@ public class CuentaDaoImpl implements CuentaDao {
 	}
 
 	@Override
-	public String obtenerUsuario(int dni) {
+	public Cuenta obtenerUsuario(int dni) {
 		// TODO Auto-generated method stub
 		PreparedStatement statement = null;
 		Connection conexion = null;
-		ResultSet resultSet = null;
-		String nombreUsuario = null;
+		ResultSet rs = null;
+		Cuenta c = new Cuenta();
 
 		try {
 			conexion = Conexion.getConexion().getSQLConexion();
-			statement = conexion.prepareStatement(user_name);
+			statement = conexion.prepareStatement(CUENTA_DNI);
 			statement.setInt(1, dni);
 
-			resultSet = statement.executeQuery();
+			rs = statement.executeQuery();
 
-			if (resultSet.next()) {
-				nombreUsuario = resultSet.getString("usuario");
+			if (rs.next()) {
+				c.setId(rs.getInt("id"));
+		        c.setUsuario(rs.getString("usuario"));
+		        c.setDni(rs.getInt("dni"));
+		        c.setCBU(rs.getString("cbu"));
+		        c.setCreacion(rs.getDate("fechaCreacion"));
+		        c.setTipo(rs.getString("tipoCuenta"));
+		        c.setSaldo(rs.getFloat("saldo"));
+		        c.setEstado(rs.getBoolean("estado"));
 			}
 
 		} catch (SQLException e) {
@@ -121,8 +118,8 @@ public class CuentaDaoImpl implements CuentaDao {
 			}
 		} finally {
 			try {
-				if (resultSet != null) {
-					resultSet.close();
+				if (rs != null) {
+					rs.close();
 				}
 				if (statement != null) {
 					statement.close();
@@ -134,8 +131,7 @@ public class CuentaDaoImpl implements CuentaDao {
 				e.printStackTrace();
 			}
 		}
-
-		return nombreUsuario != null ? nombreUsuario : "no se encontraron cuentas";
+		return c;
 	}
 
 }

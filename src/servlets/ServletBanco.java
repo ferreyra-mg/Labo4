@@ -1,7 +1,6 @@
 package servlets;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,10 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import dao.ClienteDao;
-import daoImpl.ClienteDaoImpl;
+
 import entidad.Administrador;
 import entidad.Cliente;
+import entidad.Cuenta;
 import negocio.AdministradorNegocio;
 import negocio.ClienteNegocio;
 import negocio.CuentaNegocio;
@@ -68,33 +67,27 @@ public class ServletBanco extends HttpServlet {
 			Administrador ad = adNeg.logear(usuario, contra1);
 			if(ad != null)
 			{
-				session.setAttribute("usuarioLogueado", ad);
+				session.setAttribute("nm_user", "" );
+				session.setAttribute("usuarioLogueado", ad);  //TODO: borrar
 				session.setAttribute("tipoUsuario", "administrador");
 				session.setAttribute("nm_user", usuario);
 				rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
 				rd.forward(request, response);
 				return;
 			}
-			else { // logea al cliente
-				Cliente cl = clNeg.logear(usuario, contra1);
-				if(cl != null) {
-					session.setAttribute("usuarioLogueado", cl);
-					session.setAttribute("tipoUsuario", "cliente");
-					request.setAttribute("nm_user", cuNeg.obtenerUsuario(cl.getDni()));
-					session.setAttribute("dni", cl.getDni());
-					rd = request.getRequestDispatcher("/Cliente_Home.jsp");
-					rd.forward(request, response);
-					return;
-				}
-				else
-				{
-					request.setAttribute("msj_error", "Usuario y/o contraseña incorrecta");
-					rd = request.getRequestDispatcher("/Login.jsp");
-				} 
+			Cliente cl = clNeg.logear(usuario, contra1);
+			if(cl != null) {
+				session.setAttribute("usuarioLogueado", cl);
+                session.setAttribute("tipoUsuario", "cliente");
+                session.setAttribute("nm_user", cuNeg.obtenerUsuario(cl.getDni()));
+                session.setAttribute("dni", cl.getDni());
+                rd = request.getRequestDispatcher("/Cliente_Home.jsp");
+                rd.forward(request, response);
+				return;
 			}
 		}
-			
-		//if (rd == null) rd = request.getRequestDispatcher("/Login.jsp");
+		rd = request.getRequestDispatcher("/Login.jsp");
+		request.setAttribute("msj_error", "Usuario y/o contraseña incorrecta");
 		rd.forward(request, response);
 	}
 }
