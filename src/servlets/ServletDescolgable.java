@@ -14,8 +14,10 @@ import javax.servlet.http.HttpSession;
 import entidad.Cuenta;
 import negocio.CuentaNegocio;
 import negocio.PaisNegocio;
+import negocio.TipoCuentaNegocio;
 import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.PaisNegocioImpl;
+import negocioImpl.TipoCuentaNegocioImpl;
 
 
 @WebServlet("/ServletDescolgable")
@@ -74,8 +76,24 @@ public class ServletDescolgable extends HttpServlet {
 		    rd.forward(request, response);
 		    return;
 		}
+		if(request.getParameter("btn_traerTipos") != null)
+		{
+			traerTipos(request);
+		    rd = request.getRequestDispatcher("/Admin_Cuentas.jsp");
+		    rd.forward(request, response);
+		    return;
+		}
+		
+		
 		
 	}
+
+	private void traerTipos(HttpServletRequest request) {
+		TipoCuentaNegocio tNeg = new TipoCuentaNegocioImpl();
+		ArrayList<String> tipos = tNeg.traerTipo();
+		request.setAttribute("tipos", tipos);
+	}
+
 
 	public void traerPaises(HttpServletRequest request)
 	{

@@ -16,6 +16,8 @@ public class ClienteDaoImpl implements ClienteDao {
 	private static final String insert = "INSERT INTO cliente(dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena, activo)"
 			+ " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	
+	private static final String existeDNI ="SELECT COUNT(*) AS cantidad FROM bdbanco.cliente WHERE dni = ? AND activo = 1";
+	
 	private static final String listarClientes = "SELECT * FROM cliente WHERE cliente.activo = 1;";
 	
 	private static final String update = "UPDATE cliente SET cuil = ?, nombre = ?, apellido = ?, sexo = ?, nacionalidad = ?, "
@@ -242,5 +244,38 @@ public class ClienteDaoImpl implements ClienteDao {
         return null;
 	}
 	
+	@Override
+	public boolean existeDNI(int dni) {
+		Connection con = Conexion.getConexion().getSQLConexion();
+		boolean existe = false;
+		PreparedStatement stmt = null;
+        ResultSet rs = null;
+		
+        try {
+			stmt = con.prepareStatement(existeDNI);
+			stmt.setInt(1, dni);
+			rs = stmt.executeQuery();
+			
+			while(rs.next()){
+				
+				if(Integer.parseInt(rs.getString("cantidad"))> 0)
+				{
+					existe = true;
+				}
+			}
+		} catch (Exception e5) {
+			e5.printStackTrace();
+		}
+        finally {
+        	 try {
+             	if (rs != null) rs.close();
+                 if (stmt != null) stmt.close();
+             } catch (SQLException e) {
+                 e.printStackTrace();
+             }
+		}
+        
+        return existe;
+	}
 	
 }

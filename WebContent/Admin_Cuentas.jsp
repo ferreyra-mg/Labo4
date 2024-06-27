@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@ page import="java.util.ArrayList"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,29 +33,49 @@
 		</ul>
 	</nav>
 
-	<div class="adm-cuentas">
+	<form action="ServletDescolgable" method="post">
+		<input type="submit" name="btn_traerTipos" value="Traer Tipos de cuenta">
+	</form>	
 	
-		<div>Cliente: <input type="text" name="dni-cliente"></div>
-		<div>Nombre de la cuenta: <input type="text" name="nm-cliente"></div>
-		<div>contraseña: <input type="password" name="psw-cliente"></div>
-		<div>repita la contraseña: contraseña: <input type="password" name="psw-cliente2"></div>
+	<% 
+	
+	 ArrayList<String> tipos = null;
+	 if(request.getAttribute("tipos") != null) {
+		 tipos = (ArrayList<String>) request.getAttribute("tipos");
+	 } 
+	 %>
+
+	<div class="adm-cuentas">
+		<form action="ServletCuenta" method="post">
+           
+		<div>DNI Cliente: <input type="text" name="dni_cliente"></div>
+		<div>Nombre de la cuenta: <input type="text" name="nm_cuenta"></div>
 		<div>CBU: <input type="text" name="cbu-cliente"></div>
 		<div>
-			Tipo de cuenta:
-			<select name="tipo" id="tipo">
-			    <option value="1">[tipo 1]</option>
-		        <option value="2">[tipo 2]</option>
-				<option value="3">[tipo 3]</option>
-			</select>
+			Tipo de cuenta:			
+			<select name="tipo" id=tipo>
+	                <%
+	                    if (tipos != null) {
+	                        for (String tipo : tipos) {
+	                %>
+	                <option value="<%= tipo %>"><%= tipo %></option>
+	                <%
+	                        }
+	                    }
+	                %>
+	            </select>
 		</div>
 		
-		<button type="button" name="aceptar" class="c-cuenta">Aceptar</button>
+		<input type="submit" name="crearCuenta" class="c-cuenta" value="Aceptar">
 		
 	</div>
 
 
 	<div class="error-message">
 		<%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>
+	</div>
+	<div class="msj_agrego">
+		<%= request.getAttribute("msj_agrego") != null ? request.getAttribute("msj_agrego") : "" %>
 	</div>
 </body>
 </html>

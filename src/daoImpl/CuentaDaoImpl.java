@@ -12,9 +12,42 @@ public class CuentaDaoImpl implements CuentaDao {
 
 	private static final String CUENTA_DNI = "SELECT * FROM bdbanco.cuenta where dni = ? LIMIT 1";
 	private static final String CUENTA_CLIENTE= "SELECT * FROM bdbanco.cuenta where dni = ? LIMIT 3";
+	private static final String CANTIDAD_CUENTA = "SELECT COUNT(*) AS cantidad FROM bdbanco.cuenta WHERE dni = ?";
+	private static final String CREAR_CUENTA = "INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado)"
+			+" VALUES(?, ?, ?, ?, ?, ?, ?)";
 	@Override
-	public void crearCuenta(Cuenta cuenta) {
-		// TODO Auto-generated method stub
+	public boolean crearCuenta(Cuenta cuenta) {
+		PreparedStatement stmt;
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		boolean isInsertExitoso = false;
+	    try {
+	        
+	    	stmt = conexion.prepareStatement(CREAR_CUENTA);
+	    	
+	    	stmt.setString(1, cuenta.getUsuario()); 
+	    	stmt.setInt(2, cuenta.getDni()); 
+	    	stmt.setString(3, cuenta.getCBU()); 
+	    	java.util.Date creacionUtilDate = cuenta.getCreacion();
+	    	java.sql.Date creacionSqlDate = new java.sql.Date(creacionUtilDate.getTime());
+	    	stmt.setDate(4, creacionSqlDate);
+	    	stmt.setString(5, cuenta.getTipo()); 
+	    	stmt.setFloat(6, cuenta.getSaldo()); 
+	    	stmt.setBoolean(7, cuenta.isEstado());  		        
+	    	
+	        if (stmt.executeUpdate() > 0) {
+	            conexion.commit();
+	            isInsertExitoso = true;
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        try {
+	            conexion.rollback();
+	        } catch (SQLException e1) {
+	            e1.printStackTrace();
+	        }
+	    }
+	    return isInsertExitoso;
 	}
 
 	@Override
@@ -158,6 +191,28 @@ public class CuentaDaoImpl implements CuentaDao {
 		}
 
 		return cuenta;
+	}
+	
+	@Override
+	public int numeroCuentas(int dni) {
+		int cant = 0;
+
+		String sql = "SELECT id, usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado FROM cuenta WHERE usuario = ?";
+		try (Connection conexion = Conexion.getConexion().getSQLConexion();
+				PreparedStatement stmt = conexion.prepareStatement(CANTIDAD_CUENTA)) {
+
+			stmt.setInt(1, dni);
+
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				cant = rs.getInt("cantidad");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return cant;
 	}
 
 }

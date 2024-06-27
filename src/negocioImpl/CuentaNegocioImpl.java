@@ -16,9 +16,8 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	}
 
 	@Override
-	public void crearCuenta(Cuenta cuenta) {
-		// TODO Auto-generated method stub
-		
+	public boolean crearCuenta(Cuenta cuenta) {
+		return cuentaDao.crearCuenta(cuenta);
 	}
 
 	@Override
@@ -52,5 +51,10 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	@Override
 	public Cuenta obtenerCuentaxUsuario(String Usuario) {
 		return cuentaDao.obtenerCuentaxUsuario(Usuario);
+	}
+	
+	@Override
+	public int numeroCuentas(int dni) {
+		return cuentaDao.numeroCuentas(dni);
 	}
 }

@@ -42,4 +42,9 @@ public class ClienteNegocioImpl implements ClienteNegocio{
 		return clienteDao.logear(user,psw);
 	}
 
+	@Override
+	public boolean existeDNI(int dni) {
+		return clienteDao.existeDNI(dni);
+	}
+
 }

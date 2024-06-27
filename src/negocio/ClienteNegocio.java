@@ -11,4 +11,5 @@ public interface ClienteNegocio {
 	ArrayList<Cliente> obtenerTodosLosClientes();
 	Cliente obtenerCliente(int dni);
 	Cliente logear(String user, String psw);
+	boolean existeDNI(int dni);
 }

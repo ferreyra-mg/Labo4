@@ -1,2 +1,4 @@
 eclipse.preferences.version=1
 encoding//WebContent/Cliente_Prestamo.jsp=UTF-8
+encoding//src/servlets/ServletCliente.java=UTF-8
+encoding//src/servlets/ServletCuenta.java=UTF-8

@@ -31,7 +31,7 @@ public class ServletCliente extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int dni = 0;
+		int dni = Integer.parseInt(request.getSession().getAttribute("dni").toString());
 		if(request.getParameter("dni")!=null) {
 			dni = Integer.parseInt(request.getParameter("dni").toString());
 		}
@@ -84,16 +84,19 @@ public class ServletCliente extends HttpServlet {
                  rd.forward(request, response);
 		    } 
 			
-			
-			String sexoStr = request.getParameter("sex");
-		    if (sexoStr == null)
-		    {
-                request.setAttribute("msj_error", "Debe seleccionar un sexo.");
-                cargarClientes(request);
-                rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
-                rd.forward(request, response);
-                //throw new ClienteInvalidoException();
-            }
+			try {
+				String sexoStr = request.getParameter("sex");
+				if (sexoStr == null)
+			    {
+			    	throw new ClienteInvalidoException();
+	            }
+			}catch(ClienteInvalidoException e)
+			{
+				request.setAttribute("msj_error", "Debe seleccionar un sexo.");
+	            cargarClientes(request);
+	            rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
+	            rd.forward(request, response);
+			}
 			
 			
 		    long telefono = Long.parseLong(request.getParameter("telefono"));
@@ -116,12 +119,6 @@ public class ServletCliente extends HttpServlet {
 		        rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
 		        rd.forward(request, response);
 			}
-			
-			
-			
-			
-			
-			
 			String confirmacion = request.getParameter("confirmacion");
 			
 			if ("true".equals(confirmacion)) {
@@ -141,14 +138,11 @@ public class ServletCliente extends HttpServlet {
 			    
 			    String fechaNacimientoStr = request.getParameter("fechaNacimiento");
 			    java.sql.Date fechaNacimiento = java.sql.Date.valueOf(fechaNacimientoStr);
-			    cli.setFechaNacimiento(fechaNacimiento);			    
+			    cli.setFechaNacimiento(fechaNacimiento);	
 			    
+			    String sexoStr = request.getParameter("sex");
 			    if (sexoStr == null)
 			    {
-                    request.setAttribute("msj_error", "Debe seleccionar un sexo.");
-                    cargarClientes(request);
-                    rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
-                    rd.forward(request, response);
                     throw new ClienteInvalidoException();
                 }
 			    boolean sexo = Boolean.parseBoolean(sexoStr); // Convierte la cadena "true" o "false" a booleano
@@ -164,7 +158,15 @@ public class ServletCliente extends HttpServlet {
 		        confirmacionInsert = cliNeg.agregarCliente(cli);
 				
 				
-			} catch (Exception e) {
+			} catch (ClienteInvalidoException e)
+			{
+				request.setAttribute("msj_error", "Debe seleccionar un sexo.");
+                cargarClientes(request);
+                rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
+                rd.forward(request, response);
+			}
+			
+			catch (Exception e) {
 				request.setAttribute("msj_error", "Error: " + e.getMessage());
 			}
 			
@@ -175,7 +177,7 @@ public class ServletCliente extends HttpServlet {
 	        }
 
         } else {
-            request.setAttribute("msj_error", "Acción cancelada por el usuario");
+            request.setAttribute("msj_error", "Acciï¿½n cancelada por el usuario");
         }
 	        cargarClientes(request);
 	        rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
