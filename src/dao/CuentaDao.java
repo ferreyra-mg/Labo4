@@ -12,5 +12,6 @@ public interface CuentaDao {
 	ArrayList<Cuenta> obtenerTodasLasCuentas();
 	ArrayList<Cuenta> obtenerTodasLasCuentas(int dni);
 	Cuenta obtenerCuenta(int id);
+	Cuenta obtenerCuentaxUsuario(String Usuario);
 	Cuenta obtenerUsuario(int dni);
 }

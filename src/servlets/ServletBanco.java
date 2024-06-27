@@ -79,6 +79,7 @@ public class ServletBanco extends HttpServlet {
 				session.setAttribute("usuarioLogueado", cl);
                 session.setAttribute("tipoUsuario", "cliente");
                 String aux = cuNeg.obtenerUsuario( cl.getDni() ).getUsuario();
+                request.getSession().setAttribute("usuario", aux);
                 session.setAttribute("nm_user", aux);
                 session.setAttribute("dni", cl.getDni());
                 rd = request.getRequestDispatcher("/Cliente_Home.jsp");

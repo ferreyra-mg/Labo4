@@ -3,6 +3,7 @@ package servlets;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -11,11 +12,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import entidad.Cuenta;
+import negocio.CuentaNegocio;
+import negocio.MovimientoNegocio;
 import negocio.TransferenciaNegocio;
+import negocioImpl.CuentaNegocioImpl;
+import negocioImpl.MovimientoNegocioImpl;
 
 @WebServlet("/ServletTransferencia")
 public class ServletTransferencia extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	
        
     public ServletTransferencia() {
         super();
@@ -27,40 +34,45 @@ public class ServletTransferencia extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		    HttpSession session = request.getSession(false);
 		    if (session == null || session.getAttribute("nm_user") == null) {
 		        response.sendRedirect("/Login.jsp");
 		        return;
 		    }
+		    
+		    RequestDispatcher rd = null;
 
-		    String usuarioLogueado = request.getSession().getAttribute("nm_user").toString();
-	        String enviarMonto = request.getParameter("enviarMonto");
+		    String usuarioLogueado = request.getSession().getAttribute("usuario").toString();
 	        String cbuDestino = request.getParameter("cbuDestino");
-	        String cuentaSeleccionada = request.getParameter("cuenta");
-	        double monto = Double.parseDouble(request.getParameter("monto"));
-	        //.
+	        float monto = Float.parseFloat(request.getParameter("monto"));
+	        
+	        MovimientoNegocio movNeg = new MovimientoNegocioImpl();
+	        CuentaNegocio cuentaNeg = new CuentaNegocioImpl();
+	        
+	        Cuenta cuenta = cuentaNeg.obtenerCuentaxUsuario(usuarioLogueado);
+
 	        boolean exito = false;
-	        if ("transferirOtroCbu".equals(enviarMonto)) {
-	            try {
-					exito = TransferenciaNegocio.transferirOtroCbu(usuarioLogueado, cbuDestino, monto);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-	        } else if ("transferirPropiaCuenta".equals(enviarMonto)) {
-	            int idCuentaDestino = Integer.parseInt(cuentaSeleccionada);
-	            try {
-					exito = TransferenciaNegocio.transferirPropiaCuenta(usuarioLogueado, idCuentaDestino, monto);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+	        if (request.getParameter("enviarMonto")!=null) {
+	        	
+	        	float saldoActual = movNeg.VerificarSaldo(usuarioLogueado);
+	        	
+	        	if(saldoActual < monto) {
+	        		request.setAttribute("msjTransferencia", "No tiene saldo suficiente.");
+	        		rd = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
+	        		rd.forward(request, response);
+	        	}
+	        	
+	        	exito = movNeg.transferirCbu(cuenta, cbuDestino, monto);
+	        	
 	        }
 	        
-	        if (exito) {
-	            response.sendRedirect("/Cliente_Home.jsp");
+	        if (exito == true) {
+        		request.setAttribute("msjTransferencia", "Dinero transferido.");
+        		rd = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
+        		rd.forward(request, response);
 	        } else {
-	            request.setAttribute("msj_error", "Error en la transferencia. Verifique el saldo y los datos ingresados.");
+	            request.setAttribute("msjTransferencia", "Error en la transferencia. Verifique los datos ingresados.");
 	            request.getRequestDispatcher("/Cliente_Transferencia.jsp").forward(request, response);
 	        }
 	        

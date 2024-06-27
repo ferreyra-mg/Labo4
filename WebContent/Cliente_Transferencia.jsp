@@ -43,6 +43,9 @@
         	<input type="number" id="monto_1" name="monto" placeholder="Ingrese el Monto">
         	<br><br>
         	<button type="submit" name="enviarMonto" value="transferirOtro" class="btn-aceptar">Aceptar</button>
+        	<div class="error-message">
+				<%= request.getAttribute("msjTransferencia") != null ? request.getAttribute("msjTransferencia") : "" %>
+			</div>
         	</form>
 		</div>
 
@@ -82,7 +85,7 @@
 	        	<label for="monto2">Monto:</label>
 	        	<input type="number" id="monto_2" placeholder="Ingrese el Monto">
 	        	<br><br>
-	        	<button type="submit" name="enviarMonto" value="transferir_propia" class="btn-aceptar">Aceptar</button>
+	        	<button type="submit" name="enviarMontoCuentas" value="transferir_propia" class="btn-aceptar">Aceptar</button>
         	 </form>
 			
 		</div>

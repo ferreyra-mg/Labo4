@@ -48,4 +48,9 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	public Cuenta obtenerCuenta(int id) {
 		return cuentaDao.obtenerCuenta(id);
 	}
+
+	@Override
+	public Cuenta obtenerCuentaxUsuario(String Usuario) {
+		return cuentaDao.obtenerCuentaxUsuario(Usuario);
+	}
 }

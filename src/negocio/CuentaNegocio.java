@@ -13,5 +13,6 @@ public interface CuentaNegocio {
 	ArrayList<Cuenta> obtenerTodasLasCuentas(); //trae todos
 	ArrayList<Cuenta> obtenerTodasLasCuentas(int dni); //trae de un solo usuario todas sus cuentas
 	Cuenta obtenerCuenta(int id);
+	Cuenta obtenerCuentaxUsuario(String Usuario);
 	Cuenta obtenerUsuario(int dni);
 }
