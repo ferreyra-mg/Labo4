@@ -19,12 +19,12 @@
         return false;
     	}
     }
-    function confirmarEliminacion() {
+    function confirmarEliminacion(form) {
     	if (confirm("¿Está seguro que desea eliminar este cliente a la base de datos?")) {
-        document.getElementById('confirmacionEliminar').value = 'true';
+        form.confirmacionEliminar.value = 'true';
         return true;
     	} else {
-        document.getElementById('confirmacionEliminar').value = 'false';
+    	form.confirmacionEliminar.value = 'false';
         return false;
     	}
     }
@@ -230,7 +230,7 @@
                     <td>
                         <input type="hidden" id="confirmacionEliminar" name="confirmacionEliminar" value="false">
                         <input type="submit" name="btnModificar" value="Modificar">
-                        <input type="submit" name="btnEliminar" value="Eliminar" onclick="return confirmarEliminacion()">
+                        <input type="submit" name="btnEliminar" value="Eliminar" onclick="return confirmarEliminacion(this.form)">
                     </td>
                 </form>
             </tr>

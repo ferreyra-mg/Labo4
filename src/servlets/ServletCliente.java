@@ -31,7 +31,7 @@ public class ServletCliente extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int dni = Integer.parseInt(request.getSession().getAttribute("dni").toString());
+		int dni = 0;
 		if(request.getParameter("dni")!=null) {
 			dni = Integer.parseInt(request.getParameter("dni").toString());
 		}
