@@ -8,4 +8,6 @@ public interface PrestamoNegocio {
 	boolean grabar(Prestamo prestamo);
 	
 	ArrayList<Prestamo> traerTodos(int dni);
+	
+	ArrayList<Prestamo> traerPendientes();
 }

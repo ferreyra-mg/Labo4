@@ -89,4 +89,37 @@ public class PrestamoDaoImpl implements PrestamoDao {
 
 		return prestamos;
 	}
+	
+	
+	public ArrayList<Prestamo> traerPendientes() {
+		ArrayList<Prestamo> prestamos = new ArrayList<>();
+
+		String sql = "SELECT * FROM prestamo WHERE peticion IS NULL";
+		try (Connection conexion = Conexion.getConexion().getSQLConexion();
+				PreparedStatement stmt = conexion.prepareStatement(sql)) {
+
+
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				Prestamo prestamo = new Prestamo();
+				prestamo.setId(rs.getInt("id"));
+                prestamo.setIdCuenta(rs.getInt("id_Cuenta"));
+                prestamo.setCantMeses(rs.getInt("cant_Meses"));
+                prestamo.setFecha(rs.getDate("fecha"));
+                prestamo.setMontoMensual(rs.getFloat("montoMensual"));
+                prestamo.setMontoTotal(rs.getFloat("montoTotal"));
+                prestamo.setPagado(rs.getBoolean("pagado"));
+                prestamo.setPeticion(rs.getBoolean("peticion"));
+                
+				prestamos.add(prestamo);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error al traer de la base de datos");
+		}
+						
+		return prestamos;
+	}
 }

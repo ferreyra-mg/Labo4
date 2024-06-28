@@ -1,3 +1,5 @@
+<%@ page import="entidad.Prestamo"%>
+<%@ page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -50,33 +52,52 @@
         pageNumber = Integer.parseInt(request.getParameter("page"));
     }
 
+    
+    
+    ArrayList<Prestamo> listaPrestamos = null;
+	if(request.getAttribute("listaTPrestamos") != null) {
+    listaPrestamos = (ArrayList<Prestamo>) request.getAttribute("listaTPrestamos");
+	} 
+    
     // Cálculo de la paginación
     //int totalItems = movimientos.size();
     //int totalPages = (int) Math.ceil((double) totalItems / pageSize);
     //int startIndex = (pageNumber - 1) * pageSize;
-    //int endIndex = Math.min(startIndex + pageSize, totalItems);
+    //int endIndex = Math.min(startIndex + pageSize, totalItems);    
 	%>
+	
+	<form action="ServletPrestamos" method="post">
+	<input type="submit" name="btn_traerPrestamos" value="Traer Prestamos Pendientes">
+	</form>	
 	
 	<table>
     <tr>
         <th>Usuario</th>
         <th>Capital</th>
         <th>Meses</th>
-        <th>Monto a Pagar</th>
+        <th>Valor Cuota</th>
         <th>Aceptar</th>
         <th>Rechazar</th>
     </tr>
     <!--  for (MovimientoXTransferencia movimiento : pageItems) {   -->
+    <tbody>
+    <% if(listaPrestamos != null) {
+        for(Prestamo prestamo : listaPrestamos) { %>
     <tr>
-        <td> [nombre usuario]		</td>
-        <td> [capital pedido]		</td>
-        <td> [meses en los que va a pagar] 	</td>
-        <td> [monto a pagar]  	</td>
-        <td> <button type="button" name="aceptar">Aceptar</button> 	</td>
-        <td> <button type="button" name="rechazar">Rechazar</button>   	</td>
+    	<form action="ServletPrestamos" method="post">
+        	<td> [nombre usuario]		</td>
+        	<td> <%=prestamo.getMontoTotal() %></td>
+        	<td> <%=prestamo.getCantMeses() %></td>
+       		<td> <%=prestamo.getMontoMensual() %></td>
+        	<td> <button type="button" name="aceptar">Aceptar</button> 	</td>
+        	<td> <button type="button" name="rechazar">Rechazar</button>   	</td>
+    	</form>
     </tr>
+            <% }
+    } %>
     <!-- } --> 
-</table>
+    </tbody>
+	</table>
 	
 	<div class="error-message">
 		<%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>

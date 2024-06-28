@@ -1,6 +1,9 @@
 package servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,7 +12,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import entidad.Cliente;
 import entidad.Prestamo;
+import negocio.ClienteNegocio;
 import negocio.PrestamoNegocio;
+import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.PrestamoNegocioImpl;
 
 @WebServlet("/ServletPrestamos")
@@ -31,6 +36,14 @@ public class ServletPrestamos extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		//Cliente cli = (Cliente) request.getSession().getAttribute("usuarioLogueado");
+
+		PrestamoNegocio preNeg = new PrestamoNegocioImpl();
+		
+		if(request.getParameter("btn_traerPrestamos") != null)
+		{
+			prestamosPendientes(request, response);
+			return;
+		}
 		
 		if (request.getParameter("solicitar") != null) {
 			
@@ -77,5 +90,19 @@ public class ServletPrestamos extends HttpServlet {
 		}
 		
 	}
+	
+	private void cargarPrestamos(HttpServletRequest request) {
+        PrestamoNegocio preNeg = new PrestamoNegocioImpl();
+        ArrayList<Prestamo> listaTPrestamos = preNeg.traerPendientes();
+        request.setAttribute("listaTPrestamos", listaTPrestamos);
+    }
+
+    private void prestamosPendientes(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+    	RequestDispatcher rd = null;
+    	cargarPrestamos(request);
+		rd = request.getRequestDispatcher("/Admin_Prestamos.jsp");
+		rd.forward(request, response);
+    }
 
 }

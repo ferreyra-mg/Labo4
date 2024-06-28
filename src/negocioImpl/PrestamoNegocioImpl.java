@@ -19,5 +19,10 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 	public ArrayList<Prestamo> traerTodos(int dni) {
 		return presDao.traerTodos(dni);
 	}
+	
+	@Override
+	public ArrayList<Prestamo> traerPendientes() {
+		return presDao.traerPendientes();
+	}
 
 }
