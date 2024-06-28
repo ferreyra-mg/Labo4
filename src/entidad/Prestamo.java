@@ -2,8 +2,6 @@ package entidad;
 
 import java.util.Date;
 
-import negocioImpl.PrestamoNegocioImpl;
-
 public class Prestamo {
 
     private int id;
@@ -15,8 +13,10 @@ public class Prestamo {
     private boolean pagado;
     private boolean autorizado;
     private Date fecha;
+    private boolean peticion;
     
-    private Cuenta cuenta;
+    
+	private Cuenta cuenta;
 
     public Prestamo() { }
 
@@ -64,8 +64,11 @@ public class Prestamo {
     
     public void setCuenta(Cuenta cuenta) { this.cuenta = cuenta; }
     public Cuenta getCuenta() { return this.cuenta; }
-    
-    public boolean solicitar() {
-    	return (new PrestamoNegocioImpl()).grabar(this);
-    }
+    public boolean isPeticion() {
+		return peticion;
+	}
+
+	public void setPeticion(boolean peticion) {
+		this.peticion = peticion;
+	}
 }

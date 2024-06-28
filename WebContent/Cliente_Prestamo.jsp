@@ -22,8 +22,6 @@
 			rd.forward(request, response);
 		}
 	%>
-	
-	
 	﻿
 
 	<% //no borrar
@@ -50,8 +48,7 @@
 	        <%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>
 	    </div>
 		<div class="pedir_prestamo">
-
-			
+	
 			<form action="ServletDescolgable" method="post">
 				<input type="submit" name="btn_TCPr" value="Traer Cuentas"> <!--  ABREVIATURA Traer Cliente Home-->
 			</form>
@@ -114,28 +111,28 @@
 
 
 			<%
-    // Simulamos datos de movimientos para este ejemplo
-    List<String[]> movimientos = new ArrayList<String[]>();
-    for (int i = 1; i <= 50; i++) {
-        movimientos.add(new String[]{ "" + i, "$" + (i*69.69 + 1), ""});
-    }
-
-    // Parámetros de paginación
-    int pageSize = 10; // Número de elementos por página
-    int pageNumber = 1; // Número de la página actual
-    if (request.getParameter("page") != null) {
-        pageNumber = Integer.parseInt(request.getParameter("page"));
-    }
-
-    // Cálculo de la paginación
-    int totalItems = movimientos.size();
-    int totalPages = (int) Math.ceil((double) totalItems / pageSize);
-    int startIndex = (pageNumber - 1) * pageSize;
-    int endIndex = Math.min(startIndex + pageSize, totalItems);
-
-    // Sublista para la página actual
-    List<String[]> pageItems = movimientos.subList(startIndex, endIndex);
-%>
+			    // Simulamos datos de movimientos para este ejemplo
+			    List<String[]> movimientos = new ArrayList<String[]>();
+			    for (int i = 1; i <= 50; i++) {
+			        movimientos.add(new String[]{ "" + i, "$" + (i*69.69 + 1), ""});
+			    }
+			
+			    // Parámetros de paginación
+			    int pageSize = 10; // Número de elementos por página
+			    int pageNumber = 1; // Número de la página actual
+			    if (request.getParameter("page") != null) {
+			        pageNumber = Integer.parseInt(request.getParameter("page"));
+			    }
+			
+			    // Cálculo de la paginación
+			    int totalItems = movimientos.size();
+			    int totalPages = (int) Math.ceil((double) totalItems / pageSize);
+			    int startIndex = (pageNumber - 1) * pageSize;
+			    int endIndex = Math.min(startIndex + pageSize, totalItems);
+			
+			    // Sublista para la página actual
+			    List<String[]> pageItems = movimientos.subList(startIndex, endIndex);
+			%>
 			
 			<table class="tabla-prestamos">
 				<thead>
