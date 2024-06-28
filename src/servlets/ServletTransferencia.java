@@ -1,7 +1,6 @@
 package servlets;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import entidad.Cuenta;
 import negocio.CuentaNegocio;
 import negocio.MovimientoNegocio;
-import negocio.TransferenciaNegocio;
 import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.MovimientoNegocioImpl;
 

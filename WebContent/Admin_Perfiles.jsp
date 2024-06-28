@@ -111,82 +111,89 @@
 <div class="tr1">
 		<p>Agregar Cliente</p>
 		
-        <form id="formCliente" action="ServletCliente" method="post" style="display:grid; grid-template-columns: repeat(3, 1fr)" onsubmit= "return confirmarEnvio()">
+        <form id="formCliente" action="ServletCliente" method="post" onsubmit= "return confirmarEnvio()">
                 
                 <input type="hidden" id="confirmacion" name="confirmacion" value="false">
-            <label for="dni">DNI:
-            	<input type="number" id="dni" name="dni" placeholder="Ingrese DNI" maxlength="8" min="0" value="<%= dniValue  %>" required>
-            </label>
+            <div style="display:grid; grid-template-columns: repeat(2, 1fr);">
+	            <div>
+	            	<label for="dni">DNI:</label>
+	            	<input type="number" id="dni" name="dniValue" placeholder="Ingrese DNI" maxlength="8" min="0" value="<%= dniValue  %>" required>
+	            </div>
+	            
+	            <div>
+	            	<label for="cuil">CUIL:</label>
+	            	<input type="number" id="cuil" name="cuil" placeholder="Ingrese CUIL" maxlength="12" min="0" value="<%= cuilValue %>" required>
+	            </div>
+	            
+	            <div>
+	            	<label for="nombre">NOMBRE:</label>
+	            	<input type="text" id="nombre" name="nombre" placeholder="Ingrese Nombre" value="<%= nombreValue %>" required>
+	           	</div>
+	           	
+	           	<div>
+	            	<label for="apellido">APELLIDO:</label>
+	            	<input type="text" id="apellido" name="apellido" placeholder="Ingrese Apellido" value="<%= apellidoValue %>" required>
+	            </div>
+	            
+	            <div>
+	            	<label for="sexo" style="display: flex; align-items: center; margin-left: 160px;">SEXO:</label>
+	    			<input type="radio" id="sexoM" name="sex" value="true" style="margin-left: 30px;" <%= "true".equals(request.getParameter("sex")) ? "checked" : "" %>>
+	    			<label for="sexoM" style="margin-left: 5px; font-weight: normal; font-size: small;">Masculino</label>
+	    			<input type="radio" id="sexoF" name="sex" value="false" style="margin-left: 10px;" <%= "false".equals(request.getParameter("sex")) ? "checked" : "" %>>
+	    			<label for="sexoF" style="margin-left: 5px; font-weight: normal; font-size: small;">Femenino</label>
+	            </div>
+	            
+	            <div>
+	            	<label for="direccion">DIRECCION:</label>
+		            <input type="text" id="direccion" name="direccion" placeholder="" value="<%= direccionValue %>" required>
+				</div>
+	            
+	            <div>
+	            	<label for="nacionalidad">NACIONALIDAD:</label>
+		            <select name="nacionalidad">
+		                <%
+		                    if (paises != null) {
+		                        for (String pais : paises) {
+		                %>
+		                <option value="<%= pais %>"><%= pais %></option>
+		                <%
+		                        }
+		                    }
+		                %>
+		            </select>
+				</div>
+	            
+	            <div>
+	            	<label for="fechaNacimiento">FECHA NAC.:</label>
+	            	<input type="date" id="fechaNacimiento" name="fechaNacimiento" placeholder="Ingresar fecha de nacimiento" value="<%= fechaNacimientoValue %>" required>
+	            </div>
+	            
+	            <div>
+	             	<label for="localidad">LOCALIDAD:</label>
+	            	<input type="text" id="localidad" name="localidad" placeholder="" value="<%= localidadValue %>" required>
+	            </div>
+	            
+	            <div>
+	           		<label for="provincia">PROVINCIA:</label>
+	            	<input type="text" id="provincia" name="provincia" placeholder="" value="<%= provinciaValue %>" required>
+	            </div>
+	            
+	            <div>
+	            	<label for="correo">CORREO:</label>
+	            	<input type="email" id="correo" name="correo" placeholder="" value="<%= emailValue %>" required>
+	            </div>
+	            
+	            <div>
+	            	<label for="telefono">TELEFONO:</label>
+	           		<input type="text" id="telefono" name="telefono" placeholder="" maxlength="11" value="<%= telefonoValue %>" required>
+	            </div>
+	        
+	            <div>
+	            	<label for="contra1">CONTRASEÑA:</label>
+	            	<input type="password" id="contra1" name="contra1" placeholder="" required>
+	            </div>
+            </div>
             
-            <label for="cuil">CUIL:
-            	<input type="number" id="cuil" name="cuil" placeholder="Ingrese CUIL" maxlength="12" min="0" value="<%= cuilValue %>" required>
-            </label>
-            
-            <label for="nombre">NOMBRE:
-            	<input type="text" id="nombre" name="nombre" placeholder="Ingrese Nombre" value="<%= nombreValue %>" required>
-           	</label>
-           	
-            <label for="apellido">APELLIDO:
-            	<input type="text" id="apellido" name="apellido" placeholder="Ingrese Apellido" value="<%= apellidoValue %>" required>
-            </label>
-            
-            <label for="sexo" style="display: flex; align-items: center; margin-left: 160px;">SEXO:
-    			<input type="radio" id="sexoM" name="sex" value="true" style="margin-left: 30px;" <%= "true".equals(request.getParameter("sex")) ? "checked" : "" %>>
-    			<label for="sexoM" style="margin-left: 5px; font-weight: normal; font-size: small;">Masculino</label>
-    			<input type="radio" id="sexoF" name="sex" value="false" style="margin-left: 10px;" <%= "false".equals(request.getParameter("sex")) ? "checked" : "" %>>
-    			<label for="sexoF" style="margin-left: 5px; font-weight: normal; font-size: small;">Femenino</label>
-			</label>
-            
-            <label for="direccion">DIRECCION:
-	            <input type="text" id="direccion" name="direccion" placeholder="" value="<%= direccionValue %>" required>
-            </label>
-            
-            <label for="nacionalidad">NACIONALIDAD:
-	            <select name="nacionalidad">
-	                <%
-	                    if (paises != null) {
-	                        for (String pais : paises) {
-	                %>
-	                <option value="<%= pais %>"><%= pais %></option>
-	                <%
-	                        }
-	                    }
-	                %>
-	            </select>
-        	</label>
-            
-            
-            <label for="fechaNacimiento">FECHA NAC.:
-            	<input type="date" id="fechaNacimiento" name="fechaNacimiento" placeholder="Ingresar fecha de nacimiento" value="<%= fechaNacimientoValue %>" required>
-            </label>
-            
-            
-             <label for="localidad">LOCALIDAD:
-            	<input type="text" id="localidad" name="localidad" placeholder="" value="<%= localidadValue %>" required>
-            </label>
-            
-            <label for="provincia">PROVINCIA:
-            	<input type="text" id="provincia" name="provincia" placeholder="" value="<%= provinciaValue %>" required>
-            </label>
-            
-            <label for="correo">CORREO:
-            	<input type="email" id="correo" name="correo" placeholder="" value="<%= emailValue %>" required>
-            </label>
-            
-            <label for="telefono">TELEFONO:
-           		<input type="text" id="telefono" name="telefono" placeholder="" maxlength="11" value="<%= telefonoValue %>" required>
-            </label>
-  
-            
-            <br><br>            
-            
-            <label for="contra1">CONTRASEÑA:
-            	<input type="password" id="contra1" name="contra1" placeholder="" required>
-            </label>
-            <label for="contra2">REPETIR CONTRASEÑA:
-            	<input type="password" id="contra2" name="contra2" placeholder="" required>
-            </label>
-            <br><br>
             <input type="submit" name="btnAceptar" class="btn-aceptar" value="Aceptar">
             
             <div class="error-message">
@@ -214,10 +221,7 @@
 
 <table border="1" id="tabla" class="table table-striped table-bordered" style="width:100%">
     <tr> 
-        <th>DNI</th> 
-        <th>NOMBRE</th> 
-        <th>APELLIDO</th> 
-        <th>ACCIÓN</th> 
+        <th>DNI</th> 	<th>NOMBRE</th> 	<th>APELLIDO</th> 		<th>ACCIÓN</th> 
     </tr>
     <tbody>
     <% if(listaClientes != null) {

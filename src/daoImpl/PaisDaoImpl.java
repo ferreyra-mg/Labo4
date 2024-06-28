@@ -17,13 +17,10 @@ public class PaisDaoImpl implements PaisDao{
 		ArrayList<String> paises = new ArrayList<>();
 		PreparedStatement stmt = null;
         ResultSet rs = null;
-		
         try {
 			stmt = con.prepareStatement(SELECT_PAISES);
 			rs = stmt.executeQuery();
-			
 			while(rs.next()){
-				
 				paises.add(rs.getString("pais"));
 			}
 		} catch (Exception e5) {
@@ -37,7 +34,6 @@ public class PaisDaoImpl implements PaisDao{
                  e.printStackTrace();
              }
 		}
-        
         return paises;
 	}
 

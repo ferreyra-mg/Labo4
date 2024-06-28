@@ -31,6 +31,7 @@ public class ServletCuenta extends HttpServlet {
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
+	@SuppressWarnings("null")
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		RequestDispatcher rd = null;
@@ -77,7 +78,7 @@ public class ServletCuenta extends HttpServlet {
 		                    
 		                    // Mensaje aclaratorio OK y sale
 		                    if (seAgrego) {
-		                        request.setAttribute("msj_agrego", "La cuenta se cre� con �xito");
+		                        request.setAttribute("msj_agrego", "La cuenta se creo con exito");
 		                        rd = request.getRequestDispatcher("/Admin_Cuentas.jsp");
 		                        rd.forward(request, response);
 		                        return;
@@ -90,12 +91,12 @@ public class ServletCuenta extends HttpServlet {
 		        rd.forward(request, response);
 
 		    }catch (CuentaInvalidaException e) {
-		        request.setAttribute("msj_error", "Debe seleccionar un tipo v�lido.");
+		        request.setAttribute("msj_error", "Debe seleccionar un tipo valido.");
 		        rd = request.getRequestDispatcher("/Admin_Cuentas.jsp");
 		        rd.forward(request, response);
 
 		    } catch (Exception e) {
-		        request.setAttribute("msj_error", "Ocurri� un error inesperado");
+		        request.setAttribute("msj_error", "Ocurrio un error inesperado");
 		        rd = request.getRequestDispatcher("/Admin_Cuentas.jsp");
 		        rd.forward(request, response);
 		    }

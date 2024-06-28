@@ -33,7 +33,9 @@ public class ServletMovimiento extends HttpServlet {
 		
 		
 		RequestDispatcher rd = null;
-		int id=1;
+		String idS = request.getAttribute("cuenta").toString();
+		
+		int id = Integer.parseInt(idS);
 		if(request.getParameter("btn_traerMovimientos") != null)
 		{
 			traerMovimientos(request,id);

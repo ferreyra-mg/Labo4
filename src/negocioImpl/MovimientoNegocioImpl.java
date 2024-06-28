@@ -1,6 +1,5 @@
 package negocioImpl;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dao.MovimientoDao;

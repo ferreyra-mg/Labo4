@@ -49,10 +49,6 @@ public class ServletBanco extends HttpServlet {
 			String usuario = request.getParameter("txt_user");
 			String contra1 = request.getParameter("psw1");
 			String contra2 = request.getParameter("psw2");
-			
-			System.out.println("Usuario: " + usuario);
-			System.out.println("Contraseña 1: " + contra1);
-			System.out.println("Contraseña 2: " + contra2);
 
 			// comprobar si las contraseñas son iguales
 			if(!contra1.equals(contra2))

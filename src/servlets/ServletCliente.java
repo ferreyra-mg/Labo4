@@ -31,21 +31,15 @@ public class ServletCliente extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		int dni = Integer.parseInt(request.getSession().getAttribute("dni").toString());
-		if(request.getParameter("dni")!=null) {
-			dni = Integer.parseInt(request.getParameter("dni").toString());
-		}
-		RequestDispatcher rd = null;
+		
 		boolean confirmacionInsert = false;
 		boolean confirmacionUpdate = false;
 		String confirmacionEliminar = request.getParameter("confirmacionEliminar");
-		System.out.println(confirmacionEliminar);
+		
 		if(request.getParameter("btn_traerClientes") != null)
 		{
-			cargarClientes(request);
-		    rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
-		    rd.forward(request, response);
-		    return;
+			clientesXPerfil(request, response);
+			return;
 		}
 		
 		ClienteNegocio cliNeg = new ClienteNegocioImpl();
@@ -53,35 +47,31 @@ public class ServletCliente extends HttpServlet {
 
 		if(request.getParameter("btnAceptar")!=null) 
 		{
-				
+			int dni = Integer.parseInt(request.getParameter("dniValue").toString());
+			if(request.getParameter("dni")!=null) {
+				dni= Integer.parseInt(request.getParameter("dniValue").toString());
+			}
 			
 			Cliente cliConsult = cliNeg.obtenerCliente(dni);
 			if(dni < 0)
 		    {
-                //throw new ClienteInvalidoException();
 				 request.setAttribute("msj_error", "Dni invalido.");
-                 cargarClientes(request);
-                 rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
-                 rd.forward(request, response);
+				 clientesXPerfil(request, response);
+					return;
 		    }			
 			if(cliConsult.getDni() != 0) 
 			{
 				request.setAttribute("msj_error", "Ya existe un cliente con ese DNI");
-				cargarClientes(request);
-		        rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
-		        rd.forward(request, response);					
+				clientesXPerfil(request, response);
+				return;				
 			}
 			
-			
-			  
 			int cuil = Integer.parseInt(request.getParameter("cuil").toString());
 			if(cuil < 0)
 		    {
-                //throw new ClienteInvalidoException();
 				 request.setAttribute("msj_error", "Cuil invalido.");
-                 cargarClientes(request);
-                 rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
-                 rd.forward(request, response);
+				 clientesXPerfil(request, response);
+					return;
 		    } 
 			
 			try {
@@ -93,32 +83,21 @@ public class ServletCliente extends HttpServlet {
 			}catch(ClienteInvalidoException e)
 			{
 				request.setAttribute("msj_error", "Debe seleccionar un sexo.");
-	            cargarClientes(request);
-	            rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
-	            rd.forward(request, response);
+				clientesXPerfil(request, response);
+				return;
 			}
 			
 			
 		    long telefono = Long.parseLong(request.getParameter("telefono"));
 		    if(telefono < 0)
 		    {
-                //throw new ClienteInvalidoException();
 				 request.setAttribute("msj_error", "Nro. telefono invalido.");
-                 cargarClientes(request);
-                 rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
-                 rd.forward(request, response);
+				 clientesXPerfil(request, response);
+				return;
 		    }
 			
 			
 			String contra1 = request.getParameter("contra1");
-			String contra2 = request.getParameter("contra2");
-		    
-			if(!contra1.equals(contra2)) {
-				request.setAttribute("msj_error", "Las contrasenias no coinciden");
-				cargarClientes(request);
-		        rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
-		        rd.forward(request, response);
-			}
 			String confirmacion = request.getParameter("confirmacion");
 			
 			if ("true".equals(confirmacion)) {
@@ -126,19 +105,18 @@ public class ServletCliente extends HttpServlet {
 		        
 			try {
 				cli.setDni(dni);
-				cli.setCuil(request.getParameter("cuil")); // String para cuil
-			    cli.setNombre(request.getParameter("nombre")); // String para nombre
-			    cli.setApellido(request.getParameter("apellido")); // String para apellido
-			    cli.setDireccion(request.getParameter("direccion")); // String para direccion
-			    cli.setLocalidad(request.getParameter("localidad")); // String para localidad
-			    cli.setProvincia(request.getParameter("provincia")); // String para provincia
-			    cli.setCorreoElectronico(request.getParameter("correo")); // String para correoElectronico
+				cli.setCuil(request.getParameter("cuil").toString());// String para cuil
+			    cli.setNombre(request.getParameter("nombre").toString()); // String para nombre
+			    cli.setApellido(request.getParameter("apellido").toString()); // String para apellido
+			    cli.setDireccion(request.getParameter("direccion").toString()); // String para direccion
+			    cli.setLocalidad(request.getParameter("localidad").toString()); // String para localidad
+			    cli.setProvincia(request.getParameter("provincia").toString()); // String para provincia
+			    cli.setCorreoElectronico(request.getParameter("correo").toString()); // String para correoElectronico
 			    cli.setTelefono(Integer.parseInt(request.getParameter("telefono"))); // int para telefono
-			    cli.setNacionalidad(request.getParameter("Nacionalidad").toString());
-			    
+			    cli.setNacionalidad(request.getParameter("nacionalidad").toString());
 			    String fechaNacimientoStr = request.getParameter("fechaNacimiento");
 			    java.sql.Date fechaNacimiento = java.sql.Date.valueOf(fechaNacimientoStr);
-			    cli.setFechaNacimiento(fechaNacimiento);	
+			    cli.setFechaNacimiento(fechaNacimiento);
 			    
 			    String sexoStr = request.getParameter("sex");
 			    if (sexoStr == null)
@@ -152,18 +130,14 @@ public class ServletCliente extends HttpServlet {
                     throw new ClienteInvalidoException();
 			    }
   
-			    
-			    cli.setContrasena(contra1); // String para contrasena
-		        
+			    cli.setContrasena(contra1); // String para contrasena	        
 		        confirmacionInsert = cliNeg.agregarCliente(cli);
-				
 				
 			} catch (ClienteInvalidoException e)
 			{
 				request.setAttribute("msj_error", "Debe seleccionar un sexo.");
-                cargarClientes(request);
-                rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
-                rd.forward(request, response);
+				clientesXPerfil(request, response);
+				return;
 			}
 			
 			catch (Exception e) {
@@ -177,17 +151,17 @@ public class ServletCliente extends HttpServlet {
 	        }
 
         } else {
-            request.setAttribute("msj_error", "Acci�n cancelada por el usuario");
+            request.setAttribute("msj_error", "Acción cancelada por el usuario");
         }
-	        cargarClientes(request);
-	        rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
-	        rd.forward(request, response);
+			clientesXPerfil(request, response);
+			return;
 	    }
 		
 		
 			if(request.getParameter("btnModificar")!=null) 
 			{
 				
+				int dni = Integer.parseInt(request.getParameter("dniCliente").toString());
 				if(cliNeg.obtenerCliente(dni)!=null) 
 				{
 					Cliente cli2 = new Cliente();
@@ -196,15 +170,14 @@ public class ServletCliente extends HttpServlet {
 				}
 			}
 			
-			
 			if(request.getParameter("btnConfirModif")!=null)
 			{
 				
 				Cliente cli = new Cliente();
-			        
+				int dniMod = Integer.parseInt(request.getAttribute("dniCliente").toString()); 
 				try {
 					
-					cli = cliNeg.obtenerCliente(dni);
+					cli = cliNeg.obtenerCliente(dniMod);
 				    cli.setNombre(request.getParameter("nombreM")); // String para nombre
 				    cli.setApellido(request.getParameter("apellidoM")); // String para apellido
 				    String sexoStr = request.getParameter("sexM");
@@ -227,9 +200,8 @@ public class ServletCliente extends HttpServlet {
 						e.getMessage();
 						}
 				 
-		        cargarClientes(request);
-		        rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
-		        rd.forward(request, response);
+				clientesXPerfil(request, response);
+				return;
 			}
 
 			
@@ -239,16 +211,13 @@ public class ServletCliente extends HttpServlet {
 					dniEliminar = Integer.parseInt(request.getParameter("dniCliente").toString());
 					if(cliNeg.obtenerCliente(dniEliminar)!=null)
 					{
-						System.out.println(dniEliminar);
 						boolean confirmDelete = false;
 						confirmDelete = cliNeg.eliminarCliente(dniEliminar);
 						request.setAttribute("confirmDelete", confirmDelete);
 					}
 				}
 		
-		cargarClientes(request);
-		rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
-		rd.forward(request, response);
+				clientesXPerfil(request, response);
 	}
 	
     private void cargarClientes(HttpServletRequest request) {
@@ -257,4 +226,11 @@ public class ServletCliente extends HttpServlet {
         request.setAttribute("listaTClientes", listaTClientes);
     }
 
+    private void clientesXPerfil(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+    {
+    	RequestDispatcher rd = null;
+    	cargarClientes(request);
+		rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
+		rd.forward(request, response);
+    }
 }

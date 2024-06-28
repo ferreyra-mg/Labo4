@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dao.PrestamoDao;
-import entidad.Cuenta;
 import entidad.Prestamo;
 
 public class PrestamoDaoImpl implements PrestamoDao {

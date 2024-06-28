@@ -13,8 +13,8 @@ import entidad.Cliente;
 public class ClienteDaoImpl implements ClienteDao {
 
 	
-	private static final String insert = "INSERT INTO cliente(dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena, activo)"
-			+ " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	private static final String insert = "INSERT INTO cliente(dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)"
+			+ " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	
 	private static final String existeDNI ="SELECT COUNT(*) AS cantidad FROM bdbanco.cliente WHERE dni = ? AND activo = 1";
 	
@@ -34,25 +34,20 @@ public class ClienteDaoImpl implements ClienteDao {
 			Connection conexion = Conexion.getConexion().getSQLConexion();
 			boolean isInsertExitoso = false;
 		    try {
-		        
 		    	statement = conexion.prepareStatement(insert);
-		    	statement.setInt(1, cliente.getDni()); 
+		    	statement.setInt(1, cliente.getDni());
 		        statement.setString(2, cliente.getCuil()); 
 		        statement.setString(3, cliente.getNombre()); 
 		        statement.setString(4, cliente.getApellido()); 
 		        statement.setBoolean(5, cliente.getSexo()); 
-		        statement.setString(6, cliente.getNacionalidad()); 
+		        statement.setString(6, cliente.getNacionalidad());
 		        statement.setDate(7, (Date) cliente.getFechaNacimiento());
 		        statement.setString(8, cliente.getDireccion()); 
 		        statement.setString(9, cliente.getLocalidad()); 
 		        statement.setString(10, cliente.getProvincia()); 
 		        statement.setString(11, cliente.getCorreoElectronico()); 
 		        statement.setInt(12, cliente.getTelefono()); 
-		        statement.setString(13, cliente.getContrasena()); 
-		        statement.setBoolean(14, true);  
-		        
-		    			        
-      
+		        statement.setString(13, cliente.getContrasena());
 		        if (statement.executeUpdate() > 0) {
 		            conexion.commit();
 		            isInsertExitoso = true;
@@ -66,7 +61,6 @@ public class ClienteDaoImpl implements ClienteDao {
 		        }
 		    }
 		    return isInsertExitoso;
-		
 	}
 
 	@Override

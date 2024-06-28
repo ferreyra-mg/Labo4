@@ -1,7 +1,6 @@
 package daoImpl;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,7 +13,6 @@ import entidad.Movimiento;
 public class MovimientoDaoImpl implements MovimientoDao{
 
 	private static final String query = "SELECT * FROM bdbanco.movimiento WHERE id_Cuenta = ?";
-	
 	private static final String sqlSaldo = "SELECT saldo FROM bdbanco.cuenta WHERE usuario = ?";
 	private static final String sqlResta = "UPDATE bdbanco.cuenta SET saldo = saldo - ? WHERE usuario = ?";
 	private static final String sqlSuma = "UPDATE bdbanco.cuenta SET saldo = saldo + ? WHERE cbu = ?";

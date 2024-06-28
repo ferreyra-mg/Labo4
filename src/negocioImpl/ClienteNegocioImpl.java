@@ -13,7 +13,6 @@ public class ClienteNegocioImpl implements ClienteNegocio{
 	
 	public boolean agregarCliente(Cliente cliente) {
 		return clienteDao.agregarCliente(cliente);
-		
 	}
 
 	@Override

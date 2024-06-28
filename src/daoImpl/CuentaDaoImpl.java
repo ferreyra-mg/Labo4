@@ -196,9 +196,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	@Override
 	public int numeroCuentas(int dni) {
 		int cant = 0;
-
-		String sql = "SELECT id, usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado FROM cuenta WHERE usuario = ?";
-		try (Connection conexion = Conexion.getConexion().getSQLConexion();
+			try (Connection conexion = Conexion.getConexion().getSQLConexion();
 				PreparedStatement stmt = conexion.prepareStatement(CANTIDAD_CUENTA)) {
 
 			stmt.setInt(1, dni);
