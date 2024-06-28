@@ -35,7 +35,7 @@
 	<div class="transferencia">
 		<div class="tr1">
 			<p>Transferir</p>
-			<form action="ServletTransferencia" method="post">
+			<form action="ServletMovimiento" method="get">
 			<label for="cbu">CBU:</label>
         	<input type="text" id="cbu" name="cbuDestino" placeholder="Ingrese CBU">
         	<br><br>
@@ -55,7 +55,7 @@
 				<input type="submit" name="btn_TCT" value="Traer Cuentas"> <!--  ABREVIATURA Traer Cliente Home-->
 			</form>	
 			
-			<form action="ServletTransferencia" method="post">
+			<form action="ServletMovimiento" method="post">
 				
 
 
