@@ -32,9 +32,23 @@ public class ServletCliente extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		
+		RequestDispatcher rd = null;
+		ClienteNegocio cliNeg = new ClienteNegocioImpl();
 		boolean confirmacionInsert = false;
 		boolean confirmacionUpdate = false;
 		String confirmacionEliminar = request.getParameter("confirmacionEliminar");
+		
+		if(request.getParameter("btn_traerInfoP")!=null){
+			String var = request.getSession().getAttribute("dni").toString();
+			int dniSession = Integer.parseInt(var);
+			Cliente clienteSession = null;
+			clienteSession = cliNeg.obtenerCliente(dniSession);
+			request.setAttribute("clienteSession", clienteSession);
+	        rd = request.getRequestDispatcher("/Cliente_Perfil.jsp");
+	        rd.forward(request, response);
+			
+		}
+
 		
 		if(request.getParameter("btn_traerClientes") != null)
 		{
@@ -42,7 +56,7 @@ public class ServletCliente extends HttpServlet {
 			return;
 		}
 		
-		ClienteNegocio cliNeg = new ClienteNegocioImpl();
+		
 
 
 		if(request.getParameter("btnAceptar")!=null) 

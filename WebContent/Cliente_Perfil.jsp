@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="entidad.Cuenta" %>
+<%@ page import="entidad.Cliente" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,25 +39,42 @@
 	<form action="ServletDescolgable" method="post">
 		<input type="submit" name="btn_TCPe" value="Traer Cuentas"> <!--  ABREVIATURA Traer Cliente Home-->
 	</form>
+	<form action="ServletCliente" method="post">
+		<input type="submit" name="btn_traerInfoP" value="Mostar Info. Personal">
+	</form>
 
 	<% 
 	ArrayList<Cuenta> cuentas = null;
 	if(request.getAttribute("cuentas") != null) {
 		cuentas = (ArrayList<Cuenta>) request.getAttribute("cuentas");
 	}
+	
+	Cliente clienteLog = null;
+	String sexo = "";
+	String ubicacion = "";
+	if(request.getAttribute("clienteSession")!=null){
+		clienteLog = (Cliente)request.getAttribute("clienteSession");
+		if(clienteLog.getSexo()){
+			   sexo = "masculino";
+			} else {
+			   sexo = "femenino";
+			}
+		ubicacion = clienteLog.getLocalidad() + ", " + clienteLog.getProvincia() + ", " + clienteLog.getNacionalidad();
+	
+	}			
 	%>
 
 	<div class="container-cperfil">
 		<div class="perfil">
 		
-			Nombre: [APELLIDO, NOMBRE] <br><br>
-			DNI: [VALOR] <br><br>
-			Cuil: [VALOR] <br><br>
-			Sexo: [VALOR] <br><br>
-			Ubicación: [LOCALIDAD, PROCINVIA, NACIONALIDAD] <br><br>
-			Nacimiento: [VALOR] <br><br>
-			Correo Electronico: [VALOR] <br><br>
-			Telefono: [VALOR] <br><br>
+			Nombre: <%= clienteLog != null ? clienteLog.getApellido() + ", " + clienteLog.getNombre() : "" %> <br><br>
+			DNI: <%= clienteLog != null ? clienteLog.getDni() : "" %> <br><br>
+			Cuil: <%= clienteLog != null ? clienteLog.getCuil() : "" %> <br><br>
+			Sexo: <%= sexo %> <br><br>
+			Ubicación: <%= ubicacion %> <br><br>
+			Nacimiento: <%= clienteLog != null ? clienteLog.getFechaNacimiento() : "" %> <br><br>
+			Correo Electronico: <%= clienteLog != null ? clienteLog.getCorreoElectronico() : "" %> <br><br>
+			Telefono: <%= clienteLog != null ? clienteLog.getTelefono() : "" %> <br><br>
 			
 		</div>
 		
