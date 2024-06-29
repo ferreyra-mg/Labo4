@@ -1,6 +1,9 @@
 package servlets;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,6 +11,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import negocio.MovimientoNegocio;
+import negocioImpl.MovimientoNegocioImpl;
 
 
 @WebServlet("/ServletEstadisticas")
@@ -27,27 +32,37 @@ public class ServletEstadisticas extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		RequestDispatcher rd = null;
-		System.out.println("no entro");
 		if(request.getParameter("generar_datos") != null)
 		{
-			System.out.println("nada");
-			float monto = -1;
-			System.out.println("monto");
+			Date inicio = null;
+            Date fin = null;
+            float monto = -1;
 			int cuentas = -1;
-			System.out.println("cuentas");
 			int movimientos = -1;
-			System.out.println("movimientos");
 			int prestamos = -1;
-			System.out.println("prestamos");
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                inicio = dateFormat.parse(request.getParameter("startDate"));
+                fin = dateFormat.parse(request.getParameter("endDate"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+			
+			
+			
+			if(inicio != null && fin !=null)
+			{
+				System.out.println("entro");
+				MovimientoNegocio mvNeg = new MovimientoNegocioImpl();
+				monto = mvNeg.obtenerMontoEntre(inicio, fin);
+			}
+			System.out.println("monto: " + monto);
+			
 			
 			request.setAttribute("monto", monto);
-			System.out.println("monto");
 			request.setAttribute("cuentas", cuentas);
-			System.out.println("cuentas");
 			request.setAttribute("movimientos", movimientos);
-			System.out.println("movimientos");
 			request.setAttribute("prestamos", prestamos);
-			System.out.println("prestamos");
 			
 			rd = request.getRequestDispatcher("/Admin_Estadisticas.jsp");
 		    rd.forward(request, response);

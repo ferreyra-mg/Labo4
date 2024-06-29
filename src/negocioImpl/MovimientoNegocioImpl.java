@@ -1,6 +1,7 @@
 package negocioImpl;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import dao.MovimientoDao;
 import daoImpl.MovimientoDaoImpl;
@@ -38,5 +39,10 @@ public class MovimientoNegocioImpl implements MovimientoNegocio{
 	@Override
 	public float VerificarSaldoxCuenta(String usuario, String tipoCuenta) {
 		return mvDao.VerificarSaldoxCuenta(usuario, tipoCuenta);
+	}
+
+	@Override
+	public float obtenerMontoEntre(Date inicial, Date fin) {
+		return mvDao.obtenerMontoEntre(inicial, fin);
 	}
 }

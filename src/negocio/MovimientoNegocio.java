@@ -1,6 +1,7 @@
 package negocio;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import entidad.Cuenta;
 import entidad.Movimiento;
@@ -13,4 +14,5 @@ public interface MovimientoNegocio {
 	String ObtenerCbuDestino(String tipoCuenta, Cuenta cuenta);
 	String ObtenerCbuEmisor(String tipoCuenta, Cuenta cuenta);
 	boolean TransferirEntreCuentas(Cuenta cuenta, String cbuCuentaDestino, String cbuCuentaEmisor, float montoCuenta);
+	float obtenerMontoEntre(Date inicial, Date fin);
 }

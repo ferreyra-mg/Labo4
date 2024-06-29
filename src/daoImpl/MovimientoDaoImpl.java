@@ -5,7 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import dao.MovimientoDao;
 import entidad.Cuenta;
@@ -25,6 +27,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	private static final String sqlRestaCuenta = "UPDATE bdbanco.cuenta SET saldo = saldo - ? WHERE cbu = ?";
 	private static final String sqlSumaCuenta = "UPDATE bdbanco.cuenta SET saldo = saldo + ? WHERE cbu = ?";
 	
+	private static final String sqlMontoFecha = "SELECT SUM(importe) AS total_importe FROM movimiento WHERE fecha BETWEEN ? AND ?";
 	
 	private static final String sqlSaldoxCuenta = "SELECT saldo FROM bdbanco.cuenta WHERE usuario = ? and tipoCuenta = ?";
 	
@@ -254,10 +257,40 @@ public class MovimientoDaoImpl implements MovimientoDao{
 			e.printStackTrace();
 			
 		}
-	
-		
-
 		return saldoxCuenta;
+	}
+
+	@Override
+	public float obtenerMontoEntre(Date inicial, Date fin) {
+		float totalImporte = 0;
+		System.out.println("antes conexion");
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			stmt = conexion.prepareStatement(sqlMontoFecha);
+			System.out.println("antes fechas");
+			stmt.setDate(1, new java.sql.Date(inicial.getTime()));
+	        stmt.setDate(2, new java.sql.Date(fin.getTime()));
+	        System.out.println("antes del query");
+		    rs = stmt.executeQuery();
+		    System.out.println("realizo el query");
+		        if (rs.next()) {
+		            totalImporte = rs.getFloat("total_importe");
+		        }
+		} catch (SQLException e) {
+		    e.printStackTrace();
+		} 
+		finally {
+       	 try {
+            	if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+		}
+		return totalImporte;
 	}
 
 }
