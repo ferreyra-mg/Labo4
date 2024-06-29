@@ -52,10 +52,6 @@
 	        <%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>
 	    </div>
 		<div class="pedir_prestamo">
-	
-			<form action="ServletDescolgable" method="post">
-				<input type="submit" name="btn_TCPr" value="Traer Cuentas"> <!--  ABREVIATURA Traer Cliente Home-->
-			</form>
 			
 			<form action="ServletPrestamos" method="post" class="nuevo-prestamo">
 			
