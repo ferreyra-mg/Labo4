@@ -19,6 +19,13 @@
 			rd.forward(request, response);
 		}
 	%>
+	
+	<% 
+	ArrayList<Cuenta> cuentas = null;
+	if(request.getAttribute("cuentas") != null) {
+		cuentas = (ArrayList<Cuenta>) request.getAttribute("cuentas");
+	}
+	%>
 
 	<nav class="mask">
 		<div class="name-user">
@@ -35,7 +42,26 @@
 	<div class="transferencia">
 		<div class="tr1">
 			<p>Transferir</p>
+			<form action="ServletDescolgable" method="post">
+				<input type="submit" name="btn_TCT2" value="Traer Cuentas"> <!--  ABREVIATURA Traer Cliente Home-->
+			</form>	
 			<form action="ServletMovimiento" method="get">
+			
+			<label for="SeleccionCuenta">Seleccione la cuenta:</label>
+        	<div class="filtrar_cuentas">
+					<select name="SelecCuenta" id="SelecCuenta">
+					<%
+						if (cuentas != null) {
+						for (Cuenta cuenta : cuentas) {
+					%>
+					<option value="<%= cuenta.getTipo() %>"><%= cuenta.getTipo() %></option>
+					<%
+						}
+					}
+					%>
+				</select>
+				</div>
+        	<br><br>
 			<label for="cbu">CBU:</label>
         	<input type="text" id="cbu" name="cbuDestino" placeholder="Ingrese CBU">
         	<br><br>
@@ -56,12 +82,7 @@
 			</form>	
 			
 			<form action="ServletMovimiento" method="get">
-				<% 
-				ArrayList<Cuenta> cuentas = null;
-				if(request.getAttribute("cuentas") != null) {
-					cuentas = (ArrayList<Cuenta>) request.getAttribute("cuentas");
-				}
-				%>
+
 			
 				<div class="filtrar_cuentas">
 					Elige una cuenta: 
@@ -76,9 +97,10 @@
 					}
 					%>
 				</select>
+				</div>
 
 	        	<label for="monto2">Monto:</label>
-	        	<input type="number" id="montoCuenta" placeholder="Ingrese el Monto">
+	        	<input type="number" id="montoCuenta" name="montoCuenta" placeholder="Ingrese el Monto">
 	        	<br><br>
 	        	<button type="submit" name="enviarMontoCuenta" value="transferir_propia" class="btn-aceptar">Aceptar</button>
 	        	 <div class="error-message">

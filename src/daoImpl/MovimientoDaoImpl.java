@@ -1,5 +1,6 @@
 package daoImpl;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +15,8 @@ public class MovimientoDaoImpl implements MovimientoDao{
 
 	private static final String query = "SELECT * FROM bdbanco.movimiento WHERE id_Cuenta = ?";
 	private static final String sqlSaldo = "SELECT saldo FROM bdbanco.cuenta WHERE usuario = ?";
-	private static final String sqlResta = "UPDATE bdbanco.cuenta SET saldo = saldo - ? WHERE usuario = ?";
+	
+	private static final String sqlResta = "UPDATE bdbanco.cuenta SET saldo = saldo - ? WHERE usuario = ? and tipoCuenta = ?";
 	private static final String sqlSuma = "UPDATE bdbanco.cuenta SET saldo = saldo + ? WHERE cbu = ?";
 	private static final String sqlMovimiento = "INSERT INTO bdbanco.movimiento (id_Cuenta, fecha, concepto, importe, tipo) VALUES (?, ?, ?, ?, ?)";
 	private static final String sqlCbuDestino = "SELECT cbu FROM bdbanco.cuenta WHERE usuario = ? and tipoCuenta != ?";
@@ -22,6 +24,10 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	
 	private static final String sqlRestaCuenta = "UPDATE bdbanco.cuenta SET saldo = saldo - ? WHERE cbu = ?";
 	private static final String sqlSumaCuenta = "UPDATE bdbanco.cuenta SET saldo = saldo + ? WHERE cbu = ?";
+	
+	
+	private static final String sqlSaldoxCuenta = "SELECT saldo FROM bdbanco.cuenta WHERE usuario = ? and tipoCuenta = ?";
+	
 	
 	@Override
 	public ArrayList<Movimiento> traerMovimientos(int id) {
@@ -62,7 +68,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	}
 
 	@Override
-	public boolean TransferirCbu(Cuenta cuenta, String cbuDestino, float monto) {
+	public boolean TransferirCbu(Cuenta cuenta, String cbuDestino, float monto, String tipoCuenta) {
 		
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		PreparedStatement stmtDebito;
@@ -77,6 +83,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
 			stmtDebito = conexion.prepareStatement(sqlResta);
 			stmtDebito.setFloat(1, monto);
 			stmtDebito.setString(2, cuenta.getUsuario());
+			stmtDebito.setString(3, tipoCuenta);
 			if(stmtDebito.executeUpdate() > 0) {
 				conexion.commit();
 				exitoDebito = true;
@@ -117,51 +124,27 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	}
 
 	@Override
-	public float VerificarSaldo(String usuario) {
-		Connection conexion = Conexion.getConexion().getSQLConexion();
-		PreparedStatement stmtSaldo = null;
-		ResultSet rs = null;
-		float saldoActual = 0;
-		
-		try {
-			stmtSaldo = conexion.prepareStatement(sqlSaldo);
-			stmtSaldo.setString(1, usuario);
-			rs = stmtSaldo.executeQuery();
-			
-			if(rs.next()) {
-				saldoActual = rs.getFloat("saldo");
-			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	
-		
-
-		return saldoActual;
-	}
-
-	@Override
-	public int ObtenerCbuDestino(String tipoCuenta, Cuenta cuenta) {
+	public String ObtenerCbuDestino(String tipoCuenta, Cuenta cuenta) {
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		PreparedStatement stmtCbu = null;
 		ResultSet rs = null;
-		int cbu = 0;
+		String cbu = "";
 		
 		try {
 			stmtCbu = conexion.prepareStatement(sqlCbuDestino);
 			stmtCbu.setString(1, cuenta.getUsuario());
-			stmtCbu.setString(1, tipoCuenta);
+			stmtCbu.setString(2, tipoCuenta);
 			rs = stmtCbu.executeQuery();
 			
 			if(rs.next()) {
-				cbu = rs.getInt("cbu");
+				cbu = rs.getString("cbu");
 			}
 			
 			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("error 1");
 		}
 		
 		
@@ -169,7 +152,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	}
 
 	@Override
-	public boolean TransferirEntreCuentas(Cuenta cuenta, int cbuDestino, int cbuEmisor, float monto) {
+	public boolean TransferirEntreCuentas(Cuenta cuenta, String cbuDestino, String cbuEmisor, float monto) {
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		PreparedStatement stmtRestaCuenta;
 		PreparedStatement stmtSumaCuenta;
@@ -182,7 +165,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
 		try {
 			stmtRestaCuenta = conexion.prepareStatement(sqlRestaCuenta);
 			stmtRestaCuenta.setFloat(1, monto);
-			stmtRestaCuenta.setInt(2, cbuEmisor);
+			stmtRestaCuenta.setString(2, cbuEmisor);
 			if(stmtRestaCuenta.executeUpdate() > 0) {
 				conexion.commit();
 				exitoResta = true;
@@ -190,7 +173,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
 			
 			stmtSumaCuenta = conexion.prepareStatement(sqlSumaCuenta);
 			stmtSumaCuenta.setFloat(1, monto);
-			stmtSumaCuenta.setInt(2, cbuDestino);
+			stmtSumaCuenta.setString(2, cbuDestino);
 			if(stmtSumaCuenta.executeUpdate() > 0) {
 				conexion.commit();
 				exitoSuma = true;
@@ -216,36 +199,65 @@ public class MovimientoDaoImpl implements MovimientoDao{
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("error 2");
 		}
 		
 		return exito;
 	}
 
 	@Override
-	public int ObtenerCbuEmisor(String tipoCuenta, Cuenta cuenta) {
+	public String ObtenerCbuEmisor(String tipoCuenta, Cuenta cuenta) {
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		PreparedStatement stmtCbu = null;
 		ResultSet rs = null;
-		int cbu = 0;
+		String cbu = "";
 		
 		try {
 			stmtCbu = conexion.prepareStatement(sqlCbuEmisor);
 			stmtCbu.setString(1, cuenta.getUsuario());
-			stmtCbu.setString(1, tipoCuenta);
+			stmtCbu.setString(2, tipoCuenta);
 			rs = stmtCbu.executeQuery();
 			
 			if(rs.next()) {
-				cbu = rs.getInt("cbu");
+				cbu = rs.getString("cbu");
 			}
 			
 			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.out.println("error 3");
 		}
 		
 		
 		return cbu;
+	}
+
+	@Override
+	public float VerificarSaldoxCuenta(String usuario, String tipoCuenta) {
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		PreparedStatement stmtSaldo = null;
+		ResultSet rs = null;
+		float saldoxCuenta = 0;
+		
+		try {
+			stmtSaldo = conexion.prepareStatement(sqlSaldoxCuenta);
+			stmtSaldo.setString(1, usuario);
+			stmtSaldo.setString(2, tipoCuenta);
+			rs = stmtSaldo.executeQuery();
+			
+			if(rs.next()) {
+				saldoxCuenta = rs.getFloat("saldo");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+	
+		
+
+		return saldoxCuenta;
 	}
 
 }

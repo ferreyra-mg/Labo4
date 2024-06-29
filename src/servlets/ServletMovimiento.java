@@ -22,7 +22,10 @@ import negocioImpl.MovimientoNegocioImpl;
 public class ServletMovimiento extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    
+    MovimientoNegocio movNeg = new MovimientoNegocioImpl();
+    CuentaNegocio cuentaNeg = new CuentaNegocioImpl();
+	
+	
     public ServletMovimiento() {
         super();
         // TODO Auto-generated constructor stub
@@ -37,21 +40,24 @@ public class ServletMovimiento extends HttpServlet {
 		        return;
 		    }
 		    
-		    //Esto es para transferir de un cbu a otro.
-		    RequestDispatcher rd = null;
 		    String usuarioLogueado = request.getSession().getAttribute("usuario").toString();
+	        Cuenta cuenta = cuentaNeg.obtenerCuentaxUsuario(usuarioLogueado);
+	        String tipoCuentaCbu = request.getParameter("SelecCuenta");
+	        
+		    //Esto es para transferir de un cbu a otro.
+		    if (request.getParameter("enviarMonto")!=null) {
+			RequestDispatcher rd = null;
 	        String cbuDestino = request.getParameter("cbuDestino");
 	        float monto = Float.parseFloat(request.getParameter("monto"));
 	        
-	        MovimientoNegocio movNeg = new MovimientoNegocioImpl();
-	        CuentaNegocio cuentaNeg = new CuentaNegocioImpl();
+
 	        
-	        Cuenta cuenta = cuentaNeg.obtenerCuentaxUsuario(usuarioLogueado);
+
 
 	        boolean exito = false;
-	        if (request.getParameter("enviarMonto")!=null) {
+	        
 	        	
-	        	float saldoActual = movNeg.VerificarSaldo(usuarioLogueado);
+	        	float saldoActual = movNeg.VerificarSaldoxCuenta(usuarioLogueado, tipoCuentaCbu);
 	        	
 	        	if(saldoActual < monto) {
 	        		request.setAttribute("msjTransferencia", "No tiene saldo suficiente.");
@@ -60,19 +66,20 @@ public class ServletMovimiento extends HttpServlet {
 	        		return;
 	        	}
 	        	
-	        	exito = movNeg.transferirCbu(cuenta, cbuDestino, monto);
+	        	exito = movNeg.transferirCbu(cuenta, cbuDestino, monto, tipoCuentaCbu);
 	        	
-	        }
+	      
 	        
-	        if (exito == true) {
-  		request.setAttribute("msjTransferencia", "Dinero transferido.");
-  		rd = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
-  		rd.forward(request, response);
-	        } else {
-	            request.setAttribute("msjTransferencia", "Error en la transferencia. Verifique los datos ingresados.");
-	            request.getRequestDispatcher("/Cliente_Transferencia.jsp").forward(request, response);
-	        }
+	        	if (exito == true) {
+			  		request.setAttribute("msjTransferencia", "Dinero transferido.");
+			  		rd = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
+			  		rd.forward(request, response);
+		        } else {
+		            request.setAttribute("msjTransferencia", "Error en la transferencia. Verifique los datos ingresados.");
+		            request.getRequestDispatcher("/Cliente_Transferencia.jsp").forward(request, response);
+		        }
 	        
+		    }
 	        
 	        
 	        
@@ -83,12 +90,23 @@ public class ServletMovimiento extends HttpServlet {
 	        float montoCuenta = Float.parseFloat(request.getParameter("montoCuenta"));
 	        
 	        boolean exitoCuentas = false;
+	        RequestDispatcher rd2 = null;
 	        if(request.getParameter("enviarMontoCuenta")!=null) {
-
-		        int cbuCuentaDestino = movNeg.ObtenerCbuDestino(tipoCuenta, cuenta);
-		        int cbuCuentaEmisor = movNeg.ObtenerCbuEmisor(tipoCuenta, cuenta);
+	        	
+	        	float saldoxCuenta = movNeg.VerificarSaldoxCuenta(usuarioLogueado, tipoCuenta);
+	        	
+	        	if(saldoxCuenta < montoCuenta) {
+	        		request.setAttribute("msjTransferenciaCuentas", "No tiene saldo suficiente en la siguiente cuenta: " + tipoCuenta);
+	        		rd2 = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
+	        		rd2.forward(request, response);
+	        		return;
+	        	}
 		        
-		        if(cbuCuentaDestino < 0 && cbuCuentaEmisor < 0) {
+		        
+		        String cbuCuentaDestino = movNeg.ObtenerCbuDestino(tipoCuenta, cuenta);
+		        String cbuCuentaEmisor = movNeg.ObtenerCbuEmisor(tipoCuenta, cuenta);
+		        
+		        if(cbuCuentaDestino != "" && cbuCuentaEmisor != "") {
 			        exitoCuentas = movNeg.TransferirEntreCuentas(cuenta, cbuCuentaDestino, cbuCuentaEmisor, montoCuenta);
 		        } else {
 		            request.setAttribute("msjTransferenciaCuentas", "Error en verificar las cuentas.");
@@ -97,10 +115,12 @@ public class ServletMovimiento extends HttpServlet {
 		        
 	        }
 	        
+
+	        
 	        if(exitoCuentas == true) {
 	      		request.setAttribute("msjTransferenciaCuentas", "Dinero transferido.");
-	      		rd = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
-	      		rd.forward(request, response);
+	      		rd2 = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
+	      		rd2.forward(request, response);
 	        } else {
 	            request.setAttribute("msjTransferenciaCuentas", "Error en mandar el dinero a tu otra cuenta.");
 	            request.getRequestDispatcher("/Cliente_Transferencia.jsp").forward(request, response);

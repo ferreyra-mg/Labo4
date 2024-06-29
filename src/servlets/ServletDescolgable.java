@@ -76,6 +76,13 @@ public class ServletDescolgable extends HttpServlet {
 		    rd.forward(request, response);
 		    return;
 		}
+		if(request.getParameter("btn_TCT2") != null)
+		{
+			traerCuentas(request);
+		    rd = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
+		    rd.forward(request, response);
+		    return;
+		}
 		if(request.getParameter("btn_traerTipos") != null)
 		{
 			traerTipos(request);

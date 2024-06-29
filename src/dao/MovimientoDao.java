@@ -7,12 +7,12 @@ import entidad.Movimiento;
 
 public interface MovimientoDao {
 	ArrayList<Movimiento> traerMovimientos(int id);
-	boolean TransferirCbu(Cuenta cuenta, String cbuDestino, float monto);
-	float VerificarSaldo(String usuario);
+	boolean TransferirCbu(Cuenta cuenta, String cbuDestino, float monto, String tipoCuenta);
+	float VerificarSaldoxCuenta(String usuario, String tipoCuenta);
 	
-	int ObtenerCbuDestino(String tipoCuenta, Cuenta cuenta);
-	int ObtenerCbuEmisor(String tipoCuenta, Cuenta cuenta);
-	boolean TransferirEntreCuentas(Cuenta cuenta, int cbuDestino, int cbuEmisor, float monto);
+	String ObtenerCbuDestino(String tipoCuenta, Cuenta cuenta);
+	String ObtenerCbuEmisor(String tipoCuenta, Cuenta cuenta);
+	boolean TransferirEntreCuentas(Cuenta cuenta, String cbuDestino, String cbuEmisor, float monto);
 	
 	
 }
