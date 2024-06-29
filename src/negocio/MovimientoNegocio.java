@@ -15,4 +15,5 @@ public interface MovimientoNegocio {
 	String ObtenerCbuEmisor(String tipoCuenta, Cuenta cuenta);
 	boolean TransferirEntreCuentas(Cuenta cuenta, String cbuCuentaDestino, String cbuCuentaEmisor, float montoCuenta);
 	float obtenerMontoEntre(Date inicial, Date fin);
+	int obtenerMovimientosEntre(Date inicial, Date fin);
 }

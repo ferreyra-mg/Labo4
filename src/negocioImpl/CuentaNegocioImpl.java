@@ -1,6 +1,8 @@
 package negocioImpl;
 
 import java.util.ArrayList;
+import java.util.Date;
+
 import dao.CuentaDao;
 import daoImpl.CuentaDaoImpl;
 import entidad.Cuenta;
@@ -56,5 +58,10 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	@Override
 	public int numeroCuentas(int dni) {
 		return cuentaDao.numeroCuentas(dni);
+	}
+
+	@Override
+	public int obtenerCuentasEntre(Date inicio, Date fin) {
+		return cuentaDao.obtenerCuentasEntre(inicio, fin);
 	}
 }

@@ -12,7 +12,8 @@ import entidad.Prestamo;
 
 public class PrestamoDaoImpl implements PrestamoDao {
 	private static final String insert = "INSERT INTO prestamo(id_cuenta, cant_meses, fecha, capitalPedido, monto_mensual, monto_total) VALUES(?, ?, ?, ?, ?, ? )";
-	
+	private static final String PRESTAMOS_FECHA = "SELECT COUNT(*) AS total_prestamos FROM prestamo WHERE fecha BETWEEN ? AND ?";
+
 	@Override
 	public boolean grabar(Prestamo prestamo) {
 		PreparedStatement st;
@@ -121,5 +122,33 @@ public class PrestamoDaoImpl implements PrestamoDao {
 		}
 						
 		return prestamos;
+	}
+
+	@Override
+	public int obtenerPrestamosEntre(java.util.Date inicio, java.util.Date fin) {
+		int cantidad = 0;
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conexion.prepareStatement(PRESTAMOS_FECHA);
+			stmt.setDate(1, new java.sql.Date(inicio.getTime()));
+	        stmt.setDate(2, new java.sql.Date(fin.getTime()));
+		    rs = stmt.executeQuery();
+		        if (rs.next()) {
+		            cantidad = rs.getInt("total_prestamos");
+		        }
+		} catch (SQLException e) {
+		    e.printStackTrace();
+		} 
+		finally {
+       	 try {
+            	if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+		}
+		return cantidad;
 	}
 }

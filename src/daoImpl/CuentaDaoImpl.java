@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
+
 import dao.CuentaDao;
 import entidad.Cuenta;
 
@@ -13,8 +15,9 @@ public class CuentaDaoImpl implements CuentaDao {
 	private static final String CUENTA_DNI = "SELECT * FROM bdbanco.cuenta where dni = ? LIMIT 1";
 	private static final String CUENTA_CLIENTE= "SELECT * FROM bdbanco.cuenta where dni = ? LIMIT 3";
 	private static final String CANTIDAD_CUENTA = "SELECT COUNT(*) AS cantidad FROM bdbanco.cuenta WHERE dni = ?";
-	private static final String CREAR_CUENTA = "INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado)"
-			+" VALUES(?, ?, ?, ?, ?, ?, ?)";
+	private static final String CREAR_CUENTA = "INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado) VALUES(?, ?, ?, ?, ?, ?, ?)";
+	private static final String CUENTAS_ENTRE = "SELECT COUNT(*) AS total_cuentas FROM cuenta WHERE fechaCreacion BETWEEN ? AND ?;";
+
 	@Override
 	public boolean crearCuenta(Cuenta cuenta) {
 		PreparedStatement stmt;
@@ -211,6 +214,34 @@ public class CuentaDaoImpl implements CuentaDao {
 			e.printStackTrace();
 		}
 		return cant;
+	}
+
+	@Override
+	public int obtenerCuentasEntre(Date inicio, Date fin) {
+		int cantidad = 0;
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conexion.prepareStatement(CUENTAS_ENTRE);
+			stmt.setDate(1, new java.sql.Date(inicio.getTime()));
+	        stmt.setDate(2, new java.sql.Date(fin.getTime()));
+		    rs = stmt.executeQuery();
+		        if (rs.next()) {
+		            cantidad = rs.getInt("total_cuentas");
+		        }
+		} catch (SQLException e) {
+		    e.printStackTrace();
+		} 
+		finally {
+       	 try {
+            	if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+		}
+		return cantidad;
 	}
 
 }

@@ -30,7 +30,8 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	private static final String sqlMontoFecha = "SELECT SUM(importe) AS total_importe FROM movimiento WHERE fecha BETWEEN ? AND ?";
 	
 	private static final String sqlSaldoxCuenta = "SELECT saldo FROM bdbanco.cuenta WHERE usuario = ? and tipoCuenta = ?";
-	
+	private static final String sqlMovimientosFecha = "SELECT COUNT(*) AS total_movimientos FROM movimiento WHERE fecha BETWEEN ? AND ?;";
+
 	
 	@Override
 	public ArrayList<Movimiento> traerMovimientos(int id) {
@@ -263,19 +264,15 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	@Override
 	public float obtenerMontoEntre(Date inicial, Date fin) {
 		float totalImporte = 0;
-		System.out.println("antes conexion");
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 
 		try {
 			stmt = conexion.prepareStatement(sqlMontoFecha);
-			System.out.println("antes fechas");
 			stmt.setDate(1, new java.sql.Date(inicial.getTime()));
 	        stmt.setDate(2, new java.sql.Date(fin.getTime()));
-	        System.out.println("antes del query");
 		    rs = stmt.executeQuery();
-		    System.out.println("realizo el query");
 		        if (rs.next()) {
 		            totalImporte = rs.getFloat("total_importe");
 		        }
@@ -291,6 +288,35 @@ public class MovimientoDaoImpl implements MovimientoDao{
             }
 		}
 		return totalImporte;
+	}
+	
+	@Override
+	public int obtenerMovimientosEntre(Date inicial, Date fin)
+	{
+		int cantidad = 0;
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conexion.prepareStatement(sqlMovimientosFecha);
+			stmt.setDate(1, new java.sql.Date(inicial.getTime()));
+	        stmt.setDate(2, new java.sql.Date(fin.getTime()));
+		    rs = stmt.executeQuery();
+		        if (rs.next()) {
+		            cantidad = rs.getInt("total_movimientos");
+		        }
+		} catch (SQLException e) {
+		    e.printStackTrace();
+		} 
+		finally {
+       	 try {
+            	if (rs != null) rs.close();
+                if (stmt != null) stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+		}
+		return cantidad;
 	}
 
 }

@@ -11,8 +11,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import negocio.CuentaNegocio;
 import negocio.MovimientoNegocio;
+import negocio.PrestamoNegocio;
+import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.MovimientoNegocioImpl;
+import negocioImpl.PrestamoNegocioImpl;
+
 
 
 @WebServlet("/ServletEstadisticas")
@@ -52,12 +58,14 @@ public class ServletEstadisticas extends HttpServlet {
 			
 			if(inicio != null && fin !=null)
 			{
-				System.out.println("entro");
+				CuentaNegocio cuNeg = new CuentaNegocioImpl();
 				MovimientoNegocio mvNeg = new MovimientoNegocioImpl();
+				PrestamoNegocio prNeg = new PrestamoNegocioImpl();
 				monto = mvNeg.obtenerMontoEntre(inicio, fin);
+				cuentas = cuNeg.obtenerCuentasEntre(inicio,fin);
+				movimientos = mvNeg.obtenerMovimientosEntre(inicio,fin);
+				prestamos = prNeg.obtenerPrestamosEntre(inicio,fin);
 			}
-			System.out.println("monto: " + monto);
-			
 			
 			request.setAttribute("monto", monto);
 			request.setAttribute("cuentas", cuentas);

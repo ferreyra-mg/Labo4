@@ -45,4 +45,9 @@ public class MovimientoNegocioImpl implements MovimientoNegocio{
 	public float obtenerMontoEntre(Date inicial, Date fin) {
 		return mvDao.obtenerMontoEntre(inicial, fin);
 	}
+
+	@Override
+	public int obtenerMovimientosEntre(Date inicial, Date fin) {
+		return mvDao.obtenerMovimientosEntre(inicial, fin);
+	}
 }

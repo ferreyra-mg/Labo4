@@ -15,5 +15,5 @@ public interface MovimientoDao {
 	String ObtenerCbuEmisor(String tipoCuenta, Cuenta cuenta);
 	boolean TransferirEntreCuentas(Cuenta cuenta, String cbuDestino, String cbuEmisor, float monto);
 	float obtenerMontoEntre(Date inicial, Date fin);
-	
+	int obtenerMovimientosEntre(Date inicial, Date fin);
 }

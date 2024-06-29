@@ -1,6 +1,7 @@
 package negocioImpl;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import daoImpl.PrestamoDaoImpl;
 import entidad.Prestamo;
@@ -24,5 +25,11 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 	public ArrayList<Prestamo> traerPendientes() {
 		return presDao.traerPendientes();
 	}
+
+	@Override
+	public int obtenerPrestamosEntre(Date inicio, Date fin) {
+		return presDao.obtenerPrestamosEntre(inicio, fin);
+	}
+	
 
 }
