@@ -40,10 +40,22 @@ public class ServletMovimiento extends HttpServlet {
 		        return;
 		    }
 		    
+
+		    
+		    
 		    String usuarioLogueado = request.getSession().getAttribute("usuario").toString();
 	        Cuenta cuenta = cuentaNeg.obtenerCuentaxUsuario(usuarioLogueado);
 	        String tipoCuentaCbu = request.getParameter("SelecCuenta");
 	        
+	        if(request.getParameter("mostrar")!=null) {
+			    RequestDispatcher rdCuentas = null;
+			    traerCuentas(request);
+		        rdCuentas = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
+		        rdCuentas.forward(request, response);
+	        }
+	        
+
+			
 		    //Esto es para transferir de un cbu a otro.
 		    if (request.getParameter("enviarMonto")!=null) {
 			RequestDispatcher rd = null;
@@ -60,6 +72,7 @@ public class ServletMovimiento extends HttpServlet {
 	        	float saldoActual = movNeg.VerificarSaldoxCuenta(usuarioLogueado, tipoCuentaCbu);
 	        	
 	        	if(saldoActual < monto) {
+	        		traerCuentas(request);
 	        		request.setAttribute("msjTransferencia", "No tiene saldo suficiente.");
 	        		rd = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
 	        		rd.forward(request, response);
@@ -71,10 +84,12 @@ public class ServletMovimiento extends HttpServlet {
 	      
 	        
 	        	if (exito == true) {
+	        		traerCuentas(request);
 			  		request.setAttribute("msjTransferencia", "Dinero transferido.");
 			  		rd = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
 			  		rd.forward(request, response);
 		        } else {
+		        	traerCuentas(request);
 		            request.setAttribute("msjTransferencia", "Error en la transferencia. Verifique los datos ingresados.");
 		            request.getRequestDispatcher("/Cliente_Transferencia.jsp").forward(request, response);
 		        }
@@ -97,12 +112,14 @@ public class ServletMovimiento extends HttpServlet {
 	        	float saldoxCuenta = movNeg.VerificarSaldoxCuenta(usuarioLogueado, tipoCuentaEmisora);
 	        	
 	        	if(saldoxCuenta < montoCuenta) {
+	        		traerCuentas(request);
 	        		request.setAttribute("msjTransferenciaCuentas", "No tiene saldo suficiente en la siguiente cuenta: " + tipoCuentaEmisora);
 	        		rd2 = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
 	        		rd2.forward(request, response);
 	        		return;
 	        	}
 	        	if(tipoCuentaEmisora.equals(tipoCuentaReceptora)) {
+	        		traerCuentas(request);
 	        		request.setAttribute("msjTransferenciaCuentas", "No puede enviarse el dinero a la misma cuenta");
 	        		rd2 = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
 	        		rd2.forward(request, response);
@@ -116,6 +133,7 @@ public class ServletMovimiento extends HttpServlet {
 		        if(cbuCuentaDestino != "" && cbuCuentaEmisor != "") {
 			        exitoCuentas = movNeg.TransferirEntreCuentas(cuenta, cbuCuentaDestino, cbuCuentaEmisor, montoCuenta);
 		        } else {
+		        	traerCuentas(request);
 		            request.setAttribute("msjTransferenciaCuentas", "Error en verificar las cuentas.");
 		            request.getRequestDispatcher("/Cliente_Transferencia.jsp").forward(request, response);
 		        }
@@ -125,10 +143,12 @@ public class ServletMovimiento extends HttpServlet {
 
 	        
 	        if(exitoCuentas == true) {
+	        	traerCuentas(request);
 	      		request.setAttribute("msjTransferenciaCuentas", "Dinero transferido.");
 	      		rd2 = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
 	      		rd2.forward(request, response);
 	        } else {
+	        	traerCuentas(request);
 	            request.setAttribute("msjTransferenciaCuentas", "Error en mandar el dinero a tu otra cuenta.");
 	            request.getRequestDispatcher("/Cliente_Transferencia.jsp").forward(request, response);
 	        }
@@ -160,4 +180,13 @@ public class ServletMovimiento extends HttpServlet {
         ArrayList<Movimiento> listMovimientos = mvNeg.traerMovimientos(id);
         request.setAttribute("listMovimientos", listMovimientos);
     }
+	
+	public void traerCuentas(HttpServletRequest request)
+	{
+		CuentaNegocio cuNeg = new CuentaNegocioImpl();
+		HttpSession session = request.getSession();
+		int dni = (int)session.getAttribute("dni");
+		ArrayList<Cuenta> cuentas = cuNeg.obtenerTodasLasCuentas(dni);
+        request.setAttribute("cuentas", cuentas);
+	}
 }

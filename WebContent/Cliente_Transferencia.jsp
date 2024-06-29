@@ -12,7 +12,7 @@
 <body class="cl">
 
 	<% //revisa que el usuario sea cliente
-		if(session.getAttribute("tipoUsuario") != "cliente"  )
+		if(!"cliente".equals(session.getAttribute("tipoUsuario")))
 		{
 			RequestDispatcher rd = null;
 			rd = request.getRequestDispatcher("/Login.jsp");
@@ -21,10 +21,10 @@
 	%>
 	
 	<% 
-	ArrayList<Cuenta> cuentas = null;
-	if(request.getAttribute("cuentas") != null) {
-		cuentas = (ArrayList<Cuenta>) request.getAttribute("cuentas");
-	}
+//	ArrayList<Cuenta> cuentas = null;
+//	if(request.getAttribute("cuentas") != null) {
+	ArrayList<Cuenta> cuentas = (ArrayList<Cuenta>) request.getAttribute("cuentas");
+//	}
 	%>
 
 	<nav class="mask">
@@ -32,7 +32,7 @@
 			<%= session.getAttribute("nm_user") != null ? session.getAttribute("nm_user") : "" %>
 		</div>
 		<ul class="list">
-			<li><a href="Cliente_Transferencia.jsp">Transferencia</a></li>
+			<li><a href="ServletMovimiento?mostrar=">Transferencia</a></li>
 			<li><a href="Cliente_Home.jsp">Historial</a></li>
 			<li><a href="ServletPrestamos">Prestamo</a></li>
 			<li><a href="Cliente_Perfil.jsp">Perfil</a></li>
