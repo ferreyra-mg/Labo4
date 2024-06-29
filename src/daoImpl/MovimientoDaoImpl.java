@@ -17,6 +17,11 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	private static final String sqlResta = "UPDATE bdbanco.cuenta SET saldo = saldo - ? WHERE usuario = ?";
 	private static final String sqlSuma = "UPDATE bdbanco.cuenta SET saldo = saldo + ? WHERE cbu = ?";
 	private static final String sqlMovimiento = "INSERT INTO bdbanco.movimiento (id_Cuenta, fecha, concepto, importe, tipo) VALUES (?, ?, ?, ?, ?)";
+	private static final String sqlCbuDestino = "SELECT cbu FROM bdbanco.cuenta WHERE usuario = ? and tipoCuenta != ?";
+	private static final String sqlCbuEmisor = "SELECT cbu FROM bdbanco.cuenta WHERE usuario = ? and tipoCuenta = ?";
+	
+	private static final String sqlRestaCuenta = "UPDATE bdbanco.cuenta SET saldo = saldo - ? WHERE cbu = ?";
+	private static final String sqlSumaCuenta = "UPDATE bdbanco.cuenta SET saldo = saldo + ? WHERE cbu = ?";
 	
 	@Override
 	public ArrayList<Movimiento> traerMovimientos(int id) {
@@ -134,6 +139,113 @@ public class MovimientoDaoImpl implements MovimientoDao{
 		
 
 		return saldoActual;
+	}
+
+	@Override
+	public int ObtenerCbuDestino(String tipoCuenta, Cuenta cuenta) {
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		PreparedStatement stmtCbu = null;
+		ResultSet rs = null;
+		int cbu = 0;
+		
+		try {
+			stmtCbu = conexion.prepareStatement(sqlCbuDestino);
+			stmtCbu.setString(1, cuenta.getUsuario());
+			stmtCbu.setString(1, tipoCuenta);
+			rs = stmtCbu.executeQuery();
+			
+			if(rs.next()) {
+				cbu = rs.getInt("cbu");
+			}
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return cbu;
+	}
+
+	@Override
+	public boolean TransferirEntreCuentas(Cuenta cuenta, int cbuDestino, int cbuEmisor, float monto) {
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		PreparedStatement stmtRestaCuenta;
+		PreparedStatement stmtSumaCuenta;
+		PreparedStatement stmtMov;
+		boolean exitoResta = false;
+		boolean exitoSuma = false;
+		boolean exitoMov = false;
+		boolean exito = false;
+		
+		try {
+			stmtRestaCuenta = conexion.prepareStatement(sqlRestaCuenta);
+			stmtRestaCuenta.setFloat(1, monto);
+			stmtRestaCuenta.setInt(2, cbuEmisor);
+			if(stmtRestaCuenta.executeUpdate() > 0) {
+				conexion.commit();
+				exitoResta = true;
+			}
+			
+			stmtSumaCuenta = conexion.prepareStatement(sqlSumaCuenta);
+			stmtSumaCuenta.setFloat(1, monto);
+			stmtSumaCuenta.setInt(2, cbuDestino);
+			if(stmtSumaCuenta.executeUpdate() > 0) {
+				conexion.commit();
+				exitoSuma = true;
+			}
+			
+			if(exitoResta == true && exitoSuma == true) {
+				stmtMov = conexion.prepareStatement(sqlMovimiento);
+				stmtMov.setInt(1, cuenta.getId());
+				stmtMov.setDate(2, new java.sql.Date(System.currentTimeMillis()));
+				stmtMov.setString(3, "Transferencia entre cuentas");
+				stmtMov.setFloat(4, monto);
+				stmtMov.setString(5, "Transferencia");
+				if(stmtMov.executeUpdate() > 0) {
+					conexion.commit();
+					exitoMov = true;
+				}
+				
+			}
+			
+			if(exitoResta == true && exitoSuma == true && exitoMov == true) {
+				exito = true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return exito;
+	}
+
+	@Override
+	public int ObtenerCbuEmisor(String tipoCuenta, Cuenta cuenta) {
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		PreparedStatement stmtCbu = null;
+		ResultSet rs = null;
+		int cbu = 0;
+		
+		try {
+			stmtCbu = conexion.prepareStatement(sqlCbuEmisor);
+			stmtCbu.setString(1, cuenta.getUsuario());
+			stmtCbu.setString(1, tipoCuenta);
+			rs = stmtCbu.executeQuery();
+			
+			if(rs.next()) {
+				cbu = rs.getInt("cbu");
+			}
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return cbu;
 	}
 
 }

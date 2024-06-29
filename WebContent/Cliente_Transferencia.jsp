@@ -55,12 +55,7 @@
 				<input type="submit" name="btn_TCT" value="Traer Cuentas"> <!--  ABREVIATURA Traer Cliente Home-->
 			</form>	
 			
-			<form action="ServletMovimiento" method="post">
-				
-
-
-			
-			
+			<form action="ServletMovimiento" method="get">
 				<% 
 				ArrayList<Cuenta> cuentas = null;
 				if(request.getAttribute("cuentas") != null) {
@@ -75,7 +70,7 @@
 						if (cuentas != null) {
 						for (Cuenta cuenta : cuentas) {
 					%>
-					<option value="<%= cuenta.getUsuario() %>"><%= cuenta.getUsuario() %></option>
+					<option value="<%= cuenta.getTipo() %>"><%= cuenta.getTipo() %></option>
 					<%
 						}
 					}
@@ -83,9 +78,12 @@
 				</select>
 
 	        	<label for="monto2">Monto:</label>
-	        	<input type="number" id="monto_2" placeholder="Ingrese el Monto">
+	        	<input type="number" id="montoCuenta" placeholder="Ingrese el Monto">
 	        	<br><br>
-	        	<button type="submit" name="enviarMontoCuentas" value="transferir_propia" class="btn-aceptar">Aceptar</button>
+	        	<button type="submit" name="enviarMontoCuenta" value="transferir_propia" class="btn-aceptar">Aceptar</button>
+	        	 <div class="error-message">
+				<%= request.getAttribute("msjTransferenciaCuentas") != null ? request.getAttribute("msjTransferenciaCuentas") : "" %>
+				</div>
         	 </form>
 			
 		</div>

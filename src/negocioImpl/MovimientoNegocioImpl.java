@@ -23,4 +23,19 @@ public class MovimientoNegocioImpl implements MovimientoNegocio{
 	public float VerificarSaldo(String usuario) {
 		return mvDao.VerificarSaldo(usuario);
 	}
+
+	@Override
+	public int ObtenerCbuDestino(String tipoCuenta, Cuenta cuenta) {
+		return mvDao.ObtenerCbuDestino(tipoCuenta, cuenta);
+	}
+
+	@Override
+	public boolean TransferirEntreCuentas(Cuenta cuenta, int cbuDestino, int cbuEmisor, float monto) {
+		return mvDao.TransferirEntreCuentas(cuenta, cbuDestino, cbuEmisor, monto);
+	}
+
+	@Override
+	public int ObtenerCbuEmisor(String tipoCuenta, Cuenta cuenta) {
+		return mvDao.ObtenerCbuEmisor(tipoCuenta, cuenta);
+	}
 }

@@ -36,6 +36,8 @@ public class ServletMovimiento extends HttpServlet {
 		        response.sendRedirect("/Login.jsp");
 		        return;
 		    }
+		    
+		    //Esto es para transferir de un cbu a otro.
 		    RequestDispatcher rd = null;
 		    String usuarioLogueado = request.getSession().getAttribute("usuario").toString();
 	        String cbuDestino = request.getParameter("cbuDestino");
@@ -70,6 +72,41 @@ public class ServletMovimiento extends HttpServlet {
 	            request.setAttribute("msjTransferencia", "Error en la transferencia. Verifique los datos ingresados.");
 	            request.getRequestDispatcher("/Cliente_Transferencia.jsp").forward(request, response);
 	        }
+	        
+	        
+	        
+	        
+	        
+	        //esto es para transferir de una cuenta a otra.
+
+	        String tipoCuenta = request.getParameter("cuenta");
+	        float montoCuenta = Float.parseFloat(request.getParameter("montoCuenta"));
+	        
+	        boolean exitoCuentas = false;
+	        if(request.getParameter("enviarMontoCuenta")!=null) {
+
+		        int cbuCuentaDestino = movNeg.ObtenerCbuDestino(tipoCuenta, cuenta);
+		        int cbuCuentaEmisor = movNeg.ObtenerCbuEmisor(tipoCuenta, cuenta);
+		        
+		        if(cbuCuentaDestino < 0 && cbuCuentaEmisor < 0) {
+			        exitoCuentas = movNeg.TransferirEntreCuentas(cuenta, cbuCuentaDestino, cbuCuentaEmisor, montoCuenta);
+		        } else {
+		            request.setAttribute("msjTransferenciaCuentas", "Error en verificar las cuentas.");
+		            request.getRequestDispatcher("/Cliente_Transferencia.jsp").forward(request, response);
+		        }
+		        
+	        }
+	        
+	        if(exitoCuentas == true) {
+	      		request.setAttribute("msjTransferenciaCuentas", "Dinero transferido.");
+	      		rd = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
+	      		rd.forward(request, response);
+	        } else {
+	            request.setAttribute("msjTransferenciaCuentas", "Error en mandar el dinero a tu otra cuenta.");
+	            request.getRequestDispatcher("/Cliente_Transferencia.jsp").forward(request, response);
+	        }
+	        
+	        
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
