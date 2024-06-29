@@ -34,7 +34,7 @@
 		<ul class="list">
 			<li><a href="ServletMovimiento?mostrar=">Transferencia</a></li>
 			<li><a href="Cliente_Home.jsp">Historial</a></li>
-			<li><a href="ServletPrestamos">Prestamo</a></li>
+			<li><a href="ServletPrestamos?mostrar=">Prestamo</a></li>
 			<li><a href="Cliente_Perfil.jsp">Perfil</a></li>
 		</ul>
 	</nav>
