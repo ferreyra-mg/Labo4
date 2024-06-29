@@ -20,14 +20,18 @@
 			RequestDispatcher rd = null;
 			rd = request.getRequestDispatcher("/Login.jsp");
 			rd.forward(request, response);
-		}
-	%>
-	﻿
+		}	
 
-	<% //no borrar
+ //no borrar
 	Cliente cli = null;
 	if (session.getAttribute("usuarioLogueado") != null)
 		cli = (Cliente) session.getAttribute("usuarioLogueado");
+
+
+/* 	ArrayList<Cuenta> cuentas = null;
+	if(request.getAttribute("cuentas") != null) { */
+	ArrayList<Cuenta> cuentas = (ArrayList<Cuenta>) request.getAttribute("cuentas");
+/* 	} */
 	%>
 	
 
@@ -63,12 +67,7 @@
 					<input type="number" id="meses" name="meses" placeholder="Ingrese meses" min="1" step="1" max="12" required value="12" >				
 				</div>
 	
-				<% 
-				ArrayList<Cuenta> cuentas = null;
-				if(request.getAttribute("cuentas") != null) {
-					cuentas = (ArrayList<Cuenta>) request.getAttribute("cuentas");
-				}
-				%>
+
 
 				<div class="filtrar_cuentas">
 					<label>Elige una cuenta:</label>
@@ -77,7 +76,7 @@
 						if (cuentas != null) {
 						for (Cuenta cuenta : cuentas) {
 					%>
-					<option value="<%= cuenta.getId() %>"><%= cuenta.getUsuario() %></option>
+					<option value="<%= cuenta.getTipo() %>"><%= cuenta.getTipo()%></option>
 					<%
 						}
 					}

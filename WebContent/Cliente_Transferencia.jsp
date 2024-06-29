@@ -42,9 +42,6 @@
 	<div class="transferencia">
 		<div class="tr1">
 			<p>Transferir</p>
-			<form action="ServletDescolgable" method="post">
-				<input type="submit" name="btn_TCT2" value="Traer Cuentas"> <!--  ABREVIATURA Traer Cliente Home-->
-			</form>	
 			<form action="ServletMovimiento" method="get">
 			
 			<label for="SeleccionCuenta">Seleccione la cuenta:</label>
@@ -76,14 +73,8 @@
 		</div>
 
 		<div class="tr2">
-			<p>Transferir a tus cuentas</p>
-			<form action="ServletDescolgable" method="post">
-				<input type="submit" name="btn_TCT" value="Traer Cuentas"> <!--  ABREVIATURA Traer Cliente Home-->
-			</form>	
-			
+			<p>Transferir a tus cuentas</p>			
 			<form action="ServletMovimiento" method="get">
-
-			
 				<div class="filtrar_cuentas">
 					Seleccione la cuenta emisora: 
 					<select name="cuentaEmisora" id="cuentaEmisora">
