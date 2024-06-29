@@ -86,25 +86,32 @@ public class ServletMovimiento extends HttpServlet {
 	        
 	        //esto es para transferir de una cuenta a otra.
 
-	        String tipoCuenta = request.getParameter("cuenta");
+	        String tipoCuentaEmisora = request.getParameter("cuentaEmisora");
+	        String tipoCuentaReceptora = request.getParameter("cuentaReceptora");
 	        float montoCuenta = Float.parseFloat(request.getParameter("montoCuenta"));
 	        
 	        boolean exitoCuentas = false;
 	        RequestDispatcher rd2 = null;
 	        if(request.getParameter("enviarMontoCuenta")!=null) {
 	        	
-	        	float saldoxCuenta = movNeg.VerificarSaldoxCuenta(usuarioLogueado, tipoCuenta);
+	        	float saldoxCuenta = movNeg.VerificarSaldoxCuenta(usuarioLogueado, tipoCuentaEmisora);
 	        	
 	        	if(saldoxCuenta < montoCuenta) {
-	        		request.setAttribute("msjTransferenciaCuentas", "No tiene saldo suficiente en la siguiente cuenta: " + tipoCuenta);
+	        		request.setAttribute("msjTransferenciaCuentas", "No tiene saldo suficiente en la siguiente cuenta: " + tipoCuentaEmisora);
+	        		rd2 = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
+	        		rd2.forward(request, response);
+	        		return;
+	        	}
+	        	if(tipoCuentaEmisora.equals(tipoCuentaReceptora)) {
+	        		request.setAttribute("msjTransferenciaCuentas", "No puede enviarse el dinero a la misma cuenta");
 	        		rd2 = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
 	        		rd2.forward(request, response);
 	        		return;
 	        	}
 		        
 		        
-		        String cbuCuentaDestino = movNeg.ObtenerCbuDestino(tipoCuenta, cuenta);
-		        String cbuCuentaEmisor = movNeg.ObtenerCbuEmisor(tipoCuenta, cuenta);
+		        String cbuCuentaDestino = movNeg.ObtenerCbu(tipoCuentaReceptora, cuenta);
+		        String cbuCuentaEmisor = movNeg.ObtenerCbu(tipoCuentaEmisora, cuenta);
 		        
 		        if(cbuCuentaDestino != "" && cbuCuentaEmisor != "") {
 			        exitoCuentas = movNeg.TransferirEntreCuentas(cuenta, cbuCuentaDestino, cbuCuentaEmisor, montoCuenta);

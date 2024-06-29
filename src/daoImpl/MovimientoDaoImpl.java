@@ -21,8 +21,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	private static final String sqlResta = "UPDATE bdbanco.cuenta SET saldo = saldo - ? WHERE usuario = ? and tipoCuenta = ?";
 	private static final String sqlSuma = "UPDATE bdbanco.cuenta SET saldo = saldo + ? WHERE cbu = ?";
 	private static final String sqlMovimiento = "INSERT INTO bdbanco.movimiento (id_Cuenta, fecha, concepto, importe, tipo) VALUES (?, ?, ?, ?, ?)";
-	private static final String sqlCbuDestino = "SELECT cbu FROM bdbanco.cuenta WHERE usuario = ? and tipoCuenta != ?";
-	private static final String sqlCbuEmisor = "SELECT cbu FROM bdbanco.cuenta WHERE usuario = ? and tipoCuenta = ?";
+	private static final String sqlCbu = "SELECT cbu FROM bdbanco.cuenta WHERE usuario = ? and tipoCuenta = ?";
 	
 	private static final String sqlRestaCuenta = "UPDATE bdbanco.cuenta SET saldo = saldo - ? WHERE cbu = ?";
 	private static final String sqlSumaCuenta = "UPDATE bdbanco.cuenta SET saldo = saldo + ? WHERE cbu = ?";
@@ -128,14 +127,14 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	}
 
 	@Override
-	public String ObtenerCbuDestino(String tipoCuenta, Cuenta cuenta) {
+	public String ObtenerCbu(String tipoCuenta, Cuenta cuenta) {
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		PreparedStatement stmtCbu = null;
 		ResultSet rs = null;
 		String cbu = "";
 		
 		try {
-			stmtCbu = conexion.prepareStatement(sqlCbuDestino);
+			stmtCbu = conexion.prepareStatement(sqlCbu);
 			stmtCbu.setString(1, cuenta.getUsuario());
 			stmtCbu.setString(2, tipoCuenta);
 			rs = stmtCbu.executeQuery();
@@ -209,33 +208,6 @@ public class MovimientoDaoImpl implements MovimientoDao{
 		return exito;
 	}
 
-	@Override
-	public String ObtenerCbuEmisor(String tipoCuenta, Cuenta cuenta) {
-		Connection conexion = Conexion.getConexion().getSQLConexion();
-		PreparedStatement stmtCbu = null;
-		ResultSet rs = null;
-		String cbu = "";
-		
-		try {
-			stmtCbu = conexion.prepareStatement(sqlCbuEmisor);
-			stmtCbu.setString(1, cuenta.getUsuario());
-			stmtCbu.setString(2, tipoCuenta);
-			rs = stmtCbu.executeQuery();
-			
-			if(rs.next()) {
-				cbu = rs.getString("cbu");
-			}
-			
-			
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("error 3");
-		}
-		
-		
-		return cbu;
-	}
 
 	@Override
 	public float VerificarSaldoxCuenta(String usuario, String tipoCuenta) {

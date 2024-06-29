@@ -22,8 +22,8 @@ public class MovimientoNegocioImpl implements MovimientoNegocio{
 	}
 
 	@Override
-	public String ObtenerCbuDestino(String tipoCuenta, Cuenta cuenta) {
-		return mvDao.ObtenerCbuDestino(tipoCuenta, cuenta);
+	public String ObtenerCbu(String tipoCuenta, Cuenta cuenta) {
+		return mvDao.ObtenerCbu(tipoCuenta, cuenta);
 	}
 
 	@Override
@@ -31,10 +31,7 @@ public class MovimientoNegocioImpl implements MovimientoNegocio{
 		return mvDao.TransferirEntreCuentas(cuenta, cbuDestino, cbuEmisor, monto);
 	}
 
-	@Override
-	public String ObtenerCbuEmisor(String tipoCuenta, Cuenta cuenta) {
-		return mvDao.ObtenerCbuEmisor(tipoCuenta, cuenta);
-	}
+
 
 	@Override
 	public float VerificarSaldoxCuenta(String usuario, String tipoCuenta) {

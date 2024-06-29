@@ -85,8 +85,23 @@
 
 			
 				<div class="filtrar_cuentas">
-					Elige una cuenta: 
-					<select name="cuenta" id="cuenta">
+					Seleccione la cuenta emisora: 
+					<select name="cuentaEmisora" id="cuentaEmisora">
+					<%
+						if (cuentas != null) {
+						for (Cuenta cuenta : cuentas) {
+					%>
+					<option value="<%= cuenta.getTipo() %>"><%= cuenta.getTipo() %></option>
+					<%
+						}
+					}
+					%>
+				</select>
+				</div>
+				
+				<div class="filtrar_cuentas">
+					Seleccione la cuenta receptora: 
+					<select name="cuentaReceptora" id="cuentaReceptora">
 					<%
 						if (cuentas != null) {
 						for (Cuenta cuenta : cuentas) {
