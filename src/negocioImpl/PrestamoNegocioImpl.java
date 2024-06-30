@@ -35,6 +35,11 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 	public boolean autortizacionPrestamo(int idCuenta, boolean autoriz) {
 		return presDao.autortizacionPrestamo(idCuenta, autoriz);
 	}
+
+	@Override
+	public ArrayList<Prestamo> prestamosXCapital(float minimo, float maximo) {
+		return presDao.prestamosXCapital(minimo, maximo);
+	}
 	
 	
 	

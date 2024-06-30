@@ -49,6 +49,31 @@ public class ServletPrestamos extends HttpServlet {
 
 		PrestamoNegocio preNeg = new PrestamoNegocioImpl();
 		
+		
+		if(request.getParameter("aceptar-f") != null){
+			RequestDispatcher rd = null;
+			float minimo = 0;
+			float maximo = 0;
+			minimo = Float.parseFloat(request.getParameter("capMin").toString());
+			maximo = Float.parseFloat(request.getParameter("capMax").toString());
+			
+			ArrayList<Prestamo> prestamo = preNeg.prestamosXCapital(minimo, maximo);
+			request.setAttribute("listaTPrestamos",prestamo );
+			
+			rd = request.getRequestDispatcher("/Admin_Prestamos.jsp");
+			rd.forward(request, response);
+			return;
+		}
+			
+		if(request.getParameter("btn_traerPrestamos") != null)
+		{
+			ArrayList<Prestamo> prestamo = preNeg.traerPendientes();
+			request.setAttribute("listaTPrestamos",prestamo );
+			prestamosPendientes(request, response);
+			return;
+		}
+			
+		
 		if(request.getParameter("aceptar") != null)
 		{
 			int idCuenta = 0;
@@ -84,13 +109,7 @@ public class ServletPrestamos extends HttpServlet {
 		}
 		
 		
-		if(request.getParameter("btn_traerPrestamos") != null)
-		{
-			ArrayList<Prestamo> prestamo = preNeg.traerPendientes();
-			request.setAttribute("listaTPrestamos",prestamo );
-			prestamosPendientes(request, response);
-			return;
-		}
+		
 		
 		
 		if (request.getParameter("solicitar") != null) {

@@ -30,19 +30,21 @@
 			<li><a href="Admin_Cuentas.jsp">Cuentas</a></li>
 		</ul>
 	</nav>
-	
+	<form action="ServletPrestamos" method="Post">
 	<div class="filtros-prestamos">
-		Capital pedido:
-		<input type="number">
-		Usuario
-		<input type="text">
+		Capital Min.:
+		<input type="number" name="capMin">
+		<br><br>
+		Capital Max.:
+		<input type="number" name="capMax">
 		<br><br>
 		<div class="btn-filtrar-prestamos">
-			<button type="button" name="aceptar-f">Aceptar</button>
-			<button type="button" name="remover-f">Remover filtros</button>
+			<input type="submit" value="aceptar" name="aceptar-f">
+			<input type="submit" value="remover" name="remover-f">
 		</div>
 		<br><br>
 	</div>
+	</form>
 	
 	<% 
 	// Parámetros de paginación
@@ -85,13 +87,12 @@
         for(Prestamo prestamo : listaPrestamos) { %>
     <tr>
     	<form action="ServletPrestamos" method="post">
-    		<td><%=prestamo.getIdCuenta() %><input type="hidden" name="idCuenta" value="<%=prestamo.getIdCuenta() %>"> </td>
-        	<td> <%=prestamo.getIdCuenta() %>	</td>
+        	<td> <%=prestamo.getIdCuenta() %><input type="hidden" name="idCuenta" value="<%=prestamo.getIdCuenta() %>">	</td>
         	<td> <%=prestamo.getMontoTotal() %></td>
         	<td> <%=prestamo.getCantMeses() %></td>
        		<td> <%=prestamo.getMontoMensual() %></td>
-        	<td> <button type="button" name="aceptar">Aceptar</button> 	</td>
-        	<td> <button type="button" name="rechazar">Rechazar</button>   	</td>
+        	<td> <input type="submit" name="aceptar" value="aceptar"></td>
+        	<td> <input type="submit" name="rechazar" value="rechazar"></td>
     	</form>
     </tr>
             <% }
