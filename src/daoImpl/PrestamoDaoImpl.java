@@ -13,6 +13,8 @@ import entidad.Prestamo;
 public class PrestamoDaoImpl implements PrestamoDao {
 	private static final String insert = "INSERT INTO prestamo(id_cuenta, cant_meses, fecha, capitalPedido, monto_mensual, monto_total) VALUES(?, ?, ?, ?, ?, ? )";
 	private static final String PRESTAMOS_FECHA = "SELECT COUNT(*) AS total_prestamos FROM prestamo WHERE fecha BETWEEN ? AND ?";
+	private static final String autorizPrest = "UPDATE prestamo SET peticion = ? WHERE id_Cuenta = ?";
+	
 
 	@Override
 	public boolean grabar(Prestamo prestamo) {
@@ -151,4 +153,33 @@ public class PrestamoDaoImpl implements PrestamoDao {
 		}
 		return cantidad;
 	}
+	
+	
+	@Override
+	public boolean autortizacionPrestamo(int idCuenta, boolean autoriz) {
+		PreparedStatement statement;
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		boolean esExitoso = false;
+	    try {
+	    	statement = conexion.prepareStatement(autorizPrest);  
+	    	
+	    	statement.setBoolean(1, autoriz);
+	        statement.setInt(2, idCuenta); 
+	        
+	        	        	        
+	        if (statement.executeUpdate() > 0) {
+	            conexion.commit();
+	            esExitoso = true;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        try {
+	            conexion.rollback();
+	        } catch (SQLException e1) {
+	            e1.printStackTrace();
+	        }
+	    }
+	    return esExitoso;
+	}
+	
 }

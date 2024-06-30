@@ -156,6 +156,11 @@ INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual,
 VALUES (4, 36, '2023-05-20', 15000.00, 500.00, 18000.00, 0, 1);
 INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion)
 VALUES (5, 18, '2023-06-30', 8000.00, 600.00, 10800.00, 0, 1);
+INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion)
+VALUES (1, 12, '2023-02-01', 10000.00, 833.33, 12000.00, 0, null);
+INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion)
+VALUES (4, 6, '2023-02-01', 12000.00, 2000.00, 14000.00, 0, null);
+
 
 /* MOVIMIENTOS */
 INSERT INTO movimiento (id_Cuenta, concepto, importe, fecha, tipo)

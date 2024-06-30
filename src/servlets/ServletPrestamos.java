@@ -51,12 +51,47 @@ public class ServletPrestamos extends HttpServlet {
 		
 
 		
+		if(request.getParameter("aceptar") != null)
+		{
+			//Prestamo prest = new Prestamo();
+			int idCuenta = 0;
+			idCuenta = Integer.parseInt(request.getParameter("idCuenta").toString());
+			
+			boolean confirmAutoriz = preNeg.autortizacionPrestamo(idCuenta, true);
+			
+			if(confirmAutoriz){
+				request.setAttribute("msj_error","Se autorizo correctamente");
+			}
+			else{
+				request.setAttribute("msj_error","Hubo un error al atorizar el prestamo");
+			} 
+		}
+		
+		
+		if(request.getParameter("rechazar") != null)
+		{
+			Prestamo prest = new Prestamo();
+			int idCuenta = 0;
+			idCuenta = Integer.parseInt(request.getParameter("idCuenta").toString());
+			
+			boolean confirmAutoriz = preNeg.autortizacionPrestamo(idCuenta, false);
+			
+			if(confirmAutoriz){
+				request.setAttribute("msj_error","Se autorizo correctamente");
+			}
+			else{
+				request.setAttribute("msj_error","Hubo un error al atorizar el prestamo");
+			} 
+		}
+		
+		
 		if(request.getParameter("btn_traerPrestamos") != null)
 		{
 			traerCuentas(request);
 			prestamosPendientes(request, response);
 			return;
 		}
+		
 		
 		if (request.getParameter("solicitar") != null) {
 			

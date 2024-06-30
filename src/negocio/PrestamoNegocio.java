@@ -12,4 +12,6 @@ public interface PrestamoNegocio {
 	
 	ArrayList<Prestamo> traerPendientes();
 	int obtenerPrestamosEntre(Date inicio,Date fin);
+	
+	boolean autortizacionPrestamo(int idCuenta, boolean autoriz);
 }

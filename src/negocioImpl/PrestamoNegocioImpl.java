@@ -30,6 +30,13 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 	public int obtenerPrestamosEntre(Date inicio, Date fin) {
 		return presDao.obtenerPrestamosEntre(inicio, fin);
 	}
+
+	@Override
+	public boolean autortizacionPrestamo(int idCuenta, boolean autoriz) {
+		return presDao.autortizacionPrestamo(idCuenta, autoriz);
+	}
+	
+	
 	
 
 }

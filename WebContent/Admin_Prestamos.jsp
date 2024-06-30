@@ -72,7 +72,7 @@
 	
 	<table>
     <tr>
-        <th>Usuario</th>
+        <th>Id Cuenta</th>
         <th>Capital</th>
         <th>Meses</th>
         <th>Valor Cuota</th>
@@ -85,7 +85,8 @@
         for(Prestamo prestamo : listaPrestamos) { %>
     <tr>
     	<form action="ServletPrestamos" method="post">
-        	<td> [nombre usuario]		</td>
+    		<td><%=prestamo.getIdCuenta() %><input type="hidden" name="idCuenta" value="<%=prestamo.getIdCuenta() %>"> </td>
+        	<td> <%=prestamo.getIdCuenta() %>	</td>
         	<td> <%=prestamo.getMontoTotal() %></td>
         	<td> <%=prestamo.getCantMeses() %></td>
        		<td> <%=prestamo.getMontoMensual() %></td>
