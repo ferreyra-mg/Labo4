@@ -49,11 +49,8 @@ public class ServletPrestamos extends HttpServlet {
 
 		PrestamoNegocio preNeg = new PrestamoNegocioImpl();
 		
-
-		
 		if(request.getParameter("aceptar") != null)
 		{
-			//Prestamo prest = new Prestamo();
 			int idCuenta = 0;
 			idCuenta = Integer.parseInt(request.getParameter("idCuenta").toString());
 			
@@ -64,10 +61,10 @@ public class ServletPrestamos extends HttpServlet {
 			}
 			else{
 				request.setAttribute("msj_error","Hubo un error al atorizar el prestamo");
-			} 
+			}
+			request.getRequestDispatcher("/Admin_Prestamos.jsp").forward(request, response);
+			return;
 		}
-		
-		
 		if(request.getParameter("rechazar") != null)
 		{
 			Prestamo prest = new Prestamo();
@@ -81,13 +78,16 @@ public class ServletPrestamos extends HttpServlet {
 			}
 			else{
 				request.setAttribute("msj_error","Hubo un error al atorizar el prestamo");
-			} 
+			}
+			request.getRequestDispatcher("/Admin_Prestamos.jsp").forward(request, response);
+			return;
 		}
 		
 		
 		if(request.getParameter("btn_traerPrestamos") != null)
 		{
-			traerCuentas(request);
+			ArrayList<Prestamo> prestamo = preNeg.traerPendientes();
+			request.setAttribute("listaTPrestamos",prestamo );
 			prestamosPendientes(request, response);
 			return;
 		}
@@ -129,13 +129,11 @@ public class ServletPrestamos extends HttpServlet {
 			boolean seGrabo = prNeg.grabar(prestamo);
 			if (seGrabo) {
 				traerCuentas(request);
-				System.out.println("se graboooo");
 				request.setAttribute("msj_error", "Solicitud realizada con exito. Ahora su peticion esta siendo revisada por el administrador. Espere pacientemente.");
 				request.getRequestDispatcher("/Cliente_Prestamo.jsp").forward(request, response);
 				return;
 			} else {
 				traerCuentas(request);
-				System.out.println("no se grabo");
 				request.setAttribute("msj_error", "No se pudo procesar la solicitud del prestamo. Pruebe nuevamente mas tarde.");
 				request.getRequestDispatcher("/Cliente_Prestamo.jsp").forward(request, response);
 				return;

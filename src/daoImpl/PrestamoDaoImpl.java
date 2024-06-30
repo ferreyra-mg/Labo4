@@ -78,7 +78,7 @@ public class PrestamoDaoImpl implements PrestamoDao {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("Error: trayendo todooooooooo No pudieron recuperar las cuentas del cliente [" + dni + "]");
+			System.out.println("Error: No pudieron recuperar las cuentas del cliente [" + dni + "]");
 		}
 		
 		if (prestamos.size() > 0) {
