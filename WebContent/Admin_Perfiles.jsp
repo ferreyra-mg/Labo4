@@ -312,11 +312,11 @@
             </label>
             
             <b>NACIONALIDAD:</b>
-            			<select name="nacionalidadM">
-								<option value="Argentina">Argentina</option>
-								<option value="Brasil">Brasil</option>
-								<option value="Chile">Chile</option>
-						</select>
+            	<select name="nacionalidadM">
+					<option value="Argentina">Argentina</option>
+					<option value="Brasil">Brasil</option>
+					<option value="Chile">Chile</option>
+				</select>
             
             
              <label for="localidadM">LOCALIDAD:
