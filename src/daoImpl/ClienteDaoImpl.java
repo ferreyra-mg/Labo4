@@ -20,8 +20,8 @@ public class ClienteDaoImpl implements ClienteDao {
 	
 	private static final String listarClientes = "SELECT * FROM cliente WHERE cliente.activo = 1;";
 	
-	private static final String update = "UPDATE cliente SET cuil = ?, nombre = ?, apellido = ?, sexo = ?, nacionalidad = ?, "
-			+ "fechaNacimiento = ?, direccion = ?, localidad = ?, provincia = ?, correoElectronico = ?, telefono = ?, contrasena = ? WHERE dni = ?;";
+	private static final String update = "UPDATE cliente SET nombre = ?, apellido = ?, sexo = ?, nacionalidad = ?, "
+			+ " direccion = ?, localidad = ?, provincia = ?, correoElectronico = ?, telefono = ?, contrasena = ? WHERE dni = ?;";
 	
 	private static final String clienteXdni = "SELECT * FROM cliente WHERE dni = ? and activo = 1;";
 	
@@ -48,6 +48,7 @@ public class ClienteDaoImpl implements ClienteDao {
 		        statement.setString(11, cliente.getCorreoElectronico()); 
 		        statement.setInt(12, cliente.getTelefono()); 
 		        statement.setString(13, cliente.getContrasena());
+		        
 		        if (statement.executeUpdate() > 0) {
 		            conexion.commit();
 		            isInsertExitoso = true;
@@ -70,21 +71,19 @@ public class ClienteDaoImpl implements ClienteDao {
 		boolean esExitoso = false;
 	    try {
 	    	statement = conexion.prepareStatement(update);  
-	        statement.setString(1, cliente.getCuil()); 
-	        statement.setString(2, cliente.getNombre()); 
-	        statement.setString(3, cliente.getApellido()); 
-	        statement.setBoolean(4, cliente.getSexo()); 
-	        statement.setString(5, cliente.getNacionalidad()); 
-	        statement.setDate(6, (Date) cliente.getFechaNacimiento());
-	        statement.setString(7, cliente.getDireccion()); 
-	        statement.setString(8, cliente.getLocalidad()); 
-	        statement.setString(9, cliente.getProvincia()); 
-	        statement.setString(10, cliente.getCorreoElectronico()); 
-	        statement.setInt(11, cliente.getTelefono()); 
-	        statement.setString(12, cliente.getContrasena());
-	        statement.setInt(13, cliente.getDni()); 
+	        statement.setString(1, cliente.getNombre()); 
+	        statement.setString(2, cliente.getApellido()); 
+	        statement.setBoolean(3, cliente.getSexo()); 
+	        statement.setString(4, cliente.getNacionalidad()); 
+	        statement.setString(5, cliente.getDireccion()); 
+	        statement.setString(6, cliente.getLocalidad()); 
+	        statement.setString(7, cliente.getProvincia()); 
+	        statement.setString(8, cliente.getCorreoElectronico()); 
+	        statement.setInt(9, cliente.getTelefono()); 
+	        statement.setString(10, cliente.getContrasena());
+	        statement.setInt(11, cliente.getDni());  
 	        
-	        
+	        System.out.println("Ejecutando update: " + statement.toString());
 	        
 	        if (statement.executeUpdate() > 0) {
 	            conexion.commit();
@@ -233,7 +232,6 @@ public class ClienteDaoImpl implements ClienteDao {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println("error aca cliente");
         }
         return null;
 	}

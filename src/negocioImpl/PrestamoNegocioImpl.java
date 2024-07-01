@@ -40,6 +40,11 @@ public class PrestamoNegocioImpl implements PrestamoNegocio {
 	public ArrayList<Prestamo> prestamosXCapital(float minimo, float maximo) {
 		return presDao.prestamosXCapital(minimo, maximo);
 	}
+
+	@Override
+	public ArrayList<Prestamo> traerPrestamos(int idCuenta) {
+		return presDao.traerPrestamos(idCuenta);
+	}
 	
 	
 	

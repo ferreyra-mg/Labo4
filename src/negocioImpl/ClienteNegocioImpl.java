@@ -17,6 +17,7 @@ public class ClienteNegocioImpl implements ClienteNegocio{
 
 	@Override
 	public boolean modificarCliente(Cliente cliente) {
+		
 		return clienteDao.modificarCliente(cliente);
 	}
 

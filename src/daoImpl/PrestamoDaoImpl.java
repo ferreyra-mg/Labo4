@@ -14,7 +14,7 @@ public class PrestamoDaoImpl implements PrestamoDao {
 	private static final String insert = "INSERT INTO prestamo(id_cuenta, cant_meses, fecha, capitalPedido, monto_mensual, monto_total) VALUES(?, ?, ?, ?, ?, ? )";
 	private static final String PRESTAMOS_FECHA = "SELECT COUNT(*) AS total_prestamos FROM prestamo WHERE fecha BETWEEN ? AND ?";
 	private static final String autorizPrest = "UPDATE prestamo SET peticion = ? WHERE id_Cuenta = ?";
-	
+	private static final String traerPrestamos = "SELECT * FROM prestamo WHERE id_Cuenta = ? and peticion = 1 AND pagado = 0";
 
 	@Override
 	public boolean grabar(Prestamo prestamo) {
@@ -215,6 +215,40 @@ public class PrestamoDaoImpl implements PrestamoDao {
 		}
 						
 		return prestamos;
+	}
+
+	@Override
+	public ArrayList<Prestamo> traerPrestamos(int idCuenta) {
+		ArrayList<Prestamo> prestamos = new ArrayList<>();
+		
+		try {
+				Connection conexion = Conexion.getConexion().getSQLConexion();
+				PreparedStatement stmt = conexion.prepareStatement(traerPrestamos); 
+				stmt.setFloat(1, idCuenta);
+				
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				Prestamo prestamo = new Prestamo();
+				prestamo.setId(rs.getInt("id"));
+                prestamo.setIdCuenta(rs.getInt("id_Cuenta"));
+                prestamo.setCantMeses(rs.getInt("cant_Meses"));
+                prestamo.setFecha(rs.getDate("fecha"));
+                prestamo.setMontoMensual(rs.getFloat("montoMensual"));
+                prestamo.setMontoTotal(rs.getFloat("montoTotal"));
+                prestamo.setPagado(rs.getBoolean("pagado"));
+                prestamo.setPeticion(rs.getBoolean("peticion"));
+                
+				prestamos.add(prestamo);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error al traer de la base de datos");
+		}
+						
+		return prestamos;
+
 	}
 	
 }

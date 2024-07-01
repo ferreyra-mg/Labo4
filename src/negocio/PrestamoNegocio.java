@@ -14,7 +14,10 @@ public interface PrestamoNegocio {
 	
 	ArrayList<Prestamo> prestamosXCapital(float minimo, float maximo);
 	
+	ArrayList<Prestamo> traerPrestamos(int idCuenta);
+	
 	int obtenerPrestamosEntre(Date inicio,Date fin);
 	
 	boolean autortizacionPrestamo(int idCuenta, boolean autoriz);
+	
 }

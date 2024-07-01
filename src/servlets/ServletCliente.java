@@ -171,11 +171,11 @@ public class ServletCliente extends HttpServlet {
 			return;
 	    }
 		
-		
+		int dni = 0;
 			if(request.getParameter("btnModificar")!=null) 
 			{
-				
-				int dni = Integer.parseInt(request.getParameter("dniCliente").toString());
+				dni = Integer.parseInt(request.getParameter("dniCliente").toString());
+				request.getSession().setAttribute("aux", dni);
 				if(cliNeg.obtenerCliente(dni)!=null) 
 				{
 					Cliente cli2 = new Cliente();
@@ -188,17 +188,20 @@ public class ServletCliente extends HttpServlet {
 			{
 				
 				Cliente cli = new Cliente();
-				int dniMod = Integer.parseInt(request.getAttribute("dniCliente").toString()); 
+				//int dniMod = Integer.parseInt(request.getAttribute("dniCliente").toString()); 
 				try {
-					
-					cli = cliNeg.obtenerCliente(dniMod);
+					dni = Integer.parseInt(request.getSession().getAttribute("aux").toString());
+					System.out.println("aca vale: " + dni);
+					cli = cliNeg.obtenerCliente(dni);
+					cli.setDni(dni);
 				    cli.setNombre(request.getParameter("nombreM")); // String para nombre
 				    cli.setApellido(request.getParameter("apellidoM")); // String para apellido
 				    String sexoStr = request.getParameter("sexM");
 				    boolean sexo = Boolean.parseBoolean(sexoStr); // Convierte la cadena "true" o "false" a booleano
 				    cli.setSexo(sexo);
 				    cli.setNacionalidad(request.getParameter("nacionalidadM").toString()); // String para nacionalidad
-				    				    
+				    
+				    
 				    cli.setDireccion(request.getParameter("direccionM")); // String para direccion
 				    cli.setLocalidad(request.getParameter("localidadM")); // String para localidad
 				    cli.setProvincia(request.getParameter("provinciaM")); // String para provincia
@@ -206,7 +209,6 @@ public class ServletCliente extends HttpServlet {
 				    cli.setTelefono(Integer.parseInt(request.getParameter("telefonoM"))); // int para telefono
 				    cli.setContrasena(request.getParameter("contra1M")); // String para contrasena
 
-			        
 				    confirmacionUpdate = cliNeg.modificarCliente(cli);
 				    request.setAttribute("clienteModificar", null);
 					

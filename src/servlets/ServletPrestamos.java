@@ -11,12 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import entidad.Cliente;
 import entidad.Cuenta;
 import entidad.Prestamo;
 import negocio.ClienteNegocio;
 import negocio.CuentaNegocio;
 import negocio.PrestamoNegocio;
+import negocio.CuotaNegocio;
+import negocioImpl.CuotaNegocioImpl;
 import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.PrestamoNegocioImpl;
@@ -50,18 +51,58 @@ public class ServletPrestamos extends HttpServlet {
 		PrestamoNegocio preNeg = new PrestamoNegocioImpl();
 		
 		
+		if(request.getParameter("pagarCuota")!=null)
+		{
+			System.out.println("verificacion 1");
+			CuotaNegocio cuotaNeg = new CuotaNegocioImpl();
+			System.out.println("verificacion 2");
+			int idPrestamo = Integer.parseInt(request.getParameter("idPrestamo"));
+			System.out.println("verificacion 3");
+			boolean exito = cuotaNeg.pagarCuota(idPrestamo);
+			System.out.println("verificacion 4");
+			if(exito)
+			{
+				request.setAttribute("msj_error", "Se realizo el pago de una cuota correctamente");
+				request.getRequestDispatcher("/Cliente_Prestamo.jsp").forward(request, response);
+				return;
+			} else {
+				request.setAttribute("msj_error", "hubo un error al pagar la cuota");
+				request.getRequestDispatcher("/Cliente_Prestamo.jsp").forward(request, response);
+				return;
+			}
+		}
+		
 		if(request.getParameter("aceptar-f") != null){
 			RequestDispatcher rd = null;
 			float minimo = 0;
 			float maximo = 0;
-			minimo = Float.parseFloat(request.getParameter("capMin").toString());
-			maximo = Float.parseFloat(request.getParameter("capMax").toString());
-			
-			ArrayList<Prestamo> prestamo = preNeg.prestamosXCapital(minimo, maximo);
-			request.setAttribute("listaTPrestamos",prestamo );
-			
+			if(request.getParameter("capMin") != null && request.getParameter("capMax") != null)
+			{
+				minimo = Float.parseFloat(request.getParameter("capMin").toString());
+				maximo = Float.parseFloat(request.getParameter("capMax").toString());
+				if(maximo < minimo || maximo < 0 || minimo < 0)
+				{
+					request.setAttribute("msj_error", "no se puede ingresar montos negativos");
+					rd = request.getRequestDispatcher("/Admin_Prestamos.jsp");
+					rd.forward(request, response);
+					return;
+				}
+				ArrayList<Prestamo> prestamo = preNeg.prestamosXCapital(minimo, maximo);
+				request.setAttribute("listaTPrestamos",prestamo );
+			}
+			else {
+				request.setAttribute("msj_error", "no se ingresaron montos");	
+			}
 			rd = request.getRequestDispatcher("/Admin_Prestamos.jsp");
 			rd.forward(request, response);
+			return;	
+		}
+		
+		if(request.getParameter("remover-f") != null)
+		{
+			ArrayList<Prestamo> prestamo = preNeg.traerPendientes();
+			request.setAttribute("listaTPrestamos",prestamo );
+			prestamosPendientes(request, response);
 			return;
 		}
 			
@@ -158,6 +199,29 @@ public class ServletPrestamos extends HttpServlet {
 				return;
 			}
 		}
+		if (request.getParameter("traerPrestamos") != null)
+		{
+			int idCuenta = 0;
+			if(request.getAttribute("cuentas") != null)
+			{
+				idCuenta=Integer.parseInt(request.getAttribute("cuentas").toString());
+			}
+			ArrayList<Prestamo> prestamos = preNeg.traerPrestamos(idCuenta);
+			if (prestamos != null)
+			{
+				request.setAttribute("prestamos",prestamos);
+				request.getRequestDispatcher("/Cliente_Prestamo.jsp").forward(request, response);
+				return;
+			}
+			request.setAttribute("msj_error", "hubo un error al traer prestamos");
+			request.getRequestDispatcher("/Cliente_Prestamo.jsp").forward(request, response);
+			return;
+			
+			
+		}
+		
+		
+		
 		
 	}
 	

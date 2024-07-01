@@ -26,12 +26,6 @@
 			Cliente cli = null;
 			if (session.getAttribute("usuarioLogueado") != null)
 				cli = (Cliente) session.getAttribute("usuarioLogueado");
-		
-		
-		/* 	ArrayList<Cuenta> cuentas = null;
-			if(request.getAttribute("cuentas") != null) { */
-			ArrayList<Cuenta> cuentas = (ArrayList<Cuenta>) request.getAttribute("cuentas");
-		/* 	} */
 	%>
 	
 
@@ -40,12 +34,23 @@
 			<%= session.getAttribute("nm_user") != null ? session.getAttribute("nm_user") : "" %>
 		</div>
 		<ul class="list">
-			<li><a href="ServletMovimiento?mostrar=">Transferencia</a></li>
+			<li><a href="ServletMovimiento.jsp">Transferencia</a></li>
 			<li><a href="Cliente_Home.jsp">Historial</a></li>
-			<li><a href="ServletPrestamos?mostrar=">Prestamo</a></li>
+			<li><a href="ServletPrestamos.jsp">Prestamo</a></li>
 			<li><a href="Cliente_Perfil.jsp">Perfil</a></li>
 		</ul>
 	</nav>
+
+	<form action="ServletDescolgable" method="post">
+		<input type="submit" name="btn_TCPr" value="Traer Cuentas"> <!--  ABREVIATURA Traer Cliente Home-->
+	</form>	
+	
+	<% 
+	ArrayList<Cuenta> cuentas = null;
+	if(request.getAttribute("cuentas") != null) {
+		cuentas = (ArrayList<Cuenta>) request.getAttribute("cuentas");
+	}
+	%>
 
 	<div class="prestamo">
 		<div class="prestamos-error-message">
@@ -102,66 +107,85 @@
 		</div>
 
 
-		<div class="lista_prestamo">
-
-
+		<div class="lista_prestamo">	
+		
+			<form action="ServletPrestamos" method="post">
+				<div class="filtrar_cuentas">
+					<label>Elige una cuenta:</label>
+					<select name="cuentas" id="cuentas">
+					<%
+						if (cuentas != null) {
+						for (Cuenta cuenta : cuentas) {
+					%>
+					<option value="<%= cuenta.getTipo() %>"><%= cuenta.getTipo()%></option>
+					<%
+						}
+					}
+					%>
+					</select>
+				</div>  
+				<input type="submit" name="traerPrestamos" value="traer prestamos">
+			</form>
 			<%
-			    // Simulamos datos de movimientos para este ejemplo
-			    List<String[]> movimientos = new ArrayList<String[]>();
-			    for (int i = 1; i <= 50; i++) {
-			        movimientos.add(new String[]{ "" + i, "$" + (i*69.69 + 1), ""});
-			    }
-			
-			    // Parámetros de paginación
-			    int pageSize = 10; // Número de elementos por página
-			    int pageNumber = 1; // Número de la página actual
-			    if (request.getParameter("page") != null) {
-			        pageNumber = Integer.parseInt(request.getParameter("page"));
-			    }
-			
-			    // Cálculo de la paginación
-			    int totalItems = movimientos.size();
-			    int totalPages = (int) Math.ceil((double) totalItems / pageSize);
-			    int startIndex = (pageNumber - 1) * pageSize;
-			    int endIndex = Math.min(startIndex + pageSize, totalItems);
-			
-			    // Sublista para la página actual
-			    List<String[]> pageItems = movimientos.subList(startIndex, endIndex);
+
+			 ArrayList<Prestamo> prestamos = null;
+			 if(request.getAttribute("prestamos") != null) {
+				 prestamos = (ArrayList<Prestamo>) request.getAttribute("prestamos");
+			 } 
+			 
+			 int MOVIMIENTOS_POR_PAGINA = 10;
+			 int totalMovimientos = (prestamos != null) ? prestamos.size() : 0;
+			 int totalPages = (int) Math.ceil((double) totalMovimientos / MOVIMIENTOS_POR_PAGINA);
+			 int pageNumber = 1;
+
+			 if (request.getParameter("page") != null) {
+			     pageNumber = Integer.parseInt(request.getParameter("page"));
+			 }
+
+			 int start = (pageNumber - 1) * MOVIMIENTOS_POR_PAGINA;
+			 int end = Math.min(start + MOVIMIENTOS_POR_PAGINA, totalMovimientos);
+			 ArrayList<Prestamo> paginatedList = new ArrayList<>();
+
+			 if (prestamos != null) {
+			     paginatedList = new ArrayList<>(prestamos.subList(start, end));
+			 }
 			%>
-			
 			<table class="tabla-prestamos">
-				<thead>
-					<tr>
-						<th colspan="5">Historial de Prestamos</th>
-					</tr>
-					<tr>
-						<th>Prestamo Nro.</th>
-						<th>Fecha</th>
-						<th>Monto</th>
-						<th>Estado</th>
-						<th>Cuotas Pendientes</th>
-					</tr>
-				</thead>
-				<% for (Prestamo prestamo : cli.prestamos()) { %>
-					<tr>
-						<td><%= prestamo.getId() %></td>
-						<td><%= prestamo.getFecha() %></td>
-						<td><%= prestamo.getPrestamo() %></td>
-						<% if (prestamo.autorizado()) { %> 
-							<td>Otorgado</td>
-						<% } else {%>
-							<td>Pendiente</td>
-						<% } %>
-						<td>05/12</td>
-					</tr>
-				<% } %>
-			</table>
+    <thead>
+        <tr>
+            <th colspan="5">Historial de Prestamos</th>
+        </tr>
+        <tr>
+            <th>Prestamo Nro.</th>
+            <th>Fecha</th>
+            <th>Monto Mensual</th>
+            <th>Monto Total</th>
+            <th>Pagar</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% for (Prestamo prestamo : cli.prestamos()) { %>
+            <tr>
+                <form action="ServletPrestamos" method="post">
+                    <td><%= prestamo.getId() %><input type="hidden" name="idPrestamo" value="<%= prestamo.getId() %>"></td>
+                    <td><%= prestamo.getFecha() %></td>
+                    <td><%= prestamo.getMontoMensual() %></td>
+                    <td><%= prestamo.getMontoTotal() %></td>
+                    <td><input type="submit" name="pagarCuota" value="Pagar"></td>
+                </form>
+            </tr>
+        <% } %>
+    </tbody>
+</table>
 
 			<div class="pagination">
 				<% for (int i = 1; i <= totalPages; i++) { %>
 				<a href="?page=<%= i %>"
 					class="<%= (i == pageNumber) ? "active" : "" %>"><%= i %></a>
 				<% } %>
+			</div>
+			<div class="error-message">
+				<%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>
 			</div>
 
 		</div>

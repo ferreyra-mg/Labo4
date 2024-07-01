@@ -33,10 +33,10 @@
 	<form action="ServletPrestamos" method="Post">
 	<div class="filtros-prestamos">
 		Capital Min.:
-		<input type="number" name="capMin">
+		<input type="number" name="capMin" required>
 		<br><br>
 		Capital Max.:
-		<input type="number" name="capMax">
+		<input type="number" name="capMax" required>
 		<br><br>
 		<div class="btn-filtrar-prestamos">
 			<input type="submit" value="aceptar" name="aceptar-f">
