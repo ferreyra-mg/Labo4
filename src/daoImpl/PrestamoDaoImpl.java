@@ -157,19 +157,46 @@ public class PrestamoDaoImpl implements PrestamoDao {
 	
 	@Override
 	public boolean autortizacionPrestamo(int idCuenta, boolean autoriz) {
-		PreparedStatement statement;
-		Connection conexion = Conexion.getConexion().getSQLConexion();
-		boolean esExitoso = false;
+	    PreparedStatement statement = null;
+	    Connection conexion = Conexion.getConexion().getSQLConexion();
+	    boolean esExitoso = false;
+
 	    try {
-	    	statement = conexion.prepareStatement(autorizPrest);  
-	    	
-	    	statement.setBoolean(1, autoriz);
-	        statement.setInt(2, idCuenta); 
-	        
-	        	        	        
-	        if (statement.executeUpdate() > 0) {
-	            conexion.commit();
-	            esExitoso = true;
+	        // Iniciar una transacción
+	        conexion.setAutoCommit(false);
+
+	        // Actualizar la tabla prestamo para establecer peticion a 1
+	        statement = conexion.prepareStatement("UPDATE prestamo SET peticion = ? WHERE id_Cuenta = ?");
+	        statement.setBoolean(1, autoriz);
+	        statement.setInt(2, idCuenta);
+
+	        int updatePrestamo = statement.executeUpdate();
+	        if (updatePrestamo > 0) {
+	            // Obtener el capitalPedido del prestamo para actualizar la cuenta
+	            statement = conexion.prepareStatement("SELECT capitalPedido FROM prestamo WHERE id_Cuenta = ?");
+	            statement.setInt(1, idCuenta);
+
+	            ResultSet rs = statement.executeQuery();
+	            if (rs.next()) {
+	                float capitalPedido = rs.getFloat("capitalPedido");
+
+	                // Actualizar el saldo de la cuenta sumando el capitalPedido
+	                statement = conexion.prepareStatement("UPDATE cuenta SET saldo = saldo + ? WHERE id = ?");
+	                statement.setFloat(1, capitalPedido);
+	                statement.setInt(2, idCuenta);
+
+	                int updateCuenta = statement.executeUpdate();
+	                if (updateCuenta > 0) {
+	                    conexion.commit();
+	                    esExitoso = true;
+	                } else {
+	                    conexion.rollback();
+	                }
+	            } else {
+	                conexion.rollback();
+	            }
+	        } else {
+	            conexion.rollback();
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -178,9 +205,17 @@ public class PrestamoDaoImpl implements PrestamoDao {
 	        } catch (SQLException e1) {
 	            e1.printStackTrace();
 	        }
+	    } finally {
+	        try {
+	            if (statement != null) statement.close();
+	            conexion.setAutoCommit(true);
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
 	    }
 	    return esExitoso;
 	}
+
 
 	@Override
 	public ArrayList<Prestamo> prestamosXCapital(float minimo, float maximo) {

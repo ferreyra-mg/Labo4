@@ -54,18 +54,6 @@ public class CuentaDaoImpl implements CuentaDao {
 	}
 
 	@Override
-	public void modificarCuenta(Cuenta cuenta) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void cambiarEstadoCuenta(int id) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public ArrayList<Cuenta> obtenerTodasLasCuentas() {
 		// TODO Auto-generated method stub
 		return null;

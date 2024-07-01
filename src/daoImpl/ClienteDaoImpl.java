@@ -217,7 +217,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	
 	@Override
 	public Cliente logear(String user, String psw) {
-		String sql = "SELECT dni, contrasena FROM cliente WHERE dni = ? AND contrasena = ? AND activo = 1";
+		String sql = "SELECT * FROM cliente WHERE dni = ? AND contrasena = ? AND activo = 1";
         try (Connection conexion = Conexion.getConexion().getSQLConexion();
              PreparedStatement stmt = conexion.prepareStatement(sql)) {
             
@@ -228,6 +228,8 @@ public class ClienteDaoImpl implements ClienteDao {
                 Cliente cliente = new Cliente();
                 cliente.setDni(rs.getInt("dni"));
                 cliente.setContrasena(rs.getString("contrasena"));
+                cliente.setNombre(rs.getString("nombre"));
+                cliente.setApellido(rs.getString("apellido"));
                 return cliente;
             }
         } catch (SQLException e) {

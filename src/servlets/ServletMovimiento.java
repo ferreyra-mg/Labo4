@@ -53,24 +53,22 @@ public class ServletMovimiento extends HttpServlet {
 		        rdCuentas = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
 		        rdCuentas.forward(request, response);
 	        }
-	        
-
 			
 		    //Esto es para transferir de un cbu a otro.
-		    if (request.getParameter("enviarMonto")!=null) {
+		    if (request.getParameter("enviarMonto")!=null) { 
 			RequestDispatcher rd = null;
 	        String cbuDestino = request.getParameter("cbuDestino");
-	        float monto = Float.parseFloat(request.getParameter("monto"));
+	        float monto = Float.parseFloat(request.getParameter("monto").toString());
+	        int id = 0;
+	        if(request.getParameter("cuentaEmisora") != null)
+	        {
+	        	id = Integer.parseInt(request.getParameter("cuentaEmisora").toString());
+	        }
 	        
-
-	        
-
-
 	        boolean exito = false;
-	        
-	        	
-	        	float saldoActual = movNeg.VerificarSaldoxCuenta(usuarioLogueado, tipoCuentaCbu);
-	        	
+
+	        	float saldoActual = movNeg.VerificarSaldoxCuenta(id);
+	        	System.out.println("monto actual: " + saldoActual);
 	        	if(saldoActual < monto) {
 	        		traerCuentas(request);
 	        		request.setAttribute("msjTransferencia", "No tiene saldo suficiente.");
@@ -79,9 +77,7 @@ public class ServletMovimiento extends HttpServlet {
 	        		return;
 	        	}
 	        	
-	        	exito = movNeg.transferirCbu(cuenta, cbuDestino, monto, tipoCuentaCbu);
-	        	
-	      
+	        	exito = movNeg.transferirCbu(id, cbuDestino, monto, tipoCuentaCbu);
 	        
 	        	if (exito == true) {
 	        		traerCuentas(request);
@@ -96,21 +92,24 @@ public class ServletMovimiento extends HttpServlet {
 	        
 		    }
 	        
-	        
-	        
-	        
 	        //esto es para transferir de una cuenta a otra.
 
 	        String tipoCuentaEmisora = request.getParameter("cuentaEmisora");
 	        String tipoCuentaReceptora = request.getParameter("cuentaReceptora");
-	        float montoCuenta = Float.parseFloat(request.getParameter("montoCuenta"));
-	        
+	        float montoCuenta = Float.parseFloat(request.getParameter("montoCuenta").toString());
+	        System.out.println("monto actual: " + montoCuenta);
 	        boolean exitoCuentas = false;
 	        RequestDispatcher rd2 = null;
+	        
+	        int id = 0;
+	        if(request.getAttribute("SelecCuenta") != null)
+	        {
+	        	id = Integer.parseInt(request.getAttribute("SelecCuenta").toString());
+	        }
 	        if(request.getParameter("enviarMontoCuenta")!=null) {
 	        	
-	        	float saldoxCuenta = movNeg.VerificarSaldoxCuenta(usuarioLogueado, tipoCuentaEmisora);
-	        	
+	        	float saldoxCuenta = movNeg.VerificarSaldoxCuenta(id);
+	        	System.out.println("saldo:" +saldoxCuenta);
 	        	if(saldoxCuenta < montoCuenta) {
 	        		traerCuentas(request);
 	        		request.setAttribute("msjTransferenciaCuentas", "No tiene saldo suficiente en la siguiente cuenta: " + tipoCuentaEmisora);
@@ -131,7 +130,7 @@ public class ServletMovimiento extends HttpServlet {
 		        String cbuCuentaEmisor = movNeg.ObtenerCbu(tipoCuentaEmisora, cuenta);
 		        
 		        if(cbuCuentaDestino != "" && cbuCuentaEmisor != "") {
-			        exitoCuentas = movNeg.TransferirEntreCuentas(cuenta, cbuCuentaDestino, cbuCuentaEmisor, montoCuenta);
+			        exitoCuentas = movNeg.TransferirEntreCuentas(id, cbuCuentaDestino, cbuCuentaEmisor, montoCuenta);
 		        } else {
 		        	traerCuentas(request);
 		            request.setAttribute("msjTransferenciaCuentas", "Error en verificar las cuentas.");
@@ -158,9 +157,8 @@ public class ServletMovimiento extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
 		RequestDispatcher rd = null;
-		String idS = request.getAttribute("cuenta").toString();
+		String idS = request.getParameter("cuenta").toString();
 		
 		int id = Integer.parseInt(idS);
 		if(request.getParameter("btn_traerMovimientos") != null)
@@ -170,9 +168,7 @@ public class ServletMovimiento extends HttpServlet {
 		    rd.forward(request, response);
 		    return;
 		}
-		
-		
-		
+
 	}
 
 	private void traerMovimientos(HttpServletRequest request, int id) {

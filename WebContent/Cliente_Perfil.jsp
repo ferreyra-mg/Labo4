@@ -29,9 +29,9 @@
 			<%= session.getAttribute("nm_user") != null ? session.getAttribute("nm_user") : "" %>
 		</div>
 		<ul class="list">
-			<li><a href="ServletMovimiento?mostrar=">Transferencia</a></li>
+			<li><a href="Cliente_Transferencia.jsp">Transferencia</a></li>
 			<li><a href="Cliente_Home.jsp">Historial</a></li>
-			<li><a href="ServletPrestamos?mostrar=">Prestamo</a></li>
+			<li><a href="Cliente_Prestamo.jsp">Prestamo</a></li>
 			<li><a href="Cliente_Perfil.jsp">Perfil</a></li>
 		</ul>
 	</nav>
@@ -77,14 +77,14 @@
 			Telefono: <%= clienteLog != null ? clienteLog.getTelefono() : "" %> <br><br>
 			
 		</div>
-		
+		<div class ="cartass">
 		<%
 			if (cuentas != null) {
 			for (Cuenta cuenta : cuentas) {
 		%>
 		<div class = "btn-c1">
-		    <img src="img/cuenta_bg.jpg" alt="">
-		    <div class="card-content">
+		    <img src="img/cuenta_bg.jpg" alt="cuenta">
+		    <div class="card-content" > 
 		      <h2>
 		        <%=cuenta.getUsuario() %>
 		      </h2>
@@ -95,11 +95,12 @@
 				SALDO: <%=cuenta.getSaldo()%>
 		      </p>
 		    </div>
-		  </div>
+		  </div> <br><br>
 		<%
 			}
 		}
 		%>
+		</div>
 		
 		  </div>
 		  
@@ -152,8 +153,6 @@
 			</div>
 		
 		</div>
-		
-	</div>
 	
 	<script>
 		const tarjeta = document.querySelector('#tarjeta'),

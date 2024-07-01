@@ -50,7 +50,6 @@ public class ServletBanco extends HttpServlet {
 			String contra1 = request.getParameter("psw1");
 			String contra2 = request.getParameter("psw2");
 
-			// comprobar si las contraseñas son iguales
 			if(!contra1.equals(contra2))
 			{
 				request.setAttribute("msj_error", "Las contraseñas no coinciden");
@@ -74,7 +73,7 @@ public class ServletBanco extends HttpServlet {
 			if(cl != null) {
 				session.setAttribute("usuarioLogueado", cl);
                 session.setAttribute("tipoUsuario", "cliente");
-                String aux = cuNeg.obtenerUsuario( cl.getDni() ).getUsuario();
+                String aux = cl.getApellido() + ", "+ cl.getNombre();
                 request.getSession().setAttribute("usuario", aux);
                 session.setAttribute("nm_user", aux);
                 session.setAttribute("dni", cl.getDni());

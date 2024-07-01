@@ -32,12 +32,16 @@
 			<%= session.getAttribute("nm_user") != null ? session.getAttribute("nm_user") : "" %>
 		</div>
 		<ul class="list">
-			<li><a href="ServletMovimiento?mostrar=">Transferencia</a></li>
+			<li><a href="Cliente_Transferencia.jsp">Transferencia</a></li>
 			<li><a href="Cliente_Home.jsp">Historial</a></li>
-			<li><a href="ServletPrestamos?mostrar=">Prestamo</a></li>
+			<li><a href="Cliente_Prestamo.jsp">Prestamo</a></li>
 			<li><a href="Cliente_Perfil.jsp">Perfil</a></li>
 		</ul>
 	</nav>
+	
+	<form action="ServletDescolgable" method="post">
+		<input type="submit" name="btn_TCT" value="Traer Cuentas"> <!--  ABREVIATURA Traer Cliente Home-->
+	</form>
 	
 	<div class="transferencia">
 		<div class="tr1">
@@ -51,7 +55,7 @@
 						if (cuentas != null) {
 						for (Cuenta cuenta : cuentas) {
 					%>
-					<option value="<%= cuenta.getTipo() %>"><%= cuenta.getTipo() %></option>
+					<option value="<%= cuenta.getId() %>"><%= cuenta.getTipo() %></option>
 					<%
 						}
 					}

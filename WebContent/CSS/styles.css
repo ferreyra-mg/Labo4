@@ -507,30 +507,29 @@ table {
 display: grid;
 width:auto;
 grid-template-columns: repeat(4, 1fr);
-grid-template-rows: repeat(3, 1fr);
+grid-template-rows: 1fr;
 grid-column-gap: 20px;
 grid-row-gap: 20px;
 margin: 20px;
 font-family: Helvetica, Verdana, sans-serif;
 }
 
-.perfil { grid-area: 1 / 1 / 4 / 2;
+.perfil { grid-area: 1 / 2 / 2 / 4;
 	background-color: #F17C00;
 	display: grid;
 	text-align:center;
 	padding: 20px;
 	place-items: center;
 	}
-.btn-c1 { grid-area: 1 / 2 / 2 / 3;}
-.btn-c2 { grid-area: 2 / 2 / 3 / 3;}
-.btn-c3 { grid-area: 3 / 2 / 4 / 3;}
+.btn-c1 { grid-area: 1 / 1 / 2 / 2;}
+
 .valores {
-	grid-area: 1 / 3 / 4 / 5;
+	grid-area: 1 / 4 / 2 / 5;
 	display: flex;
     align-items: center;
 }
 
-.btn-c1, .btn-c2, .btn-c3 {
+.btn-c1{
 	width: 24rem;
 	  border-radius: 10px;
 	  overflow: hidden;
@@ -538,10 +537,11 @@ font-family: Helvetica, Verdana, sans-serif;
 	  position: relative;
 	  color: $color-primary-white;
 	  box-shadow: 0 10px 30px 5px rgba(0, 0, 0, 0.2);
+	  display: flex;
+	  flex-direction: column;
 }
 
-
-  .btn-c1 p,.btn-c2 p,.btn-c3 p {
+  .btn-c1 p{
     inset: auto auto 80px 30px;
     position: absolute;
     opacity: 0;
@@ -550,12 +550,12 @@ font-family: Helvetica, Verdana, sans-serif;
   }
 
   
-.btn-c1:hover h2, .btn-c2:hover h2, .btn-c3:hover h2 {
+.btn-c1:hover h2 {
     inset: auto auto 220px 30px;
     transition: inset .3s ease-out;
   }
   
-  .btn-c1:hover p, .btn-c2:hover p, .btn-c3:hover p{
+  .btn-c1:hover p {
     opacity: 1;
     transition: opacity .5s .1s ease-in;
   }

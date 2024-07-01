@@ -17,8 +17,8 @@ public class MovimientoNegocioImpl implements MovimientoNegocio{
 		return mvDao.traerMovimientos(id);
 	} //devuelve todos los movimientos de un solo usuario
 	
-	public boolean transferirCbu(Cuenta cuenta, String cbuDestino, float monto, String tipoCuenta){
-		return mvDao.TransferirCbu(cuenta, cbuDestino, monto, tipoCuenta);
+	public boolean transferirCbu(int id, String cbuDestino, float monto, String tipoCuenta){
+		return mvDao.TransferirCbu(id, cbuDestino, monto, tipoCuenta);
 	}
 
 	@Override
@@ -27,15 +27,15 @@ public class MovimientoNegocioImpl implements MovimientoNegocio{
 	}
 
 	@Override
-	public boolean TransferirEntreCuentas(Cuenta cuenta, String cbuDestino, String cbuEmisor, float monto) {
-		return mvDao.TransferirEntreCuentas(cuenta, cbuDestino, cbuEmisor, monto);
+	public boolean TransferirEntreCuentas(int id, String cbuDestino, String cbuEmisor, float monto) {
+		return mvDao.TransferirEntreCuentas(id, cbuDestino, cbuEmisor, monto);
 	}
 
 
 
 	@Override
-	public float VerificarSaldoxCuenta(String usuario, String tipoCuenta) {
-		return mvDao.VerificarSaldoxCuenta(usuario, tipoCuenta);
+	public float VerificarSaldoxCuenta(int id) {
+		return mvDao.VerificarSaldoxCuenta(id);
 	}
 
 	@Override
