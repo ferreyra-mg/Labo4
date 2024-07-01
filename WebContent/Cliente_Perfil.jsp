@@ -29,7 +29,7 @@
 			<%= session.getAttribute("nm_user") != null ? session.getAttribute("nm_user") : "" %>
 		</div>
 		<ul class="list">
-			<li><a href="Cliente_Transferencia.jsp">Transferencia</a></li>
+			<li><a href="ServletMovimiento?mostrar=">Transferencia</a></li>
 			<li><a href="Cliente_Home.jsp">Historial</a></li>
 			<li><a href="Cliente_Prestamo.jsp">Prestamo</a></li>
 			<li><a href="Cliente_Perfil.jsp">Perfil</a></li>

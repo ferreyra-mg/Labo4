@@ -8,11 +8,11 @@ import entidad.Movimiento;
 
 public interface MovimientoDao {
 	ArrayList<Movimiento> traerMovimientos(int id);
-	boolean TransferirCbu(int id, String cbuDestino, float monto, String tipoCuenta);
-	float VerificarSaldoxCuenta(int id);
+	boolean TransferirCbu(Cuenta cuenta, String cbuDestino, float monto, String tipoCuenta);
+	float VerificarSaldoxCuenta(String usuario, String tipoCuenta);
 	
 	String ObtenerCbu(String tipoCuenta, Cuenta cuenta);
-	boolean TransferirEntreCuentas(int id, String cbuDestino, String cbuEmisor, float monto);
+	boolean TransferirEntreCuentas(Cuenta cuenta, String cbuDestino, String cbuEmisor, float monto);
 	float obtenerMontoEntre(Date inicial, Date fin);
 	int obtenerMovimientosEntre(Date inicial, Date fin);
 }

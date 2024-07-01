@@ -58,16 +58,11 @@ public class ServletMovimiento extends HttpServlet {
 		    if (request.getParameter("enviarMonto")!=null) { 
 			RequestDispatcher rd = null;
 	        String cbuDestino = request.getParameter("cbuDestino");
-	        float monto = Float.parseFloat(request.getParameter("monto").toString());
-	        int id = 0;
-	        if(request.getParameter("cuentaEmisora") != null)
-	        {
-	        	id = Integer.parseInt(request.getParameter("cuentaEmisora").toString());
-	        }
+	        float monto = Float.parseFloat(request.getParameter("monto"));
 	        
 	        boolean exito = false;
 
-	        	float saldoActual = movNeg.VerificarSaldoxCuenta(id);
+	        	float saldoActual = movNeg.VerificarSaldoxCuenta(usuarioLogueado, tipoCuentaCbu);
 	        	System.out.println("monto actual: " + saldoActual);
 	        	if(saldoActual < monto) {
 	        		traerCuentas(request);
@@ -77,7 +72,7 @@ public class ServletMovimiento extends HttpServlet {
 	        		return;
 	        	}
 	        	
-	        	exito = movNeg.transferirCbu(id, cbuDestino, monto, tipoCuentaCbu);
+	        	exito = movNeg.transferirCbu(cuenta, cbuDestino, monto, tipoCuentaCbu);
 	        
 	        	if (exito == true) {
 	        		traerCuentas(request);
@@ -96,19 +91,14 @@ public class ServletMovimiento extends HttpServlet {
 
 	        String tipoCuentaEmisora = request.getParameter("cuentaEmisora");
 	        String tipoCuentaReceptora = request.getParameter("cuentaReceptora");
-	        float montoCuenta = Float.parseFloat(request.getParameter("montoCuenta").toString());
+	        float montoCuenta = Float.parseFloat(request.getParameter("montoCuenta"));
 	        System.out.println("monto actual: " + montoCuenta);
 	        boolean exitoCuentas = false;
 	        RequestDispatcher rd2 = null;
 	        
-	        int id = 0;
-	        if(request.getAttribute("SelecCuenta") != null)
-	        {
-	        	id = Integer.parseInt(request.getAttribute("SelecCuenta").toString());
-	        }
 	        if(request.getParameter("enviarMontoCuenta")!=null) {
 	        	
-	        	float saldoxCuenta = movNeg.VerificarSaldoxCuenta(id);
+	        	float saldoxCuenta = movNeg.VerificarSaldoxCuenta(usuarioLogueado, tipoCuentaEmisora);
 	        	System.out.println("saldo:" +saldoxCuenta);
 	        	if(saldoxCuenta < montoCuenta) {
 	        		traerCuentas(request);
@@ -130,7 +120,7 @@ public class ServletMovimiento extends HttpServlet {
 		        String cbuCuentaEmisor = movNeg.ObtenerCbu(tipoCuentaEmisora, cuenta);
 		        
 		        if(cbuCuentaDestino != "" && cbuCuentaEmisor != "") {
-			        exitoCuentas = movNeg.TransferirEntreCuentas(id, cbuCuentaDestino, cbuCuentaEmisor, montoCuenta);
+			        exitoCuentas = movNeg.TransferirEntreCuentas(cuenta, cbuCuentaDestino, cbuCuentaEmisor, montoCuenta);
 		        } else {
 		        	traerCuentas(request);
 		            request.setAttribute("msjTransferenciaCuentas", "Error en verificar las cuentas.");
