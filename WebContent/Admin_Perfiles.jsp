@@ -9,6 +9,13 @@
 <meta name="viewport" http-equiv="width=device-width, initial-scale=1.0" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" type="text/css" href="CSS/styles.css">
 <title>Admin_Perfiles</title>
+
+<!-- Para usar el datatables -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+
     <script>
     function confirmarEnvio() {
     	if (confirm("¿Está seguro que desea agregar este cliente a la base de datos?")) {
@@ -31,7 +38,30 @@
     
     </script>
     
-
+    <!-- Para usar el datatables y ponerlo en español-->
+    
+    <script type="text/javascript">
+		$(document).ready( function () {
+			$('#tabla').DataTable({
+				//cambiar lo que esta en ingles a español
+				"language":{
+					"lengthMenu": "Mostrar _MENU_ registros",
+					"zeroRecords": "No se encontraron resultados",
+					"info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+					"infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+					"infoFiltered": "(filtrado de un total de _MAX_ registros)",
+					"sSearch": "Buscar:",
+					"oPaginate": {
+						"sFirst": "Primero",
+						"sLast": "Ultimo",
+						"sNext": "Siguiente",
+						"sPrevious": "Anterior"
+					},
+					"sProcessing": "Procesando...",
+				}
+			});
+		});
+	</script>
 
 
 
@@ -219,10 +249,12 @@
  %>
 
 
-<table border="1" id="tabla" class="table table-striped table-bordered" style="width:100%">
-    <tr> 
-        <th>DNI</th> 	<th>NOMBRE</th> 	<th>APELLIDO</th> 		<th>ACCIÓN</th> 
-    </tr>
+<table id="tabla" class="table table-striped table-bordered" style="width:100%" border="1">
+	<thead>
+    	<tr> 
+       		<th>DNI</th> 	<th>NOMBRE</th> 	<th>APELLIDO</th> 		<th>ACCIÓN</th> 
+    	</tr>
+    </thead>
     <tbody>
     <% if(listaClientes != null) {
         for(Cliente cliente : listaClientes) { %>
@@ -240,7 +272,7 @@
             </tr>
         <% }
     } %>
-    </tbody>
+    
 </table>
 
 
