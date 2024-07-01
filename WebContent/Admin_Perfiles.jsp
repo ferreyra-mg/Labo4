@@ -249,7 +249,7 @@
  %>
 
 
-<table id="tabla" class="table table-striped table-bordered" style="width:100%" border="1">
+<table id="tabla" class="table table-striped table-bordered" style="width:100%; color: black;" border="1" >
 	<thead>
     	<tr> 
        		<th>DNI</th> 	<th>NOMBRE</th> 	<th>APELLIDO</th> 		<th>ACCIÓN</th> 

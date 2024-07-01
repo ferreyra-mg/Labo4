@@ -123,6 +123,8 @@ INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacim
 VALUES ('88222222', '10123456789', 'Gabriel', 'Lopez', 1, 'Argentina', '1982-03-05', 'San Martin 123', 'Mar del Plata', 'Buenos Aires', 'gabriellopez@yahoo.com', 990012233, 'contrasena456xyz');
 INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
 VALUES ('99222222', '11123456780', 'Mariana', 'Suarez', 0, 'Argentina', '1993-06-28', 'Av. 25 de Mayo 567', 'Neuquen', 'Neuquen', 'marianasuarez@gmail.com', 112234455, 'clave789xyz');
+INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
+VALUES ('12345678', '10692369064', 'Carlo', 'Acutis', 1, 'Argentina', '1991-05-03', 'Av. Ing. Eduardo Madero 1174', 'Buenos Aires', 'Del Viso', 'carloacutis@gmail.com', '320470190', 'carlo');
 
 
 /* CUENTAS */
