@@ -217,7 +217,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	
 	@Override
 	public Cliente logear(String user, String psw) {
-		String sql = "SELECT dni, contrasena FROM cliente WHERE dni = ? AND contrasena = ?";
+		String sql = "SELECT dni, contrasena FROM cliente WHERE dni = ? AND contrasena = ? AND activo = 1";
         try (Connection conexion = Conexion.getConexion().getSQLConexion();
              PreparedStatement stmt = conexion.prepareStatement(sql)) {
             
