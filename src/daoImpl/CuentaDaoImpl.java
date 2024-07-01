@@ -13,7 +13,9 @@ import entidad.Cuenta;
 public class CuentaDaoImpl implements CuentaDao {
 
 	private static final String CUENTA_DNI = "SELECT * FROM bdbanco.cuenta where dni = ? LIMIT 1";
-	private static final String CUENTA_CLIENTE= "SELECT * FROM bdbanco.cuenta where dni = ? LIMIT 3";
+	private static final String CUENTA_CLIENTE= "SELECT c.id, c.usuario, c.dni, c.cbu, c.fechaCreacion, tc.descripcion as tipoCuenta, c.saldo, c.estado FROM bdbanco.cuenta c\n" + 
+			"JOIN tipo_cuenta tc on c.tipoCuenta = tc.id\n" + 
+			"where dni = ? LIMIT 3";
 	private static final String CANTIDAD_CUENTA = "SELECT COUNT(*) AS cantidad FROM bdbanco.cuenta WHERE dni = ?";
 	private static final String CREAR_CUENTA = "INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado) VALUES(?, ?, ?, ?, ?, ?, ?)";
 	private static final String CUENTAS_ENTRE = "SELECT COUNT(*) AS total_cuentas FROM cuenta WHERE fechaCreacion BETWEEN ? AND ?;";

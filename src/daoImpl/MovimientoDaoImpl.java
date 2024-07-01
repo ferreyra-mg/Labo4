@@ -19,17 +19,25 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	private static final String query = "SELECT * FROM bdbanco.movimiento WHERE id_Cuenta = ?";
 	private static final String sqlSaldo = "SELECT saldo FROM bdbanco.cuenta WHERE usuario = ?";
 	
-	private static final String sqlResta = "UPDATE bdbanco.cuenta SET saldo = saldo - ? WHERE usuario = ? and tipoCuenta = ?";
+	private static final String sqlResta = "UPDATE bdbanco.cuenta c \n" + 
+			"JOIN tipo_cuenta tc on c.tipoCuenta = tc.id\n" + 
+			"SET c.saldo = c.saldo - ?\n" + 
+			"WHERE c.usuario = ? and tc.descripcion = ?";
+	
 	private static final String sqlSuma = "UPDATE bdbanco.cuenta SET saldo = saldo + ? WHERE cbu = ?";
 	private static final String sqlMovimiento = "INSERT INTO bdbanco.movimiento (id_Cuenta, fecha, concepto, importe, tipo) VALUES (?, ?, ?, ?, ?)";
-	private static final String sqlCbu = "SELECT cbu FROM bdbanco.cuenta WHERE usuario = ? and tipoCuenta = ?";
+	private static final String sqlCbu = "SELECT cbu FROM bdbanco.cuenta c\n" + 
+			"JOIN tipo_cuenta tc on tc.id = c.tipoCuenta\n" + 
+			"WHERE c.usuario = ? and tc.descripcion = ?";
 	
 	private static final String sqlRestaCuenta = "UPDATE bdbanco.cuenta SET saldo = saldo - ? WHERE cbu = ?";
 	private static final String sqlSumaCuenta = "UPDATE bdbanco.cuenta SET saldo = saldo + ? WHERE cbu = ?";
 	
 	private static final String sqlMontoFecha = "SELECT SUM(importe) AS total_importe FROM movimiento WHERE fecha BETWEEN ? AND ?";
 	
-	private static final String sqlSaldoxCuenta = "SELECT saldo FROM bdbanco.cuenta WHERE usuario = ? and tipoCuenta = ?";
+	private static final String sqlSaldoxCuenta = "SELECT saldo FROM bdbanco.cuenta c\n" + 
+			"JOIN tipo_cuenta tc on tc.id = c.tipoCuenta\n" + 
+			"WHERE c.usuario = ? and tc.descripcion = ?";
 	private static final String sqlMovimientosFecha = "SELECT COUNT(*) AS total_movimientos FROM movimiento WHERE fecha BETWEEN ? AND ?;";
 
 	
@@ -105,9 +113,9 @@ public class MovimientoDaoImpl implements MovimientoDao{
 				stmtMov = conexion.prepareStatement(sqlMovimiento);
 				stmtMov.setInt(1, cuenta.getId());
 				stmtMov.setDate(2, new java.sql.Date(System.currentTimeMillis()));
-				stmtMov.setString(3, "Transferencia");
+				stmtMov.setString(3, "Transferencia por CBU");
 				stmtMov.setFloat(4, monto);
-				stmtMov.setString(5, "Transferencia");
+				stmtMov.setInt(5, 4);
 				if(stmtMov.executeUpdate() > 0) {
 					conexion.commit();
 					exitoMov = true;
@@ -191,7 +199,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
 				stmtMov.setDate(2, new java.sql.Date(System.currentTimeMillis()));
 				stmtMov.setString(3, "Transferencia entre cuentas");
 				stmtMov.setFloat(4, monto);
-				stmtMov.setString(5, "Transferencia"); //TODO
+				stmtMov.setInt(5, 4); //TODO
 				if(stmtMov.executeUpdate() > 0) {
 					conexion.commit();
 					exitoMov = true;

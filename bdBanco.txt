@@ -8,6 +8,19 @@ CREATE TABLE Pais (
     pais VARCHAR(50) NOT NULL
 );
 
+CREATE TABLE provincia (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    pais INT NOT NULL,
+    provincia VARCHAR(50) NOT NULL,
+    FOREIGN KEY (pais) REFERENCES Pais(id)
+);
+CREATE TABLE localidad (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+    localidad VARCHAR(50) NOT NULL,
+    provincia INT NOT NULL,
+    FOREIGN KEY (provincia) REFERENCES provincia(id)
+);
+
 CREATE TABLE tipo_cuenta(
     id INT AUTO_INCREMENT PRIMARY KEY,
     descripcion VARCHAR(50) NOT NULL
@@ -32,15 +45,18 @@ CREATE TABLE cliente (
     nombre VARCHAR(50) NOT NULL,
     apellido VARCHAR(50) NOT NULL,
     sexo bit,
-    nacionalidad VARCHAR(100),
+    nacionalidad int NOT NULL,
     fechaNacimiento DATE NOT NULL,
     direccion VARCHAR(100),
-    localidad VARCHAR(100),
-    provincia VARCHAR(100),
+    localidad int not null,
+    provincia int not null,
     correoElectronico VARCHAR(100) NOT NULL,
     telefono INT,
     contrasena VARCHAR(255) NOT NULL,
-    activo bit DEFAULT 1
+    activo bit DEFAULT 1,
+    FOREIGN KEY (nacionalidad) REFERENCES Pais(id),
+    FOREIGN KEY (localidad) REFERENCES localidad(id),
+    FOREIGN KEY (provincia) REFERENCES provincia(id)
 );
 
 CREATE TABLE cuenta (
@@ -49,10 +65,12 @@ CREATE TABLE cuenta (
     dni INT NOT NULL,
     cbu VARCHAR(22) NOT NULL UNIQUE,
     fechaCreacion DATE NOT NULL,
-    tipoCuenta VARCHAR(50) NOT NULL,
+    tipoCuenta INT NOT NULL,
     saldo DECIMAL(15, 2) DEFAULT 10000,
     estado BIT NOT NULL DEFAULT 1,
-    FOREIGN KEY (dni) REFERENCES cliente(dni)
+    FOREIGN KEY (dni) REFERENCES cliente(dni),
+    FOREIGN KEY (tipoCuenta) REFERENCES tipo_cuenta(id)
+     
 );
 
 CREATE TABLE prestamo (
@@ -82,100 +100,149 @@ CREATE TABLE movimiento (
     fecha DATE NOT NULL,
     concepto VARCHAR(100),
     importe DECIMAL(15,2),
-    tipo VARCHAR(50) NOT NULL,
-    FOREIGN KEY (id_Cuenta) REFERENCES cuenta(id)
+    tipo INT NOT NULL,
+    FOREIGN KEY (id_Cuenta) REFERENCES cuenta(id),
+    FOREIGN KEY (tipo) REFERENCES tipo_movimiento(id)
 );
 
-/*  TIPO DE CUENTA */
-INSERT INTO tipo_cuenta (id, descripcion) VALUES (1, 'caja ahorro');
-INSERT INTO tipo_cuenta (id, descripcion) VALUES (2, 'cuenta corriente');
-
-/* PAIS */
+-- Inserción de datos en la tabla Pais
 INSERT INTO Pais (pais) VALUES ('Argentina');
-INSERT INTO Pais (pais) VALUES ('Brasil');
 INSERT INTO Pais (pais) VALUES ('Chile');
 
-/* TIPO DE MOVIMIENTO */
-INSERT INTO tipo_movimiento (descripcion) VALUES ('Alta cuenta');
-INSERT INTO tipo_movimiento (descripcion) VALUES ('Alta de prestamo');
-INSERT INTO tipo_movimiento (descripcion) VALUES ('Pago Prestamo');
+-- Inserción de datos en la tabla provincia
+INSERT INTO provincia (pais, provincia) VALUES (1, 'Buenos Aires');
+INSERT INTO provincia (pais, provincia) VALUES (1, 'Córdoba');
+INSERT INTO provincia (pais, provincia) VALUES (2, 'Santiago');
+INSERT INTO provincia (pais, provincia) VALUES (2, 'Valparaíso');
+
+-- Inserción de datos en la tabla localidad
+INSERT INTO localidad (localidad, provincia) VALUES ('La Plata', 1);
+INSERT INTO localidad (localidad, provincia) VALUES ('Córdoba Capital', 2);
+INSERT INTO localidad (localidad, provincia) VALUES ('Santiago Centro', 3);
+INSERT INTO localidad (localidad, provincia) VALUES ('Valparaíso', 4);
+
+-- Inserción de datos en la tabla tipo_cuenta
+INSERT INTO tipo_cuenta (descripcion) VALUES ('Cuenta corriente');
+INSERT INTO tipo_cuenta (descripcion) VALUES ('Caja de ahorro');
+INSERT INTO tipo_cuenta (descripcion) VALUES ('Cuenta sueldo');
+
+-- Inserción de datos en la tabla tipo_movimiento
+INSERT INTO tipo_movimiento (descripcion) VALUES ('Alta de cuenta');
+INSERT INTO tipo_movimiento (descripcion) VALUES ('Alta de un prestamo');
+INSERT INTO tipo_movimiento (descripcion) VALUES ('Pago de préstamo');
 INSERT INTO tipo_movimiento (descripcion) VALUES ('Transferencia');
 
-/* ADMIN */
-INSERT INTO administrador (usuario, contrasena) VALUES ('adminPRO', '1234');
+-- Inserción de datos en la tabla administrador
+INSERT INTO administrador (usuario, contrasena) VALUES ('admin', '1234');
 
-/* CLIENTES */
-INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
-VALUES ('11222222', '20345678901', 'Juan', 'Perez', 1, 'Argentina', '1990-05-15', 'Calle Falsa 123', 'Ciudad Autonoma de Buenos Aires', 'Buenos Aires', 'juanperez@gmail.com', 112334455, 'contrasena123');
-INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
-VALUES ('33222222', '40567890123', 'Luis', 'Martinez', 1, 'Chile', '1995-01-10', 'Ruta 7 km 89', 'Rosario', 'Santa Fe', 'luismartinez@yahoo.com', 334455667, 'contrasenia456');
-INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
-VALUES ('22222222', '50678901234', 'Ana', 'Rodriguez', 0, 'Chile', '1988-11-25', 'Av. Libertador 789', 'Mendoza', 'Mendoza', 'anarodriguez@gmail.com', 445667788, 'pass1234');
-INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
-VALUES ('44222222', '60789012345', 'Diego', 'Lopez', 1, 'Chile', '1983-04-30', 'Calle Real 567', 'La Plata', 'Buenos Aires', 'diegolopez@hotmail.com', 556677899, 'clave5678');
-INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
-VALUES ('55222222', '70890123456', 'Carla', 'Garcia', 0, 'Chile', '1992-08-05', 'Av. Central 234', 'San Miguel de Tucuman', 'Tucuman', 'carlagarcia@yahoo.com', 667789900, 'segura789');
-INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
-VALUES ('66222222', '80901234567', 'Javier', 'Diaz', 1, 'Argentina', '1997-02-18', 'Rivadavia 456', 'Salta', 'Salta', 'javierdiaz@gmail.com', 778990011, 'password2022');
-INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
-VALUES ('77222222', '91012345678', 'Laura', 'Fernandez', 0, 'Argentina', '1980-09-12', 'Av. 9 de Julio 789', 'Quilmes', 'Buenos Aires', 'laurafernandez@hotmail.com', 889901122, 'pass123abc');
-INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
-VALUES ('88222222', '10123456789', 'Gabriel', 'Lopez', 1, 'Argentina', '1982-03-05', 'San Martin 123', 'Mar del Plata', 'Buenos Aires', 'gabriellopez@yahoo.com', 990012233, 'contrasena456xyz');
-INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
-VALUES ('99222222', '11123456780', 'Mariana', 'Suarez', 0, 'Argentina', '1993-06-28', 'Av. 25 de Mayo 567', 'Neuquen', 'Neuquen', 'marianasuarez@gmail.com', 112234455, 'clave789xyz');
-INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena)
-VALUES ('12345678', '10692369064', 'Carlo', 'Acutis', 1, 'Argentina', '1991-05-03', 'Av. Ing. Eduardo Madero 1174', 'Buenos Aires', 'Del Viso', 'carloacutis@gmail.com', '320470190', 'carlo');
+-- Inserción de datos en la tabla cliente
+INSERT INTO cliente (dni, cuil, nombre, apellido, sexo, nacionalidad, fechaNacimiento, direccion, localidad, provincia, correoElectronico, telefono, contrasena, activo)
+VALUES 
+(12345678, '20123456780', 'Juan', 'Perez', 1, 1, '1980-01-01', 'Calle Falsa 123', 1, 1, 'juan.perez@example.com', 234567890, 'password1', 1),
+(23456789, '20234567890', 'Ana', 'Gomez', 0, 1, '1985-02-02', 'Avenida Siempreviva 456', 2, 2, 'ana.gomez@example.com', 345678901, 'password2', 1),
+(34567890, '20345678901', 'Luis', 'Martinez', 1, 1, '1990-03-03', 'Boulevard Central 789', 3, 3, 'luis.martinez@example.com', 456789012, 'password3', 1),
+(45678901, '20456789012', 'Maria', 'Lopez', 0, 1, '1995-04-04', 'Calle del Sol 101', 4, 4, 'maria.lopez@example.com', 456789023, 'password4', 1),
+(56789012, '20567890123', 'Carlos', 'Sanchez', 1, 2, '1982-05-05', 'Calle Luna 202', 1, 1, 'carlos.sanchez@example.com', 567901234, 'password5', 1),
+(67890123, '20678901234', 'Laura', 'Rodriguez', 0, 2, '1987-06-06', 'Avenida Estrella 303', 2, 2, 'laura.rodriguez@example.com', 789012345, 'password6', 1),
+(78901234, '20789012345', 'Jorge', 'Fernandez', 1, 2, '1992-07-07', 'Boulevard Norte 404', 3, 3, 'jorge.fernandez@example.com', 890123456, 'password7', 1),
+(89012345, '20890123456', 'Elena', 'Diaz', 0, 2, '1997-08-08', 'Calle Sur 505', 4, 4, 'elena.diaz@example.com', 890123456, 'password8', 1),
+(90123456, '20901234567', 'Pedro', 'Ruiz', 1, 1, '1983-09-09', 'Avenida Este 606', 1, 1, 'pedro.ruiz@example.com', 901235678, 'password9', 1),
+(12345679, '20123456781', 'Sofia', 'Torres', 0, 1, '1988-10-10', 'Boulevard Oeste 707', 2, 2, 'sofia.torres@example.com', 134567891, 'password10', 1),
+(23456780, '20234567891', 'Diego', 'Mendoza', 1, 1, '1993-11-11', 'Calle Norte 808', 3, 3, 'diego.mendoza@example.com', 235678902, 'password11', 1),
+(34567891, '20345678902', 'Valeria', 'Romero', 0, 1, '1998-12-12', 'Avenida Central 909', 4, 4, 'valeria.romero@example.com', 345678901, 'password12', 1),
+(45678902, '20456789013', 'Gabriel', 'Herrera', 1, 2, '1984-01-13', 'Calle Principal 1010', 1, 1, 'gabriel.herrera@example.com', 456780124, 'password13', 1),
+(56789013, '20567890124', 'Lucia', 'Aguilar', 0, 2, '1989-02-14', 'Avenida Segunda 1111', 2, 2, 'lucia.aguilar@example.com', 567890125, 'password14', 1),
+(67890124, '20678901235', 'Mateo', 'Pereira', 1, 2, '1994-03-15', 'Boulevard Tercero 1212', 3, 3, 'mateo.pereira@example.com', 678902346, 'password15', 1);
 
+-- Inserción de datos en la tabla cuenta
+INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado) VALUES
+('user1', 12345678, '1234567890123456789012', '2023-01-01', 1, 10000, 1),
+('user1', 12345678, '5432167890123456789012', '2023-01-01', 2, 10000, 1),
+('user1', 12345678, '3214567890123456789012', '2023-01-01', 3, 10000, 1),
+('user2', 23456789, '2345678901234567890123', '2023-01-02', 1, 15000, 1),
+('user3', 34567890, '3456789012345678901234', '2023-01-03', 1, 20000, 1),
+('user4', 45678901, '4567890123456789012345', '2023-01-04', 1, 25000, 1),
+('user5', 56789012, '5678901234567890123456', '2023-01-05', 1, 30000, 1),
+('user6', 67890123, '6789012345678901234567', '2023-01-06', 1, 35000, 1),
+('user7', 78901234, '7890123456789012345678', '2023-01-07', 1, 40000, 1),
+('user8', 89012345, '8901234567890123456789', '2023-01-08', 1, 45000, 1),
+('user9', 90123456, '9012345678901234567890', '2023-01-09', 1, 50000, 1),
+('user10', 12345679, '0123456789012345678901', '2023-01-10', 1, 55000, 1),
+('user11', 23456780, '1234567890123456789013', '2023-01-11', 1, 60000, 1),
+('user12', 34567891, '2345678901234567890124', '2023-01-12', 1, 65000, 1),
+('user13', 45678902, '3456789012345678901235', '2023-01-13', 1, 70000, 1),
+('user14', 56789013, '4567890123456789012346', '2023-01-14', 1, 75000, 1),
+('user15', 67890124, '5678901234567890123457', '2023-01-15', 1, 80000, 1),
+('user16', 78901234, '6789012345678901234568', '2023-01-16', 1, 85000, 1),
+('user17', 89012345, '7890123456789012345679', '2023-01-17', 1, 90000, 1),
+('user18', 90123456, '8901234567890123456780', '2023-01-18', 1, 95000, 1),
+('user20', 23456789, '0123456789012345678902', '2023-01-20', 1, 105000, 1);
 
-/* CUENTAS */
-INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado)
-VALUES ('usuario1', 11222222, '1234567890123456789012', '2023-01-15', 'cuenta corriente', 15000.00, 1);
-INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado)
-VALUES ('usuario2', 33222222, '2345678901234567890123', '2023-02-20', 'caja ahorro', 8000.00, 1);
-INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado)
-VALUES ('usuario3', 22222222, '3456789012345678901234', '2023-03-10', 'cuenta corriente', 12000.00, 1);
-INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado)
-VALUES ('usuario4', 44222222, '4567890123456789012345', '2023-04-25', 'caja ahorro', 20000.00, 1);
-INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado)
-VALUES ('usuario5', 77222222, '5678901234567890123456', '2023-05-30', 'cuenta corriente', 5000.00, 1);
+-- Inserción de datos en la tabla prestamo
+INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion) VALUES
+(1, 12, '2023-02-01', 10000, 850, 10200, 0, 1),
+(2, 24, '2023-03-01', 20000, 900, 21600, 0, 1),
+(3, 36, '2023-04-01', 30000, 950, 34200, 0, 1),
+(4, 48, '2023-05-01', 40000, 1000, 48000, 0, 1),
+(5, 60, '2023-06-01', 50000, 1050, 63000, 0, 1),
+(6, 12, '2023-07-01', 60000, 1100, 79200, 0, 1),
+(7, 24, '2023-08-01', 70000, 1150, 96600, 0, 1),
+(8, 36, '2023-09-01', 80000, 1200, 115200, 0, 1),
+(9, 48, '2023-10-01', 90000, 1250, 136800, 0, 1),
+(10, 60, '2023-11-01', 100000, 1300, 160000, 0, 1),
+(11, 12, '2023-12-01', 110000, 1350, 184800, 0, 1),
+(12, 24, '2024-01-01', 120000, 1400, 211200, 0, 1),
+(13, 36, '2024-02-01', 130000, 1450, 239400, 0, 1),
+(14, 48, '2024-03-01', 140000, 1500, 269400, 0, 1),
+(15, 60, '2024-04-01', 150000, 1550, 301200, 0, 1);
 
-/* PRESTAMOS */
-INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion)
-VALUES (1, 12, '2023-02-01', 5000.00, 500.00, 6000.00, 0, 1);
-INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion)
-VALUES (2, 24, '2023-03-15', 10000.00, 500.00, 12000.00, 0, 1);
-INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion)
-VALUES (3, 6, '2023-04-10', 6000.00, 1000.00, 6000.00, 0, 1);
-INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion)
-VALUES (4, 36, '2023-05-20', 15000.00, 500.00, 18000.00, 0, 1);
-INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion)
-VALUES (5, 18, '2023-06-30', 8000.00, 600.00, 10800.00, 0, 1);
-INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion)
-VALUES (1, 12, '2023-02-01', 10000.00, 833.33, 12000.00, 0, null);
-INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion)
-VALUES (4, 6, '2023-02-01', 12000.00, 2000.00, 14000.00, 0, null);
+-- Inserción de datos en la tabla cuota
+INSERT INTO cuota (id_prestamo, pagado, fecha) VALUES
+(1, 850, '2023-03-01'),
+(2, 900, '2023-04-01'),
+(3, 950, '2023-05-01'),
+(4, 1000, '2023-06-01'),
+(5, 1050, '2023-07-01'),
+(6, 1100, '2023-08-01'),
+(7, 1150, '2023-09-01'),
+(8, 1200, '2023-10-01'),
+(9, 1250, '2023-11-01'),
+(10, 1300, '2023-12-01'),
+(11, 1350, '2024-01-01'),
+(12, 1400, '2024-02-01'),
+(13, 1450, '2024-03-01'),
+(14, 1500, '2024-04-01'),
+(15, 1550, '2024-05-01');
 
-
-/* MOVIMIENTOS */
-INSERT INTO movimiento (id_Cuenta, concepto, importe, fecha, tipo)
-VALUES (1, 'transferencia','5000','2023-02-01', 'Alta cuenta');
-INSERT INTO movimiento (id_Cuenta, concepto, importe,fecha, tipo)
-VALUES (2, 'pago','350','2023-03-15', 'Alta de prestamo');
-INSERT INTO movimiento (id_Cuenta,concepto, importe, fecha, tipo)
-VALUES (3, '','6500','2023-04-10', 'Pago Prestamo');
-INSERT INTO movimiento (id_Cuenta,concepto, importe, fecha, tipo)
-VALUES (4, 'abono','2542','2023-05-20', 'Transferencia');
-INSERT INTO movimiento (id_Cuenta, concepto, importe,fecha, tipo)
-VALUES (5, 'salida', '1500','2023-06-30',  'Alta cuenta');
-
-/* CUOTAS */
-INSERT INTO cuota (id_prestamo, pagado, fecha)
-VALUES (1, 500.00, '2023-03-01');
-INSERT INTO cuota (id_prestamo, pagado, fecha)
-VALUES (2, 500.00, '2023-04-15');
-INSERT INTO cuota (id_prestamo, pagado, fecha)
-VALUES (3, 1000.00, '2023-05-10');
-INSERT INTO cuota (id_prestamo, pagado, fecha)
-VALUES (4, 500.00, '2023-06-25');
-INSERT INTO cuota (id_prestamo, pagado, fecha)
-VALUES (5, 600.00, '2023-07-10');
+-- Inserción de datos en la tabla movimiento
+INSERT INTO movimiento (id_Cuenta, fecha, concepto, importe, tipo) VALUES
+(1, '2023-01-02', 'Transferencia recibida', 1000, 4),
+(2, '2023-01-03', 'Pago de servicios', -200, 3),
+(3, '2023-01-04', 'Depósito en efectivo', 5000, 1),
+(4, '2023-01-05', 'Transferencia enviada', -1500, 4),
+(5, '2023-01-06', 'Pago de préstamo', -850, 3),
+(6, '2023-01-07', 'Compra en tienda', -300, 4),
+(7, '2023-01-08', 'Transferencia recibida', 2500, 4),
+(8, '2023-01-09', 'Depósito en efectivo', 4000, 1),
+(9, '2023-01-10', 'Pago de servicios', -400, 3),
+(10, '2023-01-11', 'Transferencia enviada', -1200, 4),
+(11, '2023-01-12', 'Compra en tienda', -500, 4),
+(12, '2023-01-13', 'Pago de préstamo', -900, 3),
+(13, '2023-01-14', 'Transferencia recibida', 3000, 4),
+(14, '2023-01-15', 'Depósito en efectivo', 6000, 1),
+(15, '2023-01-16', 'Pago de servicios', -350, 3),
+(1, '2023-01-17', 'Transferencia enviada', -1400, 4),
+(2, '2023-01-18', 'Compra en tienda', -250, 4),
+(8, '2023-01-19', 'Pago de préstamo', -950, 3),
+(9, '2023-01-20', 'Transferencia recibida', 3500, 4),
+(1, '2023-01-21', 'Depósito en efectivo', 7000, 1),
+(1, '2023-01-22', 'Pago de servicios', -450, 3),
+(2, '2023-01-23', 'Transferencia enviada', -1300, 4),
+(2, '2023-01-24', 'Compra en tienda', -400, 4),
+(2, '2023-01-25', 'Pago de préstamo', -1000, 3),
+(2, '2023-01-26', 'Transferencia recibida', 4000, 4),
+(2, '2023-01-27', 'Depósito en efectivo', 8000, 1),
+(2, '2023-01-28', 'Pago de servicios', -300, 3),
+(2, '2023-01-29', 'Transferencia enviada', -1100, 4),
+(2, '2023-01-30', 'Compra en tienda', -350, 4),
+(3, '2023-01-31', 'Pago de préstamo', -1050, 3);
