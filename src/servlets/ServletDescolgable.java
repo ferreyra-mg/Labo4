@@ -2,6 +2,7 @@ package servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,11 +13,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import entidad.Cuenta;
+import entidad.Localidad;
+import entidad.Pais;
+import entidad.Provincia;
 import negocio.CuentaNegocio;
+import negocio.LocalidadNegocio;
 import negocio.PaisNegocio;
+import negocio.ProvinciaNegocio;
 import negocio.TipoCuentaNegocio;
 import negocioImpl.CuentaNegocioImpl;
+import negocioImpl.LocalidadNegocioImpl;
 import negocioImpl.PaisNegocioImpl;
+import negocioImpl.ProvinciaNegocioImpl;
 import negocioImpl.TipoCuentaNegocioImpl;
 
 
@@ -24,6 +32,8 @@ import negocioImpl.TipoCuentaNegocioImpl;
 public class ServletDescolgable extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
+	ProvinciaNegocio proNeg = new ProvinciaNegocioImpl();
+	LocalidadNegocio loNeg = new LocalidadNegocioImpl();
     
     public ServletDescolgable() {
         super();
@@ -40,6 +50,25 @@ public class ServletDescolgable extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		RequestDispatcher rd = null;
+		
+		String accion = request.getParameter("accion");
+		if (accion != null) {
+			if(accion.equals("cargarProvincias")) {
+				int paisId = Integer.parseInt(request.getParameter("paisId"));
+				List<Provincia> provincias = proNeg.obtenerProvinciasPorPais(paisId);
+				request.getSession().setAttribute("provincias", provincias);
+				rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
+				rd.forward(request, response);
+				return;
+			} else if(accion.equals("cargarLocalidades")) {
+				int provinciaId = Integer.parseInt(request.getParameter("provinciaId"));
+				List<Localidad> localidades = loNeg.obtenerLocalidadesPorProvincia(provinciaId);
+				request.getSession().setAttribute("localidades", localidades);
+				rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
+				rd.forward(request, response);
+				return;
+			}
+		}
 		
 		if(request.getParameter("btn_traerPaises") != null)
 		{
@@ -105,7 +134,7 @@ public class ServletDescolgable extends HttpServlet {
 	public void traerPaises(HttpServletRequest request)
 	{
 		PaisNegocio paisNeg = new PaisNegocioImpl();
-        ArrayList<String> paises = paisNeg.traerPaises();
+        ArrayList<Pais> paises = paisNeg.traerPaises();
         request.setAttribute("paises", paises);
 	}
 	

@@ -2,6 +2,8 @@ package negocio;
 
 import java.util.ArrayList;
 
+import entidad.Pais;
+
 public interface PaisNegocio {
-	ArrayList<String> traerPaises();
+	ArrayList<Pais> traerPaises();
 }

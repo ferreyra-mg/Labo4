@@ -2,6 +2,8 @@ package dao;
 
 import java.util.ArrayList;
 
+import entidad.Pais;
+
 public interface PaisDao {
-	ArrayList<String> traerPaises();
+	ArrayList<Pais> traerPaises();
 }

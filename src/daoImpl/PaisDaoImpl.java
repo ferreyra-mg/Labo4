@@ -7,21 +7,28 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dao.PaisDao;
+import entidad.Pais;
 
 public class PaisDaoImpl implements PaisDao{
 
 	private static final String SELECT_PAISES = "SELECT * FROM bdbanco.Pais";
 	@Override
-	public ArrayList<String> traerPaises() {
+	public ArrayList<Pais> traerPaises() {
 		Connection con = Conexion.getConexion().getSQLConexion();
-		ArrayList<String> paises = new ArrayList<>();
+		ArrayList<Pais> paises = new ArrayList<>();
 		PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
 			stmt = con.prepareStatement(SELECT_PAISES);
 			rs = stmt.executeQuery();
 			while(rs.next()){
-				paises.add(rs.getString("pais"));
+				
+				Pais p = new Pais();
+				p.setId(rs.getInt("id"));
+				p.setPais(rs.getString("pais"));
+				
+				
+				paises.add(p);
 			}
 		} catch (Exception e5) {
 			e5.printStackTrace();

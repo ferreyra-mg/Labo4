@@ -1,4 +1,7 @@
 <%@ page import="entidad.Cliente"%>
+<%@ page import="entidad.Pais"%>
+<%@ page import="entidad.Provincia"%>
+<%@ page import="entidad.Localidad"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -131,9 +134,19 @@
 
 <% 
 
- ArrayList<String> paises = null;
+ ArrayList<Pais> paises = null;
  if(request.getAttribute("paises") != null) {
-	 paises = (ArrayList<String>) request.getAttribute("paises");
+	 paises = (ArrayList<Pais>) request.getAttribute("paises");
+ } 
+ 
+ ArrayList<Provincia> provincias = null;
+ if(request.getAttribute("provincias") != null) {
+	 provincias = (ArrayList<Provincia>) request.getAttribute("provincias");
+ } 
+ 
+ ArrayList<Localidad> localidades = null;
+ if(request.getAttribute("localidades") != null) {
+	 localidades = (ArrayList<Localidad>) request.getAttribute("localidades");
  } 
  %>
 
@@ -180,17 +193,20 @@
 	            
 	            <div>
 	            	<label for="nacionalidad">NACIONALIDAD:</label>
-		            <select name="nacionalidad">
+	            	<form action="ServletDescolgable" method="post">
+	            	<input type="hidden" name="accion" value="cargarProvincias">
+		            <select id="nacionalidad" name="paisId" onchange="this.form.submit()">
 		                <%
 		                    if (paises != null) {
-		                        for (String pais : paises) {
+		                        for (Pais pais : paises) {
 		                %>
-		                <option value="<%= pais %>"><%= pais %></option>
+		                <option value="<%= pais.getId() %>"><%= pais.getPais() %></option>
 		                <%
 		                        }
 		                    }
 		                %>
 		            </select>
+		            </form>
 				</div>
 	            
 	            <div>
@@ -199,14 +215,33 @@
 	            </div>
 	            
 	            <div>
-	             	<label for="localidad">LOCALIDAD:</label>
-	            	<input type="text" id="localidad" name="localidad" placeholder="" value="<%= localidadValue %>" required>
+	           		<label for="provincia">PROVINCIA:</label>
+	           		<form action="ServletDescolgable" method="post">
+	           			<input type="hidden" name="accion" value="cargarLocalidades">
+	            		<select id="provincia" name="provinciaId" onchange="this.form.submit()">
+	            		 <%
+	            		 if (provincias != null) {
+	                            for (Provincia provincia1 : provincias) {
+		                %>
+		                	<option value="<%= provincia1.getId() %>"><%= provincia1.getProvincia() %></option>
+		                	<% }
+                        } %>
+		           		</select>
+		           	</form>
 	            </div>
 	            
 	            <div>
-	           		<label for="provincia">PROVINCIA:</label>
-	            	<input type="text" id="provincia" name="provincia" placeholder="" value="<%= provinciaValue %>" required>
+	             	<label for="localidad">LOCALIDAD:</label>
+	             	<select id="localidad" name="localidad">
+	             	<%if (localidades != null) {
+                        for (Localidad localidad1 : localidades) { %>
+		                <option value="<%= localidad1.getId() %>"><%= localidad1.getLocalidad() %></option>
+		                <% }
+                    } %>
+		            </select>
 	            </div>
+	            
+
 	            
 	            <div>
 	            	<label for="correo">CORREO:</label>
