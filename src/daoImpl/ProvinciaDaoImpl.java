@@ -11,9 +11,7 @@ import entidad.Provincia;
 
 public class ProvinciaDaoImpl implements ProvinciaDao{
 	
-	private static final String SELECT_PROVINCIAS = "select pro.id, pro.provincia from bdbanco.pais pa\r\n" + 
-			"join provincia pro on pa.id = pro.pais\r\n" + 
-			"where pa.id = ?";
+	private static final String SELECT_PROVINCIAS = "select pro.id, pro.provincia, pro.pais from bdbanco.provincia as pro";
 
 	@Override
 	public ArrayList<Provincia> obtenerProvinciasPorPais(int paisId) {
@@ -23,15 +21,14 @@ public class ProvinciaDaoImpl implements ProvinciaDao{
         ResultSet rs = null;
         try {
 			stmt = con.prepareStatement(SELECT_PROVINCIAS);
-			stmt.setInt(1, paisId);
 			rs = stmt.executeQuery();
 			
 			while(rs.next()){
 				
 				Provincia pro = new Provincia();
 				pro.setId(rs.getInt("id"));
+				pro.setId_Pais(rs.getInt("pais"));
 				pro.setProvincia(rs.getString("provincia"));
-				
 				
 				Provincias.add(pro);
 			}

@@ -129,7 +129,7 @@
 <h1 style="text-align: center; text-decoration: underline;">PERFILES</h1>
 
 <form action="ServletDescolgable" method="post">
-	<input type="submit" name="btn_traerPaises" value="Traer Paises">
+	<input type="submit" name="btn_traerUbicaciones" value="Traer Ubicaciones">
 </form>	
 
 <% 
@@ -193,9 +193,7 @@
 	            
 	            <div>
 	            	<label for="nacionalidad">NACIONALIDAD:</label>
-	            	<form action="ServletDescolgable" method="post">
-	            	<input type="hidden" name="accion" value="cargarProvincias">
-		            <select id="nacionalidad" name="paisId" onchange="this.form.submit()">
+		            <select id="nacionalidad" name="paisId">
 		                <%
 		                    if (paises != null) {
 		                        for (Pais pais : paises) {

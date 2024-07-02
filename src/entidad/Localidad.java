@@ -3,6 +3,7 @@ package entidad;
 public class Localidad {
 
 	private int id;
+	private int id_Provincia;
 	private String localidad;
 	
 	public Localidad() {
@@ -25,6 +26,14 @@ public class Localidad {
 	}
 	public void setLocalidad(String localidad) {
 		this.localidad = localidad;
+	}
+
+	public int getId_Provincia() {
+		return id_Provincia;
+	}
+
+	public void setId_Provincia(int id_Provincia) {
+		this.id_Provincia = id_Provincia;
 	}
 	
 	

@@ -51,24 +51,6 @@ public class ServletDescolgable extends HttpServlet {
 		
 		RequestDispatcher rd = null;
 		
-		String accion = request.getParameter("accion");
-		if (accion != null) {
-			if(accion.equals("cargarProvincias")) {
-				int paisId = Integer.parseInt(request.getParameter("paisId"));
-				List<Provincia> provincias = proNeg.obtenerProvinciasPorPais(paisId);
-				request.getSession().setAttribute("provincias", provincias);
-				rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
-				rd.forward(request, response);
-				return;
-			} else if(accion.equals("cargarLocalidades")) {
-				int provinciaId = Integer.parseInt(request.getParameter("provinciaId"));
-				List<Localidad> localidades = loNeg.obtenerLocalidadesPorProvincia(provinciaId);
-				request.getSession().setAttribute("localidades", localidades);
-				rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
-				rd.forward(request, response);
-				return;
-			}
-		}
 		
 		if(request.getParameter("btn_traerPaises") != null)
 		{
@@ -119,6 +101,13 @@ public class ServletDescolgable extends HttpServlet {
 		    rd.forward(request, response);
 		    return;
 		}
+		if(request.getParameter("btn_traerUbicaciones") != null)
+		{
+			traerUbicaciones(request);
+			rd = request.getRequestDispatcher("/Cliente_Prestamo.jsp");
+			rd.forward(request, response);
+		    return;
+		}
 		
 		
 		
@@ -145,5 +134,19 @@ public class ServletDescolgable extends HttpServlet {
 		int dni = (int)session.getAttribute("dni");
 		ArrayList<Cuenta> cuentas = cuNeg.obtenerTodasLasCuentas(dni);
         request.setAttribute("cuentas", cuentas);
+	}
+	
+	public void traerUbicaciones(HttpServletRequest request)
+	{
+		//TODO
+		PaisNegocio paNeg = new PaisNegocioImpl();
+		ProvinciaNegocio prNeg = new ProvinciaNegocioImpl();
+		LocalidadNegocio loNeg = new LocalidadNegocioImpl();
+		ArrayList<Pais> paises = paNeg.traerPaises();
+        request.setAttribute("paises", paises);
+        ArrayList<Provincia> provincias = prNeg.obtenerProvinciasPorPais(1);//el 1 esta de mas
+        request.setAttribute("provincias", provincias);
+        ArrayList<Localidad> localidades = loNeg.obtenerLocalidadesPorProvincia(1);//el 1 esta de mas
+        request.setAttribute("localidades", localidades);
 	}
 }

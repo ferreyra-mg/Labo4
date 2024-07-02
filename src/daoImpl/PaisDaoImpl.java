@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import dao.PaisDao;
+import entidad.Localidad;
 import entidad.Pais;
+import entidad.Provincia;
 
 public class PaisDaoImpl implements PaisDao{
 
@@ -43,5 +45,6 @@ public class PaisDaoImpl implements PaisDao{
 		}
         return paises;
 	}
+	
 
 }

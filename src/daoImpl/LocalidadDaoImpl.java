@@ -11,9 +11,7 @@ import entidad.Localidad;
 
 public class LocalidadDaoImpl implements LocalidadDao {
 	
-	private static final String SELECT_LOCALIDADES = "select lo.id, lo.localidad from bdbanco.provincia pro\r\n" + 
-			"join localidad lo on pro.id = lo.provincia\r\n" + 
-			"where pro.id = ?";
+	private static final String SELECT_LOCALIDADES = "select lo.id, lo.localidad, lo.provincia from bdbanco.localidad as lo";
 
 	@Override
 	public ArrayList<Localidad> obtenerLocalidadesPorProvincia(int provinciaId) {
@@ -30,9 +28,8 @@ public class LocalidadDaoImpl implements LocalidadDao {
 				
 				Localidad pro = new Localidad();
 				pro.setId(rs.getInt("id"));
+				pro.setId_Provincia(rs.getInt("provincia"));
 				pro.setLocalidad(rs.getString("localidad"));
-				
-				
 				Localidades.add(pro);
 			}
 		} catch (Exception e5) {
