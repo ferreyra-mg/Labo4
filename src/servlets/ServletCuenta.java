@@ -41,11 +41,11 @@ public class ServletCuenta extends HttpServlet {
 		    String dniStr = request.getParameter("dni_cliente");
 		    String nombre = request.getParameter("nm_cuenta").toString();
 		    String cbu = request.getParameter("cbu-cliente").toString();
-		    String tipo = "";
+		    int tipo = -11111;
 
 		    try {
-		        tipo = request.getParameter("tipo").toString();
-		        if(tipo == null && tipo.isEmpty())
+		        tipo = Integer.parseInt(request.getParameter("tipo").toString());
+		        if(tipo <0)
 		        {
 		        	throw new CuentaInvalidaException();
 		        }
@@ -53,7 +53,7 @@ public class ServletCuenta extends HttpServlet {
 		        if (dniStr != null && !dniStr.isEmpty() && Integer.parseInt(dniStr) > 0 &&
 		            nombre != null && !nombre.isEmpty() &&
 		            cbu != null && !cbu.isEmpty() &&
-		            tipo != null && !tipo.isEmpty()) {
+		            tipo >0) {
 		        	
 		            // Reviso que el dni exista
 		            int dni = Integer.parseInt(dniStr);

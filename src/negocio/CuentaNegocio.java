@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import entidad.Cuenta;
+import entidad.Tipo_Cuenta;
 
 public interface CuentaNegocio {
 
@@ -16,4 +17,6 @@ public interface CuentaNegocio {
 	Cuenta obtenerUsuario(int dni);
 	int numeroCuentas(int dni);
 	int obtenerCuentasEntre(Date inicio, Date fin);
+	ArrayList<Tipo_Cuenta> traerTipos();
+	Tipo_Cuenta traerDescripcion(int id);
 }

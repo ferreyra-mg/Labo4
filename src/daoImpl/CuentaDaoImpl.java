@@ -9,6 +9,7 @@ import java.util.Date;
 
 import dao.CuentaDao;
 import entidad.Cuenta;
+import entidad.Tipo_Cuenta;
 
 public class CuentaDaoImpl implements CuentaDao {
 
@@ -19,7 +20,9 @@ public class CuentaDaoImpl implements CuentaDao {
 	private static final String CANTIDAD_CUENTA = "SELECT COUNT(*) AS cantidad FROM bdbanco.cuenta WHERE dni = ?";
 	private static final String CREAR_CUENTA = "INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado) VALUES(?, ?, ?, ?, ?, ?, ?)";
 	private static final String CUENTAS_ENTRE = "SELECT COUNT(*) AS total_cuentas FROM cuenta WHERE fechaCreacion BETWEEN ? AND ?;";
-
+	private static final String TRAER_TIPOS = "SELECT * FROM tipo_cuenta";
+	private static final String TIPO_CUENTA = "SELECT * FROM tipo_cuenta WHERE id = ?";
+	
 	@Override
 	public boolean crearCuenta(Cuenta cuenta) {
 		PreparedStatement stmt;
@@ -35,7 +38,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	    	java.util.Date creacionUtilDate = cuenta.getCreacion();
 	    	java.sql.Date creacionSqlDate = new java.sql.Date(creacionUtilDate.getTime());
 	    	stmt.setDate(4, creacionSqlDate);
-	    	stmt.setString(5, cuenta.getTipo()); 
+	    	stmt.setInt(5, cuenta.getTipo()); 
 	    	stmt.setFloat(6, cuenta.getSaldo()); 
 	    	stmt.setBoolean(7, cuenta.isEstado());  		        
 	    	
@@ -70,7 +73,7 @@ public class CuentaDaoImpl implements CuentaDao {
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Cuenta cuenta = new Cuenta(rs.getInt("id"),rs.getString("usuario"), rs.getInt("dni"),
-						rs.getString("cbu"), rs.getDate("fechaCreacion"), rs.getString("tipoCuenta"),
+						rs.getString("cbu"), rs.getDate("fechaCreacion"), rs.getInt("tipoCuenta"),
 						rs.getFloat("saldo"), rs.getBoolean("estado"));
 				cuentas.add(cuenta);
 			}
@@ -95,7 +98,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
 			if (rs.next()) {
 				cuenta = new Cuenta(rs.getInt("id"), rs.getString("usuario"), rs.getInt("dni"),
-						rs.getString("cbu"), rs.getDate("fechaCreacion"), rs.getString("tipoCuenta"),
+						rs.getString("cbu"), rs.getDate("fechaCreacion"), rs.getInt("tipoCuenta"),
 						rs.getFloat("saldo"), rs.getBoolean("estado"));
 			}
 			
@@ -109,7 +112,6 @@ public class CuentaDaoImpl implements CuentaDao {
 
 	@Override
 	public Cuenta obtenerUsuario(int dni) {
-		// TODO Auto-generated method stub
 		PreparedStatement statement = null;
 		Connection conexion = null;
 		ResultSet rs = null;
@@ -128,7 +130,7 @@ public class CuentaDaoImpl implements CuentaDao {
 		        c.setDni(rs.getInt("dni"));
 		        c.setCBU(rs.getString("cbu"));
 		        c.setCreacion(rs.getDate("fechaCreacion"));
-		        c.setTipo(rs.getString("tipoCuenta"));
+		        c.setTipo(rs.getInt("tipoCuenta"));
 		        c.setSaldo(rs.getFloat("saldo"));
 		        c.setEstado(rs.getBoolean("estado"));
 			}
@@ -174,7 +176,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
 			if (rs.next()) {
 				cuenta = new Cuenta(rs.getInt("id"), rs.getString("usuario"), rs.getInt("dni"),
-						rs.getString("cbu"), rs.getDate("fechaCreacion"), rs.getString("tipoCuenta"),
+						rs.getString("cbu"), rs.getDate("fechaCreacion"), rs.getInt("tipoCuenta"),
 						rs.getFloat("saldo"), rs.getBoolean("estado"));
 			}
 			
@@ -189,17 +191,14 @@ public class CuentaDaoImpl implements CuentaDao {
 	@Override
 	public int numeroCuentas(int dni) {
 		int cant = 0;
-			try (Connection conexion = Conexion.getConexion().getSQLConexion();
-				PreparedStatement stmt = conexion.prepareStatement(CANTIDAD_CUENTA)) {
-
+		try (Connection conexion = Conexion.getConexion().getSQLConexion();
+			PreparedStatement stmt = conexion.prepareStatement(CANTIDAD_CUENTA))
+		{
 			stmt.setInt(1, dni);
-
 			ResultSet rs = stmt.executeQuery();
-
 			if (rs.next()) {
 				cant = rs.getInt("cantidad");
-			}
-			
+			}	
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -232,6 +231,40 @@ public class CuentaDaoImpl implements CuentaDao {
             }
 		}
 		return cantidad;
+	}
+
+	@Override
+	public ArrayList<Tipo_Cuenta> traerTipos() {
+		ArrayList<Tipo_Cuenta> cuentas = new ArrayList<>();
+		try (Connection conexion = Conexion.getConexion().getSQLConexion();
+				PreparedStatement stmt = conexion.prepareStatement(TRAER_TIPOS)) {
+			ResultSet rs = stmt.executeQuery();
+			while (rs.next()) {
+				Tipo_Cuenta tipo = new Tipo_Cuenta(rs.getInt("id"),rs.getString("descripcion"));
+				cuentas.add(tipo);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return cuentas;
+	}
+
+	@Override
+	public Tipo_Cuenta traerDescripcion(int id) {
+		Tipo_Cuenta t = new Tipo_Cuenta();
+		try (Connection conexion = Conexion.getConexion().getSQLConexion();
+			PreparedStatement stmt = conexion.prepareStatement(TIPO_CUENTA))
+		{
+			stmt.setInt(1, id);
+			ResultSet rs = stmt.executeQuery();
+			if (rs.next()) {
+				t.setId(rs.getInt("id"));
+				t.setDescripcion(rs.getString("descripcion"));
+			}	
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return t;
 	}
 
 }

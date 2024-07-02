@@ -54,8 +54,6 @@ public class ServletEstadisticas extends HttpServlet {
                 e.printStackTrace();
             }
 			
-			
-			
 			if(inicio != null && fin !=null)
 			{
 				CuentaNegocio cuNeg = new CuentaNegocioImpl();

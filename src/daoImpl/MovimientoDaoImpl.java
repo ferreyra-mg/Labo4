@@ -13,6 +13,7 @@ import java.util.Date;
 import dao.MovimientoDao;
 import entidad.Cuenta;
 import entidad.Movimiento;
+import entidad.Tipo_Movimiento;
 
 public class MovimientoDaoImpl implements MovimientoDao{
 
@@ -26,8 +27,8 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	
 	private static final String sqlSuma = "UPDATE bdbanco.cuenta SET saldo = saldo + ? WHERE cbu = ?";
 	private static final String sqlMovimiento = "INSERT INTO bdbanco.movimiento (id_Cuenta, fecha, concepto, importe, tipo) VALUES (?, ?, ?, ?, ?)";
-	private static final String sqlCbu = "SELECT cbu FROM bdbanco.cuenta c\n" + 
-			"JOIN tipo_cuenta tc on tc.id = c.tipoCuenta\n" + 
+	private static final String sqlCbu = "SELECT cbu FROM bdbanco.cuenta c" + 
+			"JOIN tipo_cuenta tc on tc.id = c.tipoCuenta" + 
 			"WHERE c.usuario = ? and tc.descripcion = ?";
 	
 	private static final String sqlRestaCuenta = "UPDATE bdbanco.cuenta SET saldo = saldo - ? WHERE cbu = ?";
@@ -35,11 +36,11 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	
 	private static final String sqlMontoFecha = "SELECT SUM(importe) AS total_importe FROM movimiento WHERE fecha BETWEEN ? AND ?";
 	
-	private static final String sqlSaldoxCuenta = "SELECT saldo FROM bdbanco.cuenta c\n" + 
-			"JOIN tipo_cuenta tc on tc.id = c.tipoCuenta\n" + 
+	private static final String sqlSaldoxCuenta = "SELECT saldo FROM bdbanco.cuenta c" + 
+			"JOIN tipo_cuenta tc on tc.id = c.tipoCuenta" + 
 			"WHERE c.usuario = ? and tc.descripcion = ?";
 	private static final String sqlMovimientosFecha = "SELECT COUNT(*) AS total_movimientos FROM movimiento WHERE fecha BETWEEN ? AND ?;";
-
+	private static final String sqlTraerTipos = "SELECT * FROM tipo_movimiento";
 	
 	@Override
 	public ArrayList<Movimiento> traerMovimientos(int id) {
@@ -101,7 +102,6 @@ public class MovimientoDaoImpl implements MovimientoDao{
 				exitoDebito = true;
 			}
 			
-			
 			stmtCredito = conexion.prepareStatement(sqlSuma);
 			stmtCredito.setFloat(1, monto);
 			stmtCredito.setString(2, cbuDestino);
@@ -120,7 +120,6 @@ public class MovimientoDaoImpl implements MovimientoDao{
 					conexion.commit();
 					exitoMov = true;
 				}
-				
 			}
 			
 			if(exitoDebito == true && exitoCredito == true && exitoMov == true) {
@@ -150,12 +149,8 @@ public class MovimientoDaoImpl implements MovimientoDao{
 			if(rs.next()) {
 				cbu = rs.getString("cbu");
 			}
-			
-			
-			
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("error 1");
 		}
 		
 		
@@ -182,8 +177,6 @@ public class MovimientoDaoImpl implements MovimientoDao{
 				conexion.commit();
 				exitoResta = true;
 			}
-			System.out.println("TEST 1: " + exitoResta);
-			
 			stmtSumaCuenta = conexion.prepareStatement(sqlSumaCuenta);
 			stmtSumaCuenta.setFloat(1, monto);
 			stmtSumaCuenta.setString(2, cbuDestino);
@@ -191,7 +184,6 @@ public class MovimientoDaoImpl implements MovimientoDao{
 				conexion.commit();
 				exitoSuma = true;
 			}
-			System.out.println("TEST 2: " + exitoSuma);
 			
 			if(exitoResta == true && exitoSuma == true) {
 				stmtMov = conexion.prepareStatement(sqlMovimiento);
@@ -199,12 +191,11 @@ public class MovimientoDaoImpl implements MovimientoDao{
 				stmtMov.setDate(2, new java.sql.Date(System.currentTimeMillis()));
 				stmtMov.setString(3, "Transferencia entre cuentas");
 				stmtMov.setFloat(4, monto);
-				stmtMov.setInt(5, 4); //TODO
+				stmtMov.setInt(5, 4);
 				if(stmtMov.executeUpdate() > 0) {
 					conexion.commit();
 					exitoMov = true;
 				}
-				System.out.println("TEST 3: " + exitoMov);
 			}
 			
 			if(exitoResta == true && exitoSuma == true && exitoMov == true) {
@@ -213,7 +204,6 @@ public class MovimientoDaoImpl implements MovimientoDao{
 			
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("error 2");
 		}
 		
 		return exito;
@@ -246,6 +236,9 @@ public class MovimientoDaoImpl implements MovimientoDao{
 
 	@Override
 	public float obtenerMontoEntre(Date inicial, Date fin) {
+		System.out.println("entro a la query");
+		
+		
 		float totalImporte = 0;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		PreparedStatement stmt = null;
@@ -256,19 +249,19 @@ public class MovimientoDaoImpl implements MovimientoDao{
 			stmt.setDate(1, new java.sql.Date(inicial.getTime()));
 	        stmt.setDate(2, new java.sql.Date(fin.getTime()));
 		    rs = stmt.executeQuery();
-		        if (rs.next()) {
-		            totalImporte = rs.getFloat("total_importe");
-		        }
+		    if (rs.next()) {
+		    	totalImporte = rs.getFloat("total_importe");
+		    }
 		} catch (SQLException e) {
 		    e.printStackTrace();
 		} 
 		finally {
        	 try {
-            	if (rs != null) rs.close();
-                if (stmt != null) stmt.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+       		 if (rs != null) rs.close();
+       		 if (stmt != null) stmt.close();
+       	 } catch (SQLException e) {
+       		 e.printStackTrace();
+       	 }
 		}
 		return totalImporte;
 	}
@@ -300,6 +293,39 @@ public class MovimientoDaoImpl implements MovimientoDao{
             }
 		}
 		return cantidad;
+	}
+
+	@Override
+	public ArrayList<Tipo_Movimiento> traerTipos() {
+		Connection con = Conexion.getConexion().getSQLConexion();
+		ArrayList<Tipo_Movimiento> tipos = new ArrayList<>();
+		PreparedStatement stmt = null;
+        ResultSet rs = null;
+		
+        try {
+			stmt = con.prepareStatement(sqlTraerTipos);
+			rs = stmt.executeQuery();
+			
+			while(rs.next()){	
+				Tipo_Movimiento mv = new Tipo_Movimiento();
+				
+				mv.setId(rs.getInt("id"));
+				mv.setDescripcion(rs.getString("descripcion"));
+				tipos.add(mv);
+			}
+		} catch (Exception e5) {
+			e5.printStackTrace();
+		}
+        finally {
+        	 try {
+             	if (rs != null) rs.close();
+                 if (stmt != null) stmt.close();
+             } catch (SQLException e) {
+                 e.printStackTrace();
+             }
+		}
+        
+        return tipos;
 	}
 
 }

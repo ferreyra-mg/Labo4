@@ -6,6 +6,7 @@ import java.util.Date;
 import dao.CuentaDao;
 import daoImpl.CuentaDaoImpl;
 import entidad.Cuenta;
+import entidad.Tipo_Cuenta;
 import negocio.CuentaNegocio;
 
 public class CuentaNegocioImpl implements CuentaNegocio {
@@ -51,5 +52,15 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	@Override
 	public int obtenerCuentasEntre(Date inicio, Date fin) {
 		return cuentaDao.obtenerCuentasEntre(inicio, fin);
+	}
+
+	@Override
+	public ArrayList<Tipo_Cuenta> traerTipos() {
+		return cuentaDao.traerTipos();
+	}
+
+	@Override
+	public Tipo_Cuenta traerDescripcion(int id) {
+		return cuentaDao.traerDescripcion(id);
 	}
 }

@@ -16,13 +16,17 @@ import entidad.Cuenta;
 import entidad.Localidad;
 import entidad.Pais;
 import entidad.Provincia;
+import entidad.Tipo_Cuenta;
+import entidad.Tipo_Movimiento;
 import negocio.CuentaNegocio;
 import negocio.LocalidadNegocio;
+import negocio.MovimientoNegocio;
 import negocio.PaisNegocio;
 import negocio.ProvinciaNegocio;
 import negocio.TipoCuentaNegocio;
 import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.LocalidadNegocioImpl;
+import negocioImpl.MovimientoNegocioImpl;
 import negocioImpl.PaisNegocioImpl;
 import negocioImpl.ProvinciaNegocioImpl;
 import negocioImpl.TipoCuentaNegocioImpl;
@@ -37,7 +41,6 @@ public class ServletDescolgable extends HttpServlet {
     
     public ServletDescolgable() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	
@@ -115,8 +118,8 @@ public class ServletDescolgable extends HttpServlet {
 	}
 
 	private void traerTipos(HttpServletRequest request) {
-		TipoCuentaNegocio tNeg = new TipoCuentaNegocioImpl();
-		ArrayList<String> tipos = tNeg.traerTipo();
+		CuentaNegocio tNeg = new CuentaNegocioImpl();
+		ArrayList<Tipo_Cuenta> tipos = tNeg.traerTipos();
 		request.setAttribute("tipos", tipos);
 	}
 

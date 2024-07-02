@@ -122,10 +122,8 @@ INSERT INTO localidad (localidad, provincia) VALUES ('Santiago Centro', 3);
 INSERT INTO localidad (localidad, provincia) VALUES ('Valparaíso', 4);
 
 -- Inserción de datos en la tabla tipo_cuenta
-INSERT INTO tipo_cuenta (descripcion) VALUES ('Alta de cuenta');
-INSERT INTO tipo_cuenta (descripcion) VALUES ('Alta de un prestamo');
-INSERT INTO tipo_cuenta (descripcion) VALUES ('Pago de préstamo');
-INSERT INTO tipo_cuenta (descripcion) VALUES ('Transferencia');
+INSERT INTO tipo_cuenta (descripcion) VALUES ('caja ahorro');
+INSERT INTO tipo_cuenta (descripcion) VALUES ('cuenta corriente');
 
 -- Inserción de datos en la tabla tipo_movimiento
 INSERT INTO tipo_movimiento (descripcion) VALUES ('Alta de cuenta');

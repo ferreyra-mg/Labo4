@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList"%>
+<%@ page import="entidad.Tipo_Cuenta"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -39,9 +41,9 @@
 	
 	<% 
 	
-	 ArrayList<String> tipos = null;
+	 ArrayList<Tipo_Cuenta> tipos = null;
 	 if(request.getAttribute("tipos") != null) {
-		 tipos = (ArrayList<String>) request.getAttribute("tipos");
+		 tipos = (ArrayList<Tipo_Cuenta>) request.getAttribute("tipos");
 	 } 
 	 %>
 
@@ -54,16 +56,12 @@
 		<div>
 			Tipo de cuenta:			
 			<select name="tipo" id=tipo>
-	                <%
-	                    if (tipos != null) {
-	                        for (String tipo : tipos) {
-	                %>
-	                <option value="<%= tipo %>"><%= tipo %></option>
-	                <%
-	                        }
-	                    }
-	                %>
-	            </select>
+				<% if (tipos != null) {
+				for (Tipo_Cuenta tipo : tipos) { %>
+	            <option value="<%= tipo.getId() %>"><%= tipo.getDescripcion() %></option>
+				<% }
+				}	%>
+			</select>
 		</div>
 		
 		<input type="submit" name="crearCuenta" class="c-cuenta" value="Aceptar">

@@ -7,6 +7,7 @@ import dao.MovimientoDao;
 import daoImpl.MovimientoDaoImpl;
 import entidad.Cuenta;
 import entidad.Movimiento;
+import entidad.Tipo_Movimiento;
 import negocio.MovimientoNegocio;
 
 public class MovimientoNegocioImpl implements MovimientoNegocio{
@@ -46,5 +47,10 @@ public class MovimientoNegocioImpl implements MovimientoNegocio{
 	@Override
 	public int obtenerMovimientosEntre(Date inicial, Date fin) {
 		return mvDao.obtenerMovimientosEntre(inicial, fin);
+	}
+
+	@Override
+	public ArrayList<Tipo_Movimiento> traerTipos() {
+		return mvDao.traerTipos();
 	}
 }

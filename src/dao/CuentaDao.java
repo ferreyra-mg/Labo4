@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import entidad.Cuenta;
+import entidad.Tipo_Cuenta;
 
 public interface CuentaDao {
 
@@ -15,4 +16,6 @@ public interface CuentaDao {
 	Cuenta obtenerUsuario(int dni);
 	int numeroCuentas(int dni);
 	int obtenerCuentasEntre(Date inicio, Date fin);
+	ArrayList<Tipo_Cuenta> traerTipos();
+	Tipo_Cuenta traerDescripcion(int id);
 }

@@ -9,7 +9,7 @@ public class Cuenta {
     private int dni; //relaciona con cliente correspondiente
     private String CBU;
     private Date creacion;
-    private String tipo;
+    private int tipo;
     private float saldo;
     private boolean estado;
     
@@ -17,7 +17,7 @@ public class Cuenta {
     	this.estado= true;
     }
     
-    public Cuenta(int id, String usuario, int dni, String CBU, Date creacion, String tipo, float saldo, boolean estado) {
+    public Cuenta(int id, String usuario, int dni, String CBU, Date creacion, int tipo, float saldo, boolean estado) {
         this.id = id;
         this.usuario = usuario;
         this.dni = dni;
@@ -38,8 +38,8 @@ public class Cuenta {
     public void setCBU(String CBU) { this.CBU = CBU; }
     public Date getCreacion() { return creacion; }
     public void setCreacion(Date creacion) { this.creacion = creacion; }
-    public String getTipo() { return tipo; }
-    public void setTipo(String tipo) { this.tipo = tipo; }
+    public int getTipo() { return tipo; }
+    public void setTipo(int tipo) { this.tipo = tipo; }
     public float getSaldo() { return saldo; }
     public void setSaldo(float saldo) { this.saldo = saldo; }
     public boolean isEstado() { return estado; }
