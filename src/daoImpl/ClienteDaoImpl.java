@@ -40,11 +40,11 @@ public class ClienteDaoImpl implements ClienteDao {
 		        statement.setString(3, cliente.getNombre()); 
 		        statement.setString(4, cliente.getApellido()); 
 		        statement.setBoolean(5, cliente.getSexo()); 
-		        statement.setString(6, cliente.getNacionalidad());
+		        statement.setInt(6, cliente.getNacionalidad());
 		        statement.setDate(7, (Date) cliente.getFechaNacimiento());
 		        statement.setString(8, cliente.getDireccion()); 
-		        statement.setString(9, cliente.getLocalidad()); 
-		        statement.setString(10, cliente.getProvincia()); 
+		        statement.setInt(9, cliente.getLocalidad()); 
+		        statement.setInt(10, cliente.getProvincia()); 
 		        statement.setString(11, cliente.getCorreoElectronico()); 
 		        statement.setInt(12, cliente.getTelefono()); 
 		        statement.setString(13, cliente.getContrasena());
@@ -70,14 +70,15 @@ public class ClienteDaoImpl implements ClienteDao {
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		boolean esExitoso = false;
 	    try {
+	    	
 	    	statement = conexion.prepareStatement(update);  
 	        statement.setString(1, cliente.getNombre()); 
 	        statement.setString(2, cliente.getApellido()); 
 	        statement.setBoolean(3, cliente.getSexo()); 
-	        statement.setString(4, cliente.getNacionalidad()); 
+	        statement.setInt(4, cliente.getNacionalidad()); 
 	        statement.setString(5, cliente.getDireccion()); 
-	        statement.setString(6, cliente.getLocalidad()); 
-	        statement.setString(7, cliente.getProvincia()); 
+	        statement.setInt(6, cliente.getLocalidad()); 
+	        statement.setInt(7, cliente.getProvincia()); 
 	        statement.setString(8, cliente.getCorreoElectronico()); 
 	        statement.setInt(9, cliente.getTelefono()); 
 	        statement.setString(10, cliente.getContrasena());
@@ -144,11 +145,11 @@ public class ClienteDaoImpl implements ClienteDao {
 				cli.setNombre(rs.getString("nombre"));
 				cli.setApellido(rs.getString("apellido"));
 				cli.setSexo(rs.getBoolean("sexo"));
-				cli.setNacionalidad(rs.getString("nacionalidad"));
+				cli.setNacionalidad(rs.getInt("nacionalidad"));
 				cli.setFechaNacimiento(rs.getDate("fechaNacimiento"));
 				cli.setDireccion(rs.getString("direccion"));
-				cli.setLocalidad(rs.getString("localidad"));
-				cli.setProvincia(rs.getString("provincia"));
+				cli.setLocalidad(rs.getInt("localidad"));
+				cli.setProvincia(rs.getInt("provincia"));
 				cli.setCorreoElectronico(rs.getString("correoElectronico"));
 				cli.setTelefono(rs.getInt("telefono"));
 				cli.setContrasena(rs.getString("contrasena"));
@@ -190,11 +191,11 @@ public class ClienteDaoImpl implements ClienteDao {
 				cli.setNombre(rs.getString("nombre"));
 				cli.setApellido(rs.getString("apellido"));
 				cli.setSexo(rs.getBoolean("sexo"));
-				cli.setNacionalidad(rs.getString("nacionalidad"));
+				cli.setNacionalidad(rs.getInt("nacionalidad"));
 				cli.setFechaNacimiento(rs.getDate("fechaNacimiento"));
 				cli.setDireccion(rs.getString("direccion"));
-				cli.setLocalidad(rs.getString("localidad"));
-				cli.setProvincia(rs.getString("provincia"));
+				cli.setLocalidad(rs.getInt("localidad"));
+				cli.setProvincia(rs.getInt("provincia"));
 				cli.setCorreoElectronico(rs.getString("correoElectronico"));
 				cli.setTelefono(rs.getInt("telefono"));
 				cli.setContrasena(rs.getString("contrasena"));				

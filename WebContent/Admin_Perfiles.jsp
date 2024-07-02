@@ -75,7 +75,6 @@
 	<% //revisa que el usuario sea Admin
 		if(session.getAttribute("tipoUsuario") != "administrador"  )
 		{
-			System.out.println("entro al login");
 			RequestDispatcher rd = null;
 			rd = request.getRequestDispatcher("/Login.jsp");
 			rd.forward(request, response);
@@ -213,12 +212,10 @@
 	            </div>
 	            
 	            <div>
-	           		<label for="provincia">PROVINCIA:</label>
+	           		<label for="provincia">PROVINCIA:</label> 
 	           		<select id="provincias" name="provincias">
-	            		 <%
-	            		 if (provincias != null) {
-	                            for (Provincia pro : provincias) {
-		                %>
+	            	<%	if (provincias != null) {
+							for (Provincia pro : provincias) { %>
 		                	<option value="<%= pro.getId() %>"><%= pro.getProvincia() %></option>
 		                	<% }
                         } %>
@@ -303,11 +300,6 @@
     
 </table>
 
-
-
-
-	
-
 </div>
 
 <% Cliente clienteModif = null;
@@ -315,6 +307,23 @@
 
 <%if(clienteModif != null){ %>
 
+
+<% 
+ ArrayList<Pais> paisess = null;
+ if(request.getAttribute("paises") != null) {
+	 paisess = (ArrayList<Pais>) request.getAttribute("paises");
+ } 
+ 
+ ArrayList<Provincia> provinciass = null;
+ if(request.getAttribute("provincias") != null) {
+	 provinciass = (ArrayList<Provincia>) request.getAttribute("provincias");
+ } 
+ 
+ ArrayList<Localidad> localidadess = null;
+ if(request.getAttribute("localidades") != null) {
+	 localidadess = (ArrayList<Localidad>) request.getAttribute("localidades");
+ } 
+ %>
 <div class="tr3">
 		<p>Modificar Cliente</p>
 		
@@ -339,21 +348,39 @@
 	            <input type="text" id="direccionM" name="direccionM" value="<%= clienteModif.getDireccion() %>" required>
             </label>
             
-            <b>NACIONALIDAD:</b>
-            	<select name="nacionalidadM">
-					<option value="Argentina">Argentina</option>
-					<option value="Brasil">Brasil</option>
-					<option value="Chile">Chile</option>
+           	<div>
+	            <label for="nacionalidad">NACIONALIDAD:</label>
+				<select id="nacionalidad" name="paisIdM">
+				<% 	if (paisess != null) {
+					for (Pais pais : paisess) { %>
+					<option value="<%= pais.getId() %>"><%= pais.getPais() %></option>
+		            <%		}
+						}	%>
 				</select>
+			</div>
             
             
-             <label for="localidadM">LOCALIDAD:
-            	<input type="text" id="localidadM" name="localidadM" value="<%= clienteModif.getLocalidad() %>" required>
-            </label>
-            
-            <label for="provinciaM">PROVINCIA:
-            	<input type="text" id="provinciaM" name="provinciaM" value="<%= clienteModif.getProvincia() %>" required>
-            </label>
+            <div>
+	           		<label for="provincia">PROVINCIA:</label>
+	           		<select id="provincias" name="provinciasM">
+	            	<%	if (provinciass != null) {
+							for (Provincia pro : provinciass) { %>
+		                	<option value="<%= pro.getId() %>"><%= pro.getProvincia() %></option>
+		                	<% }
+                        } %>
+		           		</select>
+	            </div>
+	            
+	            <div>
+	             	<label for="localidad">LOCALIDAD:</label>
+	             	<select id="localidad" name="localidadM">
+	             	<%if (localidadess != null) {
+                        for (Localidad loc : localidadess) { %>
+		                <option value="<%= loc.getId() %>"><%= loc.getLocalidad() %></option>
+		                <% }
+                    } %>
+		            </select>
+	            </div>
             
             <label for="correoM">CORREO:
             	<input type="email" id="correoM" name="correoM" value="<%= clienteModif.getCorreoElectronico() %>" required>
@@ -365,9 +392,6 @@
             <br><br>            
             <label for="contra1M">CONTRASEÑA:
             	<input type="password" id="contra1M" name="contra1M" value="<%= clienteModif.getContrasena() %>" required>
-            </label>
-            <label for="contra2M">REPETIR CONTRASEÑA:
-            	<input type="password" id="contra2M" name="contra2M" value="<%= clienteModif.getContrasena() %>" required>
             </label>
             <br><br>
             <input type="submit" name="btnConfirModif" class="btn-aceptar" value="Confirmar modificacion">

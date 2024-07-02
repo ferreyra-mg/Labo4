@@ -118,17 +118,21 @@ public class ServletCliente extends HttpServlet {
 				 clientesXPerfil(request, response);
 				return;
 		    }
-			if(request.getParameter("localidad") != null && request.getParameter("provincia")!= null && request.getParameter("nacionalidad")!=null)
+		    Pais pais= null;
+		    Provincia pro= null;
+		    Localidad lo= null;
+			if(request.getParameter("localidad") != null && request.getParameter("provincias")!= null && request.getParameter("paisId")!=null)
 			{
 				LocalidadNegocio loNeg = new LocalidadNegocioImpl();
 				ProvinciaNegocio proNeg = new ProvinciaNegocioImpl();
 				PaisNegocio paNeg = new PaisNegocioImpl();
-				Localidad lo = loNeg.obtenerLocalidad(Integer.parseInt(request.getParameter("localidad").toString()));
-				Provincia pro = proNeg.obtenerProvincia(Integer.parseInt(request.getParameter("provincia").toString()));
-				Pais pais = paNeg.obtenerPais(Integer.parseInt(request.getParameter("nacionalidad").toString()));
-				
+				lo = loNeg.obtenerLocalidad(Integer.parseInt(request.getParameter("localidad").toString()));
+				pro = proNeg.obtenerProvincia(Integer.parseInt(request.getParameter("provincias").toString()));
+				pais = paNeg.obtenerPais(Integer.parseInt(request.getParameter("paisId").toString()));
 				if(lo.getId_Provincia() != pro.getId() || pro.getId_Pais() != pais.getId())
 				{
+					System.out.println(lo.getId_Provincia() + " = " + pro.getId() );
+					System.out.println(pro.getId_Pais() + " = " + pais.getId());
 					request.setAttribute("msj_error", "Localidad, Provincia o Nacionalidad incorrecto");
 					clientesXPerfil(request, response);
 					return;
@@ -142,15 +146,15 @@ public class ServletCliente extends HttpServlet {
 		        
 			try {
 				cli.setDni(dni);
-				cli.setCuil(request.getParameter("cuil").toString());// String para cuil
-			    cli.setNombre(request.getParameter("nombre").toString()); // String para nombre
-			    cli.setApellido(request.getParameter("apellido").toString()); // String para apellido
-			    cli.setDireccion(request.getParameter("direccion").toString()); // String para direccion
-			    cli.setLocalidad(request.getParameter("localidad").toString()); // String para localidad
-			    cli.setProvincia(request.getParameter("provincia").toString()); // String para provincia
-			    cli.setCorreoElectronico(request.getParameter("correo").toString()); // String para correoElectronico
+				cli.setCuil(request.getParameter("cuil").toString());
+			    cli.setNombre(request.getParameter("nombre").toString());
+			    cli.setApellido(request.getParameter("apellido").toString());
+			    cli.setDireccion(request.getParameter("direccion").toString());
+			    cli.setLocalidad(lo.getId());
+			    cli.setProvincia(pro.getId());
+			    cli.setCorreoElectronico(request.getParameter("correo").toString());
 			    cli.setTelefono(Integer.parseInt(request.getParameter("telefono"))); // int para telefono
-			    cli.setNacionalidad(request.getParameter("nacionalidad").toString());
+			    cli.setNacionalidad(pais.getId());
 			    String fechaNacimientoStr = request.getParameter("fechaNacimiento");
 			    java.sql.Date fechaNacimiento = java.sql.Date.valueOf(fechaNacimientoStr);
 			    cli.setFechaNacimiento(fechaNacimiento);
@@ -195,55 +199,82 @@ public class ServletCliente extends HttpServlet {
 	    }
 		
 		int dni = 0;
-			if(request.getParameter("btnModificar")!=null) 
-			{
-				dni = Integer.parseInt(request.getParameter("dniCliente").toString());
-				request.getSession().setAttribute("aux", dni);
-				if(cliNeg.obtenerCliente(dni)!=null) 
-				{
-					Cliente cli2 = new Cliente();
-					cli2 = cliNeg.obtenerCliente(dni);
-					request.setAttribute("clienteModificar", cli2);
-				}
-			}
-			
-			if(request.getParameter("btnConfirModif")!=null)
-			{
+		if(request.getParameter("btnModificar")!=null) 
+		{
 				
-				Cliente cli = new Cliente();
-				//int dniMod = Integer.parseInt(request.getAttribute("dniCliente").toString()); 
-				try {
-					dni = Integer.parseInt(request.getSession().getAttribute("aux").toString());
-					System.out.println("aca vale: " + dni);
-					cli = cliNeg.obtenerCliente(dni);
-					cli.setDni(dni);
-				    cli.setNombre(request.getParameter("nombreM")); // String para nombre
-				    cli.setApellido(request.getParameter("apellidoM")); // String para apellido
-				    String sexoStr = request.getParameter("sexM");
-				    boolean sexo = Boolean.parseBoolean(sexoStr); // Convierte la cadena "true" o "false" a booleano
-				    cli.setSexo(sexo);
-				    cli.setNacionalidad(request.getParameter("nacionalidadM").toString()); // String para nacionalidad
+			//TRAIGO UBICACIONES
+			PaisNegocio paNeg = new PaisNegocioImpl();
+			ProvinciaNegocio prNeg = new ProvinciaNegocioImpl();
+			LocalidadNegocio loNeg = new LocalidadNegocioImpl();
+			ArrayList<Pais> paises = paNeg.traerPaises();
+		    request.setAttribute("paises", paises);
+		    ArrayList<Provincia> provincias = prNeg.obtenerProvinciasPorPais(1);//el 1 esta de mas
+		    request.setAttribute("provincias", provincias);
+		    ArrayList<Localidad> localidades = loNeg.obtenerLocalidadesPorProvincia(1);//el 1 esta de mas
+		    request.setAttribute("localidades", localidades);
+				
+		    dni = Integer.parseInt(request.getParameter("dniCliente").toString());
+		    request.getSession().setAttribute("aux", dni);
+			if(cliNeg.obtenerCliente(dni)!=null) 
+			{
+				Cliente cli2 = new Cliente();
+				cli2 = cliNeg.obtenerCliente(dni);
+				request.setAttribute("clienteModificar", cli2);
+			}
+		}
+			
+		if(request.getParameter("btnConfirModif")!=null)
+		{	
+			Cliente cli = new Cliente();
+			//int dniMod = Integer.parseInt(request.getAttribute("dniCliente").toString()); 
+			try {
+				dni = Integer.parseInt(request.getSession().getAttribute("aux").toString());
+				cli = cliNeg.obtenerCliente(dni);
+				cli.setDni(dni);
+			    cli.setNombre(request.getParameter("nombreM"));
+			    cli.setApellido(request.getParameter("apellidoM"));
+			    String sexoStr = request.getParameter("sexM");
+			    boolean sexo = Boolean.parseBoolean(sexoStr);
+				cli.setSexo(sexo);    
 				    
-				    
-				    cli.setDireccion(request.getParameter("direccionM")); // String para direccion
-				    cli.setLocalidad(request.getParameter("localidadM")); // String para localidad
-				    cli.setProvincia(request.getParameter("provinciaM")); // String para provincia
-				    cli.setCorreoElectronico(request.getParameter("correoM")); // String para correoElectronico
-				    cli.setTelefono(Integer.parseInt(request.getParameter("telefonoM"))); // int para telefono
-				    cli.setContrasena(request.getParameter("contra1M")); // String para contrasena
+				Pais pais = null;
+			    Provincia pro= null;
+			    Localidad lo= null;
+				if(request.getParameter("localidadM") != null && request.getParameter("provinciasM")!= null && request.getParameter("paisIdM")!=null)
+				{
+					LocalidadNegocio loNeg = new LocalidadNegocioImpl();
+					ProvinciaNegocio proNeg = new ProvinciaNegocioImpl();
+					PaisNegocio paNeg = new PaisNegocioImpl();
+					lo = loNeg.obtenerLocalidad(Integer.parseInt(request.getParameter("localidadM").toString()));
+					pro = proNeg.obtenerProvincia(Integer.parseInt(request.getParameter("provinciasM").toString()));
+					pais = paNeg.obtenerPais(Integer.parseInt(request.getParameter("paisIdM").toString()));
+					if(lo.getId_Provincia() != pro.getId() || pro.getId_Pais() != pais.getId())
+					{
+						request.setAttribute("msj_error", "Localidad, Provincia o Nacionalidad incorrecto");
+						clientesXPerfil(request, response);
+						return;
+					}
+				}
+				
+				cli.setNacionalidad(pais.getId());
+			    cli.setDireccion(request.getParameter("direccionM"));
+			    cli.setLocalidad(lo.getId());
+			    cli.setProvincia(pro.getId());
+			    cli.setCorreoElectronico(request.getParameter("correoM"));
+			    cli.setTelefono(Integer.parseInt(request.getParameter("telefonoM")));
+			    cli.setContrasena(request.getParameter("contra1M"));
 
-				    confirmacionUpdate = cliNeg.modificarCliente(cli);
-				    request.setAttribute("clienteModificar", null);
-					
-					} catch (Exception e) {
-						e.getMessage();
-						}
+			    confirmacionUpdate = cliNeg.modificarCliente(cli);
+				    
+			    request.setAttribute("clienteModificar", null);		
+				} 
+				catch (Exception e) {
+					e.getMessage();
+				}
 				 
 				clientesXPerfil(request, response);
 				return;
 			}
-
-			
 							
 				if ("true".equals(confirmacionEliminar)) {
 					int dniEliminar = 0;

@@ -55,6 +55,7 @@ public class ProvinciaDaoImpl implements ProvinciaDao{
         ResultSet rs = null;
         try {
 			stmt = con.prepareStatement(SELECT_PROVINCIA);
+			stmt.setInt(1, pro);
 			rs = stmt.executeQuery();
 			
 			while(rs.next()){
