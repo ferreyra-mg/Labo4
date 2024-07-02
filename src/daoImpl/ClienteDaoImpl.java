@@ -84,8 +84,6 @@ public class ClienteDaoImpl implements ClienteDao {
 	        statement.setString(10, cliente.getContrasena());
 	        statement.setInt(11, cliente.getDni());  
 	        
-	        System.out.println("Ejecutando update: " + statement.toString());
-	        
 	        if (statement.executeUpdate() > 0) {
 	            conexion.commit();
 	            esExitoso = true;

@@ -122,9 +122,10 @@ INSERT INTO localidad (localidad, provincia) VALUES ('Santiago Centro', 3);
 INSERT INTO localidad (localidad, provincia) VALUES ('Valparaíso', 4);
 
 -- Inserción de datos en la tabla tipo_cuenta
-INSERT INTO tipo_cuenta (descripcion) VALUES ('Cuenta corriente');
-INSERT INTO tipo_cuenta (descripcion) VALUES ('Caja de ahorro');
-INSERT INTO tipo_cuenta (descripcion) VALUES ('Cuenta sueldo');
+INSERT INTO tipo_cuenta (descripcion) VALUES ('Alta de cuenta');
+INSERT INTO tipo_cuenta (descripcion) VALUES ('Alta de un prestamo');
+INSERT INTO tipo_cuenta (descripcion) VALUES ('Pago de préstamo');
+INSERT INTO tipo_cuenta (descripcion) VALUES ('Transferencia');
 
 -- Inserción de datos en la tabla tipo_movimiento
 INSERT INTO tipo_movimiento (descripcion) VALUES ('Alta de cuenta');
@@ -152,13 +153,12 @@ VALUES
 (34567891, '20345678902', 'Valeria', 'Romero', 0, 1, '1998-12-12', 'Avenida Central 909', 4, 4, 'valeria.romero@example.com', 345678901, 'password12', 1),
 (45678902, '20456789013', 'Gabriel', 'Herrera', 1, 2, '1984-01-13', 'Calle Principal 1010', 1, 1, 'gabriel.herrera@example.com', 456780124, 'password13', 1),
 (56789013, '20567890124', 'Lucia', 'Aguilar', 0, 2, '1989-02-14', 'Avenida Segunda 1111', 2, 2, 'lucia.aguilar@example.com', 567890125, 'password14', 1),
-(67890124, '20678901235', 'Mateo', 'Pereira', 1, 2, '1994-03-15', 'Boulevard Tercero 1212', 3, 3, 'mateo.pereira@example.com', 678902346, 'password15', 1);
+(67890124, '20678901235', 'Mateo', 'Pereira', 1, 2, '1994-03-15', 'Boulevard Tercero 1212', 3, 3, 'mateo.pereira@example.com', 678902346, 'password15', 1),
+(87654321, '43743346767', 'Carlo', 'Acutis', 1, 1, '1993-05-03', ' Adolfo Alisna 1234', 3, 3, 'carlo.acutis@example.com', 623623632, 'carlo', 1);
 
 -- Inserción de datos en la tabla cuenta
 INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado) VALUES
 ('user1', 12345678, '1234567890123456789012', '2023-01-01', 1, 10000, 1),
-('user1', 12345678, '5432167890123456789012', '2023-01-01', 2, 10000, 1),
-('user1', 12345678, '3214567890123456789012', '2023-01-01', 3, 10000, 1),
 ('user2', 23456789, '2345678901234567890123', '2023-01-02', 1, 15000, 1),
 ('user3', 34567890, '3456789012345678901234', '2023-01-03', 1, 20000, 1),
 ('user4', 45678901, '4567890123456789012345', '2023-01-04', 1, 25000, 1),
@@ -176,25 +176,26 @@ INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado)
 ('user16', 78901234, '6789012345678901234568', '2023-01-16', 1, 85000, 1),
 ('user17', 89012345, '7890123456789012345679', '2023-01-17', 1, 90000, 1),
 ('user18', 90123456, '8901234567890123456780', '2023-01-18', 1, 95000, 1),
+('user19', 12345678, '9012345678901234567891', '2023-01-19', 1, 100000, 1),
 ('user20', 23456789, '0123456789012345678902', '2023-01-20', 1, 105000, 1);
 
 -- Inserción de datos en la tabla prestamo
-INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado, peticion) VALUES
-(1, 12, '2023-02-01', 10000, 850, 10200, 0, 1),
-(2, 24, '2023-03-01', 20000, 900, 21600, 0, 1),
-(3, 36, '2023-04-01', 30000, 950, 34200, 0, 1),
-(4, 48, '2023-05-01', 40000, 1000, 48000, 0, 1),
-(5, 60, '2023-06-01', 50000, 1050, 63000, 0, 1),
-(6, 12, '2023-07-01', 60000, 1100, 79200, 0, 1),
-(7, 24, '2023-08-01', 70000, 1150, 96600, 0, 1),
-(8, 36, '2023-09-01', 80000, 1200, 115200, 0, 1),
-(9, 48, '2023-10-01', 90000, 1250, 136800, 0, 1),
-(10, 60, '2023-11-01', 100000, 1300, 160000, 0, 1),
-(11, 12, '2023-12-01', 110000, 1350, 184800, 0, 1),
-(12, 24, '2024-01-01', 120000, 1400, 211200, 0, 1),
-(13, 36, '2024-02-01', 130000, 1450, 239400, 0, 1),
-(14, 48, '2024-03-01', 140000, 1500, 269400, 0, 1),
-(15, 60, '2024-04-01', 150000, 1550, 301200, 0, 1);
+INSERT INTO prestamo (id_Cuenta, cant_Meses, fecha, capitalPedido, montoMensual, montoTotal, pagado) VALUES
+(1, 12, '2023-02-01', 10000, 850, 10200, 0),
+(2, 24, '2023-03-01', 20000, 900, 21600, 0),
+(3, 36, '2023-04-01', 30000, 950, 34200, 0),
+(4, 48, '2023-05-01', 40000, 1000, 48000, 0),
+(5, 60, '2023-06-01', 50000, 1050, 63000, 0),
+(6, 12, '2023-07-01', 60000, 1100, 79200, 0),
+(7, 24, '2023-08-01', 70000, 1150, 96600, 0),
+(8, 36, '2023-09-01', 80000, 1200, 115200, 0),
+(9, 48, '2023-10-01', 90000, 1250, 136800, 0),
+(10, 60, '2023-11-01', 100000, 1300, 160000, 0),
+(11, 12, '2023-12-01', 110000, 1350, 184800, 0),
+(12, 24, '2024-01-01', 120000, 1400, 211200, 0),
+(13, 36, '2024-02-01', 130000, 1450, 239400, 0),
+(14, 48, '2024-03-01', 140000, 1500, 269400, 0),
+(15, 60, '2024-04-01', 150000, 1550, 301200, 0);
 
 -- Inserción de datos en la tabla cuota
 INSERT INTO cuota (id_prestamo, pagado, fecha) VALUES
