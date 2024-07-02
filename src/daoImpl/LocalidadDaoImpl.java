@@ -11,7 +11,8 @@ import entidad.Localidad;
 
 public class LocalidadDaoImpl implements LocalidadDao {
 	
-	private static final String SELECT_LOCALIDADES = "select lo.id, lo.localidad, lo.provincia from bdbanco.localidad as lo";
+	private static final String SELECT_LOCALIDADES = "select * from bdbanco.localidad";
+	private static final String SELECT_LOCALIDAD = "select * from bdbanco.localidad WHERE id= ?";
 
 	@Override
 	public ArrayList<Localidad> obtenerLocalidadesPorProvincia(int provinciaId) {
@@ -21,7 +22,6 @@ public class LocalidadDaoImpl implements LocalidadDao {
         ResultSet rs = null;
         try {
 			stmt = con.prepareStatement(SELECT_LOCALIDADES);
-			stmt.setInt(1, provinciaId);
 			rs = stmt.executeQuery();
 			
 			while(rs.next()){
@@ -44,6 +44,36 @@ public class LocalidadDaoImpl implements LocalidadDao {
              }
 		}
         return Localidades;
+	}
+
+	@Override
+	public Localidad obtenerLocalidad(int loc) {
+		Connection con = Conexion.getConexion().getSQLConexion();
+		Localidad pro = new Localidad();
+		PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+			stmt = con.prepareStatement(SELECT_LOCALIDAD);
+			stmt.setInt(1,loc);
+			rs = stmt.executeQuery();
+			
+			while(rs.next()){
+				pro.setId(rs.getInt("id"));
+				pro.setId_Provincia(rs.getInt("provincia"));
+				pro.setLocalidad(rs.getString("localidad"));
+			}
+		} catch (Exception e5) {
+			e5.printStackTrace();
+		}
+        finally {
+        	 try {
+             	if (rs != null) rs.close();
+                 if (stmt != null) stmt.close();
+             } catch (SQLException e) {
+                 e.printStackTrace();
+             }
+		}
+        return pro;
 	}
 
 }

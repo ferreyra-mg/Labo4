@@ -75,6 +75,7 @@
 	<% //revisa que el usuario sea Admin
 		if(session.getAttribute("tipoUsuario") != "administrador"  )
 		{
+			System.out.println("entro al login");
 			RequestDispatcher rd = null;
 			rd = request.getRequestDispatcher("/Login.jsp");
 			rd.forward(request, response);
@@ -204,7 +205,6 @@
 		                    }
 		                %>
 		            </select>
-		            </form>
 				</div>
 	            
 	            <div>
@@ -214,33 +214,28 @@
 	            
 	            <div>
 	           		<label for="provincia">PROVINCIA:</label>
-	           		<form action="ServletDescolgable" method="post">
-	           			<input type="hidden" name="accion" value="cargarLocalidades">
-	            		<select id="provincia" name="provinciaId" onchange="this.form.submit()">
+	           		<select id="provincias" name="provincias">
 	            		 <%
 	            		 if (provincias != null) {
-	                            for (Provincia provincia1 : provincias) {
+	                            for (Provincia pro : provincias) {
 		                %>
-		                	<option value="<%= provincia1.getId() %>"><%= provincia1.getProvincia() %></option>
+		                	<option value="<%= pro.getId() %>"><%= pro.getProvincia() %></option>
 		                	<% }
                         } %>
 		           		</select>
-		           	</form>
 	            </div>
 	            
 	            <div>
 	             	<label for="localidad">LOCALIDAD:</label>
 	             	<select id="localidad" name="localidad">
 	             	<%if (localidades != null) {
-                        for (Localidad localidad1 : localidades) { %>
-		                <option value="<%= localidad1.getId() %>"><%= localidad1.getLocalidad() %></option>
+                        for (Localidad loc : localidades) { %>
+		                <option value="<%= loc.getId() %>"><%= loc.getLocalidad() %></option>
 		                <% }
                     } %>
 		            </select>
 	            </div>
-	            
 
-	            
 	            <div>
 	            	<label for="correo">CORREO:</label>
 	            	<input type="email" id="correo" name="correo" placeholder="" value="<%= emailValue %>" required>
@@ -255,7 +250,7 @@
 	            	<label for="contra1">CONTRASEÑA:</label>
 	            	<input type="password" id="contra1" name="contra1" placeholder="" required>
 	            </div>
-            </div>
+	        </div>
             
             <input type="submit" name="btnAceptar" class="btn-aceptar" value="Aceptar">
             

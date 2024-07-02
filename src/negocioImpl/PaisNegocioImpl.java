@@ -9,10 +9,15 @@ import entidad.Pais;
 
 public class PaisNegocioImpl implements PaisNegocio{
 
+	PaisDao paisDao = new PaisDaoImpl();
 	@Override
 	public ArrayList<Pais> traerPaises() {
-		PaisDao paisDao = new PaisDaoImpl();
 		return paisDao.traerPaises();
+	}
+
+	@Override
+	public Pais obtenerPais(int pais) {
+		return paisDao.obtenerPais(pais);
 	}
 
 }

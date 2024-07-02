@@ -76,6 +76,7 @@ public class ServletDescolgable extends HttpServlet {
 		if(request.getParameter("btn_TCPr") != null)
 		{
 			traerCuentas(request);
+			System.out.println("entro en btn_TCPr");
 		    rd = request.getRequestDispatcher("/Cliente_Prestamo.jsp");
 		    rd.forward(request, response);
 		    return;
@@ -104,7 +105,7 @@ public class ServletDescolgable extends HttpServlet {
 		if(request.getParameter("btn_traerUbicaciones") != null)
 		{
 			traerUbicaciones(request);
-			rd = request.getRequestDispatcher("/Cliente_Prestamo.jsp");
+			rd = request.getRequestDispatcher("/Admin_Perfiles.jsp");
 			rd.forward(request, response);
 		    return;
 		}
@@ -138,7 +139,6 @@ public class ServletDescolgable extends HttpServlet {
 	
 	public void traerUbicaciones(HttpServletRequest request)
 	{
-		//TODO
 		PaisNegocio paNeg = new PaisNegocioImpl();
 		ProvinciaNegocio prNeg = new ProvinciaNegocioImpl();
 		LocalidadNegocio loNeg = new LocalidadNegocioImpl();

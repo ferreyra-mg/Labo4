@@ -6,4 +6,5 @@ import entidad.Pais;
 
 public interface PaisNegocio {
 	ArrayList<Pais> traerPaises();
+	Pais obtenerPais(int pais);
 }

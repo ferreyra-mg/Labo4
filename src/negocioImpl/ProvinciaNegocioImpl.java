@@ -16,4 +16,9 @@ public class ProvinciaNegocioImpl implements ProvinciaNegocio {
 		return proDao.obtenerProvinciasPorPais(paisId);
 	}
 
+	@Override
+	public Provincia obtenerProvincia(int pro) {
+		return proDao.obtenerProvincia(pro);
+	}
+
 }

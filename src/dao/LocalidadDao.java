@@ -7,4 +7,5 @@ import entidad.Localidad;
 public interface LocalidadDao {
 
 	ArrayList<Localidad> obtenerLocalidadesPorProvincia(int provinciaId);
+	Localidad obtenerLocalidad(int loc);
 }

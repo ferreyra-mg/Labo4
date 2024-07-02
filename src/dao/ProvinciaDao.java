@@ -7,4 +7,5 @@ import entidad.Provincia;
 public interface ProvinciaDao {
 
 	ArrayList<Provincia> obtenerProvinciasPorPais(int paisId);
+	Provincia obtenerProvincia(int pro);
 }

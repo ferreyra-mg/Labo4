@@ -23,9 +23,11 @@
 		}	
 
 		 //no borrar
+		 System.out.println("entro en cliente prestamo");
 			Cliente cli = null;
-			if (session.getAttribute("usuarioLogueado") != null)
+			if (session.getAttribute("usuarioLogueado") != null) {
 				cli = (Cliente) session.getAttribute("usuarioLogueado");
+			}
 	%>
 	
 

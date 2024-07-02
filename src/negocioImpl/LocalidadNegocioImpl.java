@@ -16,4 +16,9 @@ public class LocalidadNegocioImpl implements LocalidadNegocio{
 		return loDao.obtenerLocalidadesPorProvincia(provinciaId);
 	}
 
+	@Override
+	public Localidad obtenerLocalidad(int loc) {
+		return loDao.obtenerLocalidad(loc);
+	}
+
 }

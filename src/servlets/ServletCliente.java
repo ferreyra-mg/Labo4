@@ -12,9 +12,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import entidad.Cliente;
+import entidad.Localidad;
+import entidad.Pais;
+import entidad.Provincia;
 import excepcion.ClienteInvalidoException;
 import negocio.ClienteNegocio;
+import negocio.LocalidadNegocio;
+import negocio.PaisNegocio;
+import negocio.ProvinciaNegocio;
 import negocioImpl.ClienteNegocioImpl;
+import negocioImpl.LocalidadNegocioImpl;
+import negocioImpl.PaisNegocioImpl;
+import negocioImpl.ProvinciaNegocioImpl;
 
 @WebServlet("/ServletCliente")
 public class ServletCliente extends HttpServlet {
@@ -109,8 +118,22 @@ public class ServletCliente extends HttpServlet {
 				 clientesXPerfil(request, response);
 				return;
 		    }
-			
-			
+			if(request.getParameter("localidad") != null && request.getParameter("provincia")!= null && request.getParameter("nacionalidad")!=null)
+			{
+				LocalidadNegocio loNeg = new LocalidadNegocioImpl();
+				ProvinciaNegocio proNeg = new ProvinciaNegocioImpl();
+				PaisNegocio paNeg = new PaisNegocioImpl();
+				Localidad lo = loNeg.obtenerLocalidad(Integer.parseInt(request.getParameter("localidad").toString()));
+				Provincia pro = proNeg.obtenerProvincia(Integer.parseInt(request.getParameter("provincia").toString()));
+				Pais pais = paNeg.obtenerPais(Integer.parseInt(request.getParameter("nacionalidad").toString()));
+				
+				if(lo.getId_Provincia() != pro.getId() || pro.getId_Pais() != pais.getId())
+				{
+					request.setAttribute("msj_error", "Localidad, Provincia o Nacionalidad incorrecto");
+					clientesXPerfil(request, response);
+					return;
+				}
+			}
 			String contra1 = request.getParameter("contra1");
 			String confirmacion = request.getParameter("confirmacion");
 			

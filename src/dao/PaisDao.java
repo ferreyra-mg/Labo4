@@ -8,4 +8,5 @@ import entidad.Provincia;
 
 public interface PaisDao {
 	ArrayList<Pais> traerPaises();
+	Pais obtenerPais(int pais);
 }

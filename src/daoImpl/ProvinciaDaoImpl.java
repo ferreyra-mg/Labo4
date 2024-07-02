@@ -11,7 +11,8 @@ import entidad.Provincia;
 
 public class ProvinciaDaoImpl implements ProvinciaDao{
 	
-	private static final String SELECT_PROVINCIAS = "select pro.id, pro.provincia, pro.pais from bdbanco.provincia as pro";
+	private static final String SELECT_PROVINCIAS = "select * from bdbanco.provincia";
+	private static final String SELECT_PROVINCIA = "select * from bdbanco.provincia WHERE id = ?";
 
 	@Override
 	public ArrayList<Provincia> obtenerProvinciasPorPais(int paisId) {
@@ -44,6 +45,35 @@ public class ProvinciaDaoImpl implements ProvinciaDao{
              }
 		}
         return Provincias;
+	}
+
+	@Override
+	public Provincia obtenerProvincia(int pro) {
+		Connection con = Conexion.getConexion().getSQLConexion();
+		Provincia prov = new Provincia();
+		PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+			stmt = con.prepareStatement(SELECT_PROVINCIA);
+			rs = stmt.executeQuery();
+			
+			while(rs.next()){
+				prov.setId(rs.getInt("id"));
+				prov.setId_Pais(rs.getInt("pais"));
+				prov.setProvincia(rs.getString("provincia"));
+			}
+		} catch (Exception e5) {
+			e5.printStackTrace();
+		}
+        finally {
+        	 try {
+             	if (rs != null) rs.close();
+                 if (stmt != null) stmt.close();
+             } catch (SQLException e) {
+                 e.printStackTrace();
+             }
+		}
+        return prov;
 	}
 
 }
