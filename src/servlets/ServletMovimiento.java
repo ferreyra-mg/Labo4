@@ -56,11 +56,12 @@ public class ServletMovimiento extends HttpServlet {
 			RequestDispatcher rd = null;
 	        String cbuDestino = request.getParameter("cbuDestino");
 	        float monto = Float.parseFloat(request.getParameter("monto"));
-	        
+	        int id = Integer.parseInt(request.getParameter("SelecCuenta").toString());
 	        boolean exito = false;
 
-	        	float saldoActual = movNeg.VerificarSaldoxCuenta(1); //ya lo cambio
-	        	
+	        	float saldoActual = movNeg.VerificarSaldoxCuenta(id); //TODO:ya lo cambio
+	        	System.out.println("saldoActual: "+ saldoActual);
+	        	System.out.println("monto: "+ monto);
 	        	if(saldoActual < monto) {
 	        		traerCuentas(request);
 	        		request.setAttribute("msjTransferencia", "No tiene saldo suficiente.");

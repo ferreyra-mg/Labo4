@@ -31,7 +31,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	
 	private static final String sqlMontoFecha = "SELECT SUM(importe) AS total_importe FROM movimiento WHERE fecha BETWEEN ? AND ?";
 	
-	private static final String sqlSaldoxCuenta = "SELECT c.saldo FROM bdbanco.cuenta WHERE c.id = ?";
+	private static final String sqlSaldoxCuenta = "SELECT saldo FROM bdbanco.cuenta WHERE id = ?";
 	private static final String sqlMovimientosFecha = "SELECT COUNT(*) AS total_movimientos FROM movimiento WHERE fecha BETWEEN ? AND ?;";
 	private static final String sqlTraerTipos = "SELECT * FROM tipo_movimiento";
 	
