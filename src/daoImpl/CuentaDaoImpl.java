@@ -14,8 +14,7 @@ import entidad.Tipo_Cuenta;
 public class CuentaDaoImpl implements CuentaDao {
 
 	private static final String CUENTA_DNI = "SELECT * FROM bdbanco.cuenta where dni = ? LIMIT 1";
-	private static final String CUENTA_CLIENTE= "SELECT c.id, c.usuario, c.dni, c.cbu, c.fechaCreacion, tc.descripcion as tipoCuenta, c.saldo, c.estado FROM bdbanco.cuenta c\n" + 
-			"JOIN tipo_cuenta tc on c.tipoCuenta = tc.id" + 
+	private static final String CUENTA_CLIENTE= "SELECT c.id, c.usuario, c.dni, c.cbu as cbu, c.fechaCreacion creacion, c.tipoCuenta, c.saldo, c.estado FROM bdbanco.cuenta c " +
 			"where dni = ? LIMIT 3";
 	private static final String CANTIDAD_CUENTA = "SELECT COUNT(*) AS cantidad FROM bdbanco.cuenta WHERE dni = ?";
 	private static final String CREAR_CUENTA = "INSERT INTO cuenta (usuario, dni, cbu, fechaCreacion, tipoCuenta, saldo, estado) VALUES(?, ?, ?, ?, ?, ?, ?)";
@@ -73,9 +72,13 @@ public class CuentaDaoImpl implements CuentaDao {
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Cuenta cuenta = new Cuenta(rs.getInt("id"),rs.getString("usuario"), rs.getInt("dni"),
-						rs.getString("cbu"), rs.getDate("fechaCreacion"), rs.getInt("tipoCuenta"),
-						rs.getFloat("saldo"), rs.getBoolean("estado"));
+						rs.getString("cbu"), 
+						rs.getDate("creacion"), 
+						rs.getInt("tipoCuenta"),
+						rs.getFloat("saldo"), 
+						rs.getBoolean("estado"));
 				cuentas.add(cuenta);
+				cuenta.toString();
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

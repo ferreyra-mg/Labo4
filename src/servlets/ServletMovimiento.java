@@ -63,7 +63,6 @@ public class ServletMovimiento extends HttpServlet {
 	        boolean exito = false;
 
 	        	float saldoActual = movNeg.VerificarSaldoxCuenta(usuarioLogueado, tipoCuentaCbu);
-	        	System.out.println("monto actual: " + saldoActual);
 	        	if(saldoActual < monto) {
 	        		traerCuentas(request);
 	        		request.setAttribute("msjTransferencia", "No tiene saldo suficiente.");
@@ -92,14 +91,12 @@ public class ServletMovimiento extends HttpServlet {
 	        String tipoCuentaEmisora = request.getParameter("cuentaEmisora");
 	        String tipoCuentaReceptora = request.getParameter("cuentaReceptora");
 	        float montoCuenta = Float.parseFloat(request.getParameter("montoCuenta"));
-	        System.out.println("monto actual: " + montoCuenta);
 	        boolean exitoCuentas = false;
 	        RequestDispatcher rd2 = null;
 	        
 	        if(request.getParameter("enviarMontoCuenta")!=null) {
 	        	
 	        	float saldoxCuenta = movNeg.VerificarSaldoxCuenta(usuarioLogueado, tipoCuentaEmisora);
-	        	System.out.println("saldo:" +saldoxCuenta);
 	        	if(saldoxCuenta < montoCuenta) {
 	        		traerCuentas(request);
 	        		request.setAttribute("msjTransferenciaCuentas", "No tiene saldo suficiente en la siguiente cuenta: " + tipoCuentaEmisora);

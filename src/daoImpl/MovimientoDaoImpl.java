@@ -17,28 +17,21 @@ import entidad.Tipo_Movimiento;
 
 public class MovimientoDaoImpl implements MovimientoDao{
 
-	private static final String query = "SELECT * FROM bdbanco.movimiento WHERE id_Cuenta = ?";
+	private static final String query = "SELECT M.id AS id, M.id_Cuenta AS cuenta, M.fecha AS fec, M.concepto AS con, M.importe AS imp, TM.descripcion AS descr from bdbanco.movimiento M JOIN bdbanco.tipo_movimiento TM on TM.id = M.tipo WHERE M.id_Cuenta = ?";
 	private static final String sqlSaldo = "SELECT saldo FROM bdbanco.cuenta WHERE usuario = ?";
 	
-	private static final String sqlResta = "UPDATE bdbanco.cuenta c \n" + 
-			"JOIN tipo_cuenta tc on c.tipoCuenta = tc.id\n" + 
-			"SET c.saldo = c.saldo - ?\n" + 
-			"WHERE c.usuario = ? and tc.descripcion = ?";
+	private static final String sqlResta = "UPDATE bdbanco.cuenta c JOIN tipo_cuenta tc on c.tipoCuenta = tc.id SET c.saldo = c.saldo - ? WHERE c.usuario = ? and tc.descripcion = ?";
 	
 	private static final String sqlSuma = "UPDATE bdbanco.cuenta SET saldo = saldo + ? WHERE cbu = ?";
 	private static final String sqlMovimiento = "INSERT INTO bdbanco.movimiento (id_Cuenta, fecha, concepto, importe, tipo) VALUES (?, ?, ?, ?, ?)";
-	private static final String sqlCbu = "SELECT cbu FROM bdbanco.cuenta c" + 
-			"JOIN tipo_cuenta tc on tc.id = c.tipoCuenta" + 
-			"WHERE c.usuario = ? and tc.descripcion = ?";
+	private static final String sqlCbu = "SELECT cbu FROM bdbanco.cuenta c JOIN tipo_cuenta tc on tc.id = c.tipoCuenta WHERE c.usuario = ? and tc.descripcion = ?";
 	
 	private static final String sqlRestaCuenta = "UPDATE bdbanco.cuenta SET saldo = saldo - ? WHERE cbu = ?";
 	private static final String sqlSumaCuenta = "UPDATE bdbanco.cuenta SET saldo = saldo + ? WHERE cbu = ?";
 	
 	private static final String sqlMontoFecha = "SELECT SUM(importe) AS total_importe FROM movimiento WHERE fecha BETWEEN ? AND ?";
 	
-	private static final String sqlSaldoxCuenta = "SELECT saldo FROM bdbanco.cuenta c" + 
-			"JOIN tipo_cuenta tc on tc.id = c.tipoCuenta" + 
-			"WHERE c.usuario = ? and tc.descripcion = ?";
+	private static final String sqlSaldoxCuenta = "SELECT saldo FROM bdbanco.cuenta c JOIN tipo_cuenta tc on tc.id = c.tipoCuenta WHERE c.usuario = ? and tc.descripcion = ?";
 	private static final String sqlMovimientosFecha = "SELECT COUNT(*) AS total_movimientos FROM movimiento WHERE fecha BETWEEN ? AND ?;";
 	private static final String sqlTraerTipos = "SELECT * FROM tipo_movimiento";
 	
@@ -57,12 +50,12 @@ public class MovimientoDaoImpl implements MovimientoDao{
 			
 			while(rs.next()){	
 				Movimiento mv = new Movimiento();
-				
+
 				mv.setId(rs.getInt("id"));
-				mv.setDetalle(rs.getString("concepto"));
-				mv.setFecha(rs.getDate("fecha"));
-				mv.setImporte(rs.getFloat("importe"));
-				mv.setMovimiento(rs.getString("tipo"));
+				mv.setDetalle(rs.getString("con"));
+				mv.setFecha(rs.getDate("fec"));
+				mv.setImporte(rs.getFloat("imp"));
+				mv.setMovimiento(rs.getString("descr"));
 				listMovimientos.add(mv);
 			}
 		} catch (Exception e5) {

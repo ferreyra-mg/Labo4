@@ -51,15 +51,11 @@
 			<label for="SeleccionCuenta">Seleccione la cuenta:</label>
         	<div class="filtrar_cuentas">
 					<select name="SelecCuenta" id="SelecCuenta">
-					<%
-						if (cuentas != null) {
-						for (Cuenta cuenta : cuentas) {
-					%>
-					<option value="<%= cuenta.getTipo() %>"><%= cuenta.getTipo() %></option>
-					<%
-						}
-					}
-					%>
+					<%	if (cuentas != null) {
+						for (Cuenta cuenta : cuentas) {	%>
+					<option value="<%= cuenta.getId() %>"><%= cuenta.getUsuario() %></option>
+					<%	}
+					}	%>
 				</select>
 				</div>
         	<br><br>
@@ -82,30 +78,22 @@
 				<div class="filtrar_cuentas">
 					Seleccione la cuenta emisora: 
 					<select name="cuentaEmisora" id="cuentaEmisora">
-					<%
-						if (cuentas != null) {
-						for (Cuenta cuenta : cuentas) {
-					%>
-					<option value="<%= cuenta.getTipo() %>"><%= cuenta.getTipo() %></option>
-					<%
-						}
-					}
-					%>
+					<%	if (cuentas != null) {
+						for (Cuenta cuenta : cuentas) {	%>
+					<option value="<%= cuenta.getId() %>"><%= cuenta.getUsuario() %></option>
+					<%	}
+					}	%>
 				</select>
 				</div>
 				
 				<div class="filtrar_cuentas">
 					Seleccione la cuenta receptora: 
 					<select name="cuentaReceptora" id="cuentaReceptora">
-					<%
-						if (cuentas != null) {
-						for (Cuenta cuenta : cuentas) {
-					%>
-					<option value="<%= cuenta.getTipo() %>"><%= cuenta.getTipo() %></option>
-					<%
-						}
-					}
-					%>
+					<%	if (cuentas != null) {
+						for (Cuenta cuenta : cuentas) {	%>
+					<option value="<%= cuenta.getId() %>"><%= cuenta.getUsuario() %></option>
+					<% }
+					}	%>
 				</select>
 				</div>
 
