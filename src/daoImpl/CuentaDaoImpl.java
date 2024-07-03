@@ -24,8 +24,9 @@ public class CuentaDaoImpl implements CuentaDao {
 	
 	@Override
 	public boolean crearCuenta(Cuenta cuenta) {
-		PreparedStatement stmt;
+		PreparedStatement stmt=null;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
+		ResultSet rs = null;
 		boolean isInsertExitoso = false;
 	    try {
 	        
@@ -39,11 +40,30 @@ public class CuentaDaoImpl implements CuentaDao {
 	    	stmt.setDate(4, creacionSqlDate);
 	    	stmt.setInt(5, cuenta.getTipo()); 
 	    	stmt.setFloat(6, cuenta.getSaldo()); 
-	    	stmt.setBoolean(7, cuenta.isEstado());  		        
+	    	stmt.setBoolean(7, cuenta.isEstado());
 	    	
 	        if (stmt.executeUpdate() > 0) {
-	            conexion.commit();
-	            isInsertExitoso = true;
+	        	String ultimoId = "SELECT MAX(id) as id FROM bdbanco.cuenta";
+	            stmt = conexion.prepareStatement(ultimoId);
+	            rs = stmt.executeQuery();
+
+	            int id = 0;
+	            // Procesar el resultado
+	            if (rs.next()) {
+	                id = rs.getInt("id");
+	                System.out.println("El ID de la nueva cuenta creada es: " + id);
+	            }
+	        	
+	        	stmt = conexion.prepareStatement("INSERT INTO bdbanco.movimiento (id_Cuenta, fecha, concepto, importe, tipo) VALUES (?, ?, ?, ?, ?)");
+	        	stmt.setInt(1, id);
+	        	stmt.setDate(2, new java.sql.Date(System.currentTimeMillis()));
+	        	stmt.setString(3, "Alta cuenta");
+	        	stmt.setFloat(4, 10000);
+	        	stmt.setInt(5, 1);
+				if(stmt.executeUpdate() > 0) {
+					conexion.commit();
+					isInsertExitoso = true;
+				}
 	        }
 	        
 	    } catch (SQLException e) {
@@ -53,7 +73,15 @@ public class CuentaDaoImpl implements CuentaDao {
 	        } catch (SQLException e1) {
 	            e1.printStackTrace();
 	        }
-	    }
+	    } finally {
+       	 try {
+          	if (rs != null) rs.close();
+              if (stmt != null) stmt.close();
+          } catch (SQLException e) {
+              e.printStackTrace();
+          }
+		}
+	    
 	    return isInsertExitoso;
 	}
 
@@ -83,7 +111,7 @@ public class CuentaDaoImpl implements CuentaDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Error: No pudieron recuperar las cuentas del cliente [" + dni + "]");
-		}
+		} 
 		return cuentas;
 	}
 

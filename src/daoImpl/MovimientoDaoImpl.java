@@ -78,10 +78,10 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	public boolean TransferirCbu(Cuenta cuenta, String cbuDestino, float monto, String tipoCuenta) {
 		
 		Connection conexion = Conexion.getConexion().getSQLConexion();
-		PreparedStatement stmtDebito;
-		PreparedStatement stmtCredito;
-		PreparedStatement stmtMov;
-		ResultSet rs;
+		PreparedStatement stmtDebito= null;
+		PreparedStatement stmtCredito= null;
+		PreparedStatement stmtMov = null;
+		ResultSet rs = null;
 		boolean exitoDebito = false;
 		boolean exitoCredito = false;
 		boolean exitoMov = false;
@@ -143,6 +143,17 @@ public class MovimientoDaoImpl implements MovimientoDao{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		finally {
+       	 try {
+            	if (rs != null) rs.close();
+            	if (stmtMov != null) stmtMov.close();
+            	if (stmtDebito != null) stmtDebito.close();
+            	if (stmtCredito != null) stmtCredito.close();
+            	
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+		}
 		
 		return exito;
 	}
@@ -164,6 +175,13 @@ public class MovimientoDaoImpl implements MovimientoDao{
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+       	 try {
+          	if (rs != null) rs.close();
+              if (stmtCbu != null) stmtCbu.close();
+          } catch (SQLException e) {
+              e.printStackTrace();
+          }
 		}
 		
 		
@@ -173,10 +191,10 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	@Override
 	public boolean TransferirEntreCuentas(Cuenta cuenta, String cbuDestino, String cbuEmisor, float monto) {
 		Connection conexion = Conexion.getConexion().getSQLConexion();
-		PreparedStatement stmtRestaCuenta;
-		PreparedStatement stmtSumaCuenta;
-		PreparedStatement stmtMov;
-		ResultSet rs;
+		PreparedStatement stmtRestaCuenta= null;
+		PreparedStatement stmtSumaCuenta=null;
+		PreparedStatement stmtMov=null;
+		ResultSet rs=null;
 		boolean exitoResta = false;
 		boolean exitoSuma = false;
 		boolean exitoMov = false;
@@ -237,6 +255,16 @@ public class MovimientoDaoImpl implements MovimientoDao{
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+       	 try {
+          	if (rs != null) rs.close();
+          	if (stmtRestaCuenta != null) stmtRestaCuenta.close();
+          	if (stmtSumaCuenta != null) stmtSumaCuenta.close();
+          	if (stmtMov != null) stmtMov.close();
+              
+          } catch (SQLException e) {
+              e.printStackTrace();
+          }
 		}
 		
 		return exito;
@@ -262,7 +290,15 @@ public class MovimientoDaoImpl implements MovimientoDao{
 		} catch (Exception e) {
 			e.printStackTrace();
 			
-		}
+		} finally {
+	       	 try {
+	          	if (rs != null) rs.close();
+	          	if (stmtSaldo != null) stmtSaldo.close();
+	              
+	          } catch (SQLException e) {
+	              e.printStackTrace();
+	          }
+			}
 		return saldoxCuenta;
 	}
 

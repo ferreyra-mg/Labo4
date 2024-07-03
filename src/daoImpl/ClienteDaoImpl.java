@@ -30,7 +30,7 @@ public class ClienteDaoImpl implements ClienteDao {
 	@Override
 	public boolean agregarCliente(Cliente cliente) {
 		
-			PreparedStatement statement;
+			PreparedStatement statement = null;
 			Connection conexion = Conexion.getConexion().getSQLConexion();
 			boolean isInsertExitoso = false;
 		    try {
@@ -60,13 +60,19 @@ public class ClienteDaoImpl implements ClienteDao {
 		        } catch (SQLException e1) {
 		            e1.printStackTrace();
 		        }
-		    }
+		    }finally {
+	        	 try {
+	                  if (statement != null) statement.close();
+	              } catch (SQLException e) {
+	                  e.printStackTrace();
+	              }
+	 		}
 		    return isInsertExitoso;
 	}
 
 	@Override
 	public boolean modificarCliente(Cliente cliente) {
-		PreparedStatement statement;
+		PreparedStatement statement=null;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		boolean esExitoso = false;
 	    try {
@@ -96,12 +102,19 @@ public class ClienteDaoImpl implements ClienteDao {
 	            e1.printStackTrace();
 	        }
 	    }
+	    finally {
+       	 try {
+             if (statement != null) statement.close();
+             } catch (SQLException e) {
+                 e.printStackTrace();
+             }
+		}
 	    return esExitoso;
 	}
 
 	@Override
 	public boolean eliminarCliente(int dni) {
-		PreparedStatement statement;
+		PreparedStatement statement = null;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		boolean esExitoso = false;
 	    try {
@@ -121,6 +134,13 @@ public class ClienteDaoImpl implements ClienteDao {
 	            e1.printStackTrace();
 	        }
 	    }
+	    finally {
+	       	 try {
+	             if (statement != null) statement.close();
+	             } catch (SQLException e) {
+	                 e.printStackTrace();
+	             }
+			}
 	    return esExitoso;
 	}
 

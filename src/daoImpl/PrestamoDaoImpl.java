@@ -18,7 +18,7 @@ public class PrestamoDaoImpl implements PrestamoDao {
 
 	@Override
 	public boolean grabar(Prestamo prestamo) {
-		PreparedStatement st;
+		PreparedStatement st = null;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		boolean isInsertExitoso = false;
 	    try {		        
@@ -36,16 +36,20 @@ public class PrestamoDaoImpl implements PrestamoDao {
 		    }
 		        
 		    } catch (SQLException e) {
-		    	System.out.println("Error: estoy en la bd [" + prestamo.getId() + "]");
-				
 		        e.printStackTrace();
 		        try {
 		            conexion.rollback();
 		        } catch (SQLException e1) {
-		        	System.out.println("Error: estoy en la bd2 [" + prestamo.getId() + "]");
-		            e1.printStackTrace();
+		        	e1.printStackTrace();
 		        }
 		    }
+	    finally {
+       	 try {
+                if (st != null) st.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+		}
 		    return isInsertExitoso;
 		
 	}
@@ -78,7 +82,6 @@ public class PrestamoDaoImpl implements PrestamoDao {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("Error: No pudieron recuperar las cuentas del cliente [" + dni + "]");
 		}
 		
 		if (prestamos.size() > 0) {
@@ -120,9 +123,7 @@ public class PrestamoDaoImpl implements PrestamoDao {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("Error al traer de la base de datos");
-		}
-						
+			}			
 		return prestamos;
 	}
 
