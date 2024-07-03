@@ -2,6 +2,8 @@ package entidad;
 
 import java.util.Date;
 
+import funciones.Clientex;
+
 public class Cuenta {
 
     private int id;
@@ -44,4 +46,9 @@ public class Cuenta {
     public void setSaldo(float saldo) { this.saldo = saldo; }
     public boolean isEstado() { return estado; }
     public void setEstado(boolean estado) { this.estado = estado; }
+
+	public String toString(String tipo) {
+		return tipo;
+	}
+    
 }

@@ -53,13 +53,9 @@ public class ServletPrestamos extends HttpServlet {
 		
 		if(request.getParameter("pagarCuota")!=null)
 		{
-			System.out.println("verificacion 1");
 			CuotaNegocio cuotaNeg = new CuotaNegocioImpl();
-			System.out.println("verificacion 2");
 			int idPrestamo = Integer.parseInt(request.getParameter("idPrestamo"));
-			System.out.println("verificacion 3");
 			boolean exito = cuotaNeg.pagarCuota(idPrestamo);
-			System.out.println("verificacion 4");
 			if(exito)
 			{
 				request.setAttribute("msj_error", "Se realizo el pago de una cuota correctamente");
@@ -202,9 +198,9 @@ public class ServletPrestamos extends HttpServlet {
 		if (request.getParameter("traerPrestamos") != null)
 		{
 			int idCuenta = 0;
-			if(request.getAttribute("cuentas") != null)
+			if(request.getParameter("cuentas") != null)
 			{
-				idCuenta=Integer.parseInt(request.getAttribute("cuentas").toString());
+				idCuenta=Integer.parseInt(request.getParameter("cuentas").toString());
 			}
 			ArrayList<Prestamo> prestamos = preNeg.traerPrestamos(idCuenta);
 			if (prestamos != null)

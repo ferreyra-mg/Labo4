@@ -22,8 +22,6 @@
 			rd.forward(request, response);
 		}	
 
-		 //no borrar
-		 System.out.println("entro en cliente prestamo");
 			Cliente cli = null;
 			if (session.getAttribute("usuarioLogueado") != null) {
 				cli = (Cliente) session.getAttribute("usuarioLogueado");
@@ -55,9 +53,6 @@
 	%>
 
 	<div class="prestamo">
-		<div class="prestamos-error-message">
-	        <%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>
-	    </div>
 		<div class="pedir_prestamo">
 			
 			<form action="ServletPrestamos" method="post" class="nuevo-prestamo">
@@ -79,7 +74,7 @@
 						if (cuentas != null) {
 						for (Cuenta cuenta : cuentas) {
 					%>
-					<option value="<%= cuenta.getTipo() %>"><%= cuenta.getTipo()%></option>
+					<option value="<%= cuenta.getId() %>"><%= cuenta.getUsuario() %></option>
 					<%
 						}
 					}
@@ -115,15 +110,11 @@
 				<div class="filtrar_cuentas">
 					<label>Elige una cuenta:</label>
 					<select name="cuentas" id="cuentas">
-					<%
-						if (cuentas != null) {
-						for (Cuenta cuenta : cuentas) {
-					%>
-					<option value="<%= cuenta.getTipo() %>"><%= cuenta.getTipo()%></option>
-					<%
-						}
-					}
-					%>
+					<%	if (cuentas != null) {
+						for (Cuenta cuenta : cuentas) {	%>
+					<option value="<%= cuenta.getId() %>"><%= cuenta.getUsuario()%></option>
+					<%	}
+					}	%>
 					</select>
 				</div>  
 				<input type="submit" name="traerPrestamos" value="traer prestamos">
@@ -152,6 +143,8 @@
 			     paginatedList = new ArrayList<>(prestamos.subList(start, end));
 			 }
 			%>
+			
+			<%if(prestamos != null) {%>
 			<table class="tabla-prestamos">
     <thead>
         <tr>
@@ -166,7 +159,7 @@
         </tr>
     </thead>
     <tbody>
-        <% for (Prestamo prestamo : cli.prestamos()) { %>
+        <% for (Prestamo prestamo : prestamos) { %>
             <tr>
                 <form action="ServletPrestamos" method="post">
                     <td><%= prestamo.getId() %><input type="hidden" name="idPrestamo" value="<%= prestamo.getId() %>"></td>
@@ -186,10 +179,7 @@
 					class="<%= (i == pageNumber) ? "active" : "" %>"><%= i %></a>
 				<% } %>
 			</div>
-			<div class="error-message">
-				<%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>
-			</div>
-
+<%} %>
 		</div>
 	</div>
 

@@ -11,10 +11,10 @@ import dao.PrestamoDao;
 import entidad.Prestamo;
 
 public class PrestamoDaoImpl implements PrestamoDao {
-	private static final String insert = "INSERT INTO prestamo(id_cuenta, cant_meses, fecha, capitalPedido, monto_mensual, monto_total) VALUES(?, ?, ?, ?, ?, ? )";
-	private static final String PRESTAMOS_FECHA = "SELECT COUNT(*) AS total_prestamos FROM prestamo WHERE fecha BETWEEN ? AND ?";
-	private static final String autorizPrest = "UPDATE prestamo SET peticion = ? WHERE id_Cuenta = ?";
-	private static final String traerPrestamos = "SELECT * FROM prestamo WHERE id_Cuenta = ? and peticion = 1 AND pagado = 0";
+	private static final String insert = "INSERT INTO bdbanco.prestamo(id_cuenta, cant_meses, fecha, capitalPedido, montoMensual, montoTotal) VALUES(?, ?, ?, ?, ?, ? );";
+	private static final String PRESTAMOS_FECHA = "SELECT COUNT(*) AS total_prestamos FROM bdbanco.prestamo WHERE fecha BETWEEN ? AND ?";
+	private static final String autorizPrest = "UPDATE bdbanco.prestamo SET peticion = ? WHERE id_Cuenta = ?";
+	private static final String traerPrestamos = "SELECT * FROM bdbanco.prestamo WHERE id_Cuenta = ? and peticion = 1 AND pagado = 0";
 
 	@Override
 	public boolean grabar(Prestamo prestamo) {
@@ -246,20 +246,19 @@ public class PrestamoDaoImpl implements PrestamoDao {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("Error al traer de la base de datos");
 		}
 						
 		return prestamos;
 	}
 
 	@Override
-	public ArrayList<Prestamo> traerPrestamos(int idCuenta) {
+	public ArrayList<Prestamo> traerPrestamos(int idCuenta) { //TODO
 		ArrayList<Prestamo> prestamos = new ArrayList<>();
 		
 		try {
 				Connection conexion = Conexion.getConexion().getSQLConexion();
 				PreparedStatement stmt = conexion.prepareStatement(traerPrestamos); 
-				stmt.setFloat(1, idCuenta);
+				stmt.setInt(1, idCuenta);
 				
 			ResultSet rs = stmt.executeQuery();
 
@@ -273,8 +272,8 @@ public class PrestamoDaoImpl implements PrestamoDao {
                 prestamo.setMontoTotal(rs.getFloat("montoTotal"));
                 prestamo.setPagado(rs.getBoolean("pagado"));
                 prestamo.setPeticion(rs.getBoolean("peticion"));
-                
 				prestamos.add(prestamo);
+				
 			}
 			
 		} catch (SQLException e) {

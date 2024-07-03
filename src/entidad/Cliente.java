@@ -85,8 +85,4 @@ public class Cliente {
     public ArrayList<Cuenta> cuentas() {
         return (new CuentaNegocioImpl()).obtenerTodasLasCuentas(this.dni);
     }
-    
-    public ArrayList<Prestamo> prestamos() {
-        return (new PrestamoNegocioImpl()).traerTodos(this.dni);
-    }
 }

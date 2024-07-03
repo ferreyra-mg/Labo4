@@ -3,6 +3,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="entidad.Cuenta" %>
 <%@ page import="entidad.Cliente" %>
+<%@ page import="funciones.Clientex" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,8 +60,7 @@
 			} else {
 			   sexo = "femenino";
 			}
-		ubicacion = clienteLog.getLocalidad() + ", " + clienteLog.getProvincia() + ", " + clienteLog.getNacionalidad();
-	
+		ubicacion = Clientex.obtenerUbicacion(clienteLog.getLocalidad(), clienteLog.getProvincia(), clienteLog.getNacionalidad());
 	}			
 	%>
 
@@ -81,6 +81,7 @@
 		<%
 			if (cuentas != null) {
 			for (Cuenta cuenta : cuentas) {
+				String tipo = Clientex.obtenerTipo(cuenta.getTipo());
 		%>
 		<div class = "btn-c1">
 		    <img src="img/cuenta_bg.jpg" alt="cuenta">
@@ -91,7 +92,7 @@
 		      <p>
 				CBU: <%=cuenta.getCBU() %> 				<br>
 				FECHA DE CREACION: <%=cuenta.getCreacion()%> 	<br>
-				TIPO DE CUENTA: <%=cuenta.getTipo()%> 	<br>
+				TIPO DE CUENTA: <%= cuenta.toString(tipo) %> 	<br>
 				SALDO: <%=cuenta.getSaldo()%>
 		      </p>
 		    </div>

@@ -79,7 +79,6 @@ public class ServletDescolgable extends HttpServlet {
 		if(request.getParameter("btn_TCPr") != null)
 		{
 			traerCuentas(request);
-			System.out.println("entro en btn_TCPr");
 		    rd = request.getRequestDispatcher("/Cliente_Prestamo.jsp");
 		    rd.forward(request, response);
 		    return;
@@ -136,7 +135,6 @@ public class ServletDescolgable extends HttpServlet {
 		CuentaNegocio cuNeg = new CuentaNegocioImpl();
 		HttpSession session = request.getSession();
 		int dni = (int)session.getAttribute("dni");
-		System.out.println("dni: "+ dni);
 		ArrayList<Cuenta> cuentas = cuNeg.obtenerTodasLasCuentas(dni);
         request.setAttribute("cuentas", cuentas);
 	}
