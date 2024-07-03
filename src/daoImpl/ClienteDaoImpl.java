@@ -267,7 +267,6 @@ public class ClienteDaoImpl implements ClienteDao {
                  e.printStackTrace();
              }
 		}
-        
         return existe;
 	}
 	
