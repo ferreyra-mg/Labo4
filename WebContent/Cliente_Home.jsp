@@ -79,7 +79,7 @@
             <select name="cuenta" id="cuenta">
                 <% if (cuentas != null) {
                     for (Cuenta cuenta : cuentas) { %>
-                        <option value="<%= cuenta.getId() %>"><%= cuenta.getTipo() %></option>
+                        <option value="<%= cuenta.getId() %>"><%= cuenta.getUsuario() %></option>
                 <%    }
                     }
                 %>

@@ -280,6 +280,7 @@
        		<th>DNI</th> 	<th>NOMBRE</th> 	<th>APELLIDO</th> 		<th>ACCIÓN</th> 
     	</tr>
     </thead>
+    <tbody>
     <% if(listaClientes != null) {
         for(Cliente cliente : listaClientes) { %>
             <tr> 
@@ -295,8 +296,8 @@
                 </form>
             </tr>
         <% }
-    } %>
-    
+ 	   } %>
+      </tbody>
 </table>
 
 </div>
