@@ -63,6 +63,7 @@ public class ServletMovimiento extends HttpServlet {
 	        	System.out.println("saldoActual: "+ saldoActual);
 	        	System.out.println("monto: "+ monto);
 	        	if(saldoActual < monto) {
+	        		System.out.println("entro a monto");
 	        		traerCuentas(request);
 	        		request.setAttribute("msjTransferencia", "No tiene saldo suficiente.");
 	        		rd = request.getRequestDispatcher("/Cliente_Transferencia.jsp");
