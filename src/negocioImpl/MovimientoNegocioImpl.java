@@ -35,8 +35,8 @@ public class MovimientoNegocioImpl implements MovimientoNegocio{
 
 
 	@Override
-	public float VerificarSaldoxCuenta(String usuario, String tipoCuenta) {
-		return mvDao.VerificarSaldoxCuenta(usuario, tipoCuenta);
+	public float VerificarSaldoxCuenta(int id) {
+		return mvDao.VerificarSaldoxCuenta(id);
 	}
 
 	@Override

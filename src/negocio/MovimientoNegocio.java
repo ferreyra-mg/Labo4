@@ -10,7 +10,7 @@ import entidad.Tipo_Movimiento;
 public interface MovimientoNegocio {
 	ArrayList<Movimiento> traerMovimientos(int id);
 	boolean transferirCbu(Cuenta cuenta, String cbuDestino, float monto, String tipoCuenta);
-	float VerificarSaldoxCuenta(String usuario, String tipoCuenta);
+	float VerificarSaldoxCuenta(int id);
 
 	String ObtenerCbu(String tipoCuenta, Cuenta cuenta);
 	boolean TransferirEntreCuentas(Cuenta cuenta, String cbuCuentaDestino, String cbuCuentaEmisor, float montoCuenta);

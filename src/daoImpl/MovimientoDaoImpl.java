@@ -212,7 +212,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
 		
 		try {
 			stmtSaldo = conexion.prepareStatement(sqlSaldoxCuenta);
-			stmtSaldo.setString(1, id);
+			stmtSaldo.setInt(1, id);
 			rs = stmtSaldo.executeQuery();
 			
 			if(rs.next()) {
