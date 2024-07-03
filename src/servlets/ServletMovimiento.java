@@ -40,9 +40,6 @@ public class ServletMovimiento extends HttpServlet {
 		        return;
 		    }
 		    
-
-		    
-		    
 		    String usuarioLogueado = request.getSession().getAttribute("usuario").toString();
 	        Cuenta cuenta = cuentaNeg.obtenerCuentaxUsuario(usuarioLogueado);
 	        String tipoCuentaCbu = request.getParameter("SelecCuenta");
@@ -63,6 +60,7 @@ public class ServletMovimiento extends HttpServlet {
 	        boolean exito = false;
 
 	        	float saldoActual = movNeg.VerificarSaldoxCuenta(usuarioLogueado, tipoCuentaCbu);
+	        	
 	        	if(saldoActual < monto) {
 	        		traerCuentas(request);
 	        		request.setAttribute("msjTransferencia", "No tiene saldo suficiente.");

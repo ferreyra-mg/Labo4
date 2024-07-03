@@ -31,7 +31,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	
 	private static final String sqlMontoFecha = "SELECT SUM(importe) AS total_importe FROM movimiento WHERE fecha BETWEEN ? AND ?";
 	
-	private static final String sqlSaldoxCuenta = "SELECT saldo FROM bdbanco.cuenta c JOIN tipo_cuenta tc on tc.id = c.tipoCuenta WHERE c.usuario = ? and tc.descripcion = ?";
+	private static final String sqlSaldoxCuenta = "SELECT c.saldo FROM bdbanco.cuenta WHERE c.id = ?";
 	private static final String sqlMovimientosFecha = "SELECT COUNT(*) AS total_movimientos FROM movimiento WHERE fecha BETWEEN ? AND ?;";
 	private static final String sqlTraerTipos = "SELECT * FROM tipo_movimiento";
 	
@@ -204,7 +204,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
 
 
 	@Override
-	public float VerificarSaldoxCuenta(String usuario, String tipoCuenta) {
+	public float VerificarSaldoxCuenta(int id) {
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		PreparedStatement stmtSaldo = null;
 		ResultSet rs = null;
@@ -212,8 +212,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
 		
 		try {
 			stmtSaldo = conexion.prepareStatement(sqlSaldoxCuenta);
-			stmtSaldo.setString(1, usuario);
-			stmtSaldo.setString(2, tipoCuenta);
+			stmtSaldo.setString(1, id);
 			rs = stmtSaldo.executeQuery();
 			
 			if(rs.next()) {
