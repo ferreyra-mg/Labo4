@@ -12,7 +12,7 @@ public interface MovimientoNegocio {
 	boolean transferirCbu(Cuenta cuenta, String cbuDestino, float monto, String tipoCuenta);
 	float VerificarSaldoxCuenta(int id);
 
-	String ObtenerCbu(String tipoCuenta, Cuenta cuenta);
+	String ObtenerCbu(int id);
 	boolean TransferirEntreCuentas(Cuenta cuenta, String cbuCuentaDestino, String cbuCuentaEmisor, float montoCuenta);
 	float obtenerMontoEntre(Date inicial, Date fin);
 	int obtenerMovimientosEntre(Date inicial, Date fin);

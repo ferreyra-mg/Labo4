@@ -96,7 +96,9 @@ public class ServletMovimiento extends HttpServlet {
 	        
 	        if(request.getParameter("enviarMontoCuenta")!=null) {
 	        	
-	        	float saldoxCuenta = movNeg.VerificarSaldoxCuenta(1); //TODO: ya lo cambio
+	        	int idE = Integer.parseInt(request.getParameter("cuentaEmisora").toString());
+	        	int idR = Integer.parseInt(request.getParameter("cuentaReceptora").toString());
+	        	float saldoxCuenta = movNeg.VerificarSaldoxCuenta(idE);
 	        	if(saldoxCuenta < montoCuenta) {
 	        		traerCuentas(request);
 	        		request.setAttribute("msjTransferenciaCuentas", "No tiene saldo suficiente en la siguiente cuenta: " + tipoCuentaEmisora);
@@ -113,8 +115,8 @@ public class ServletMovimiento extends HttpServlet {
 	        	}
 		        
 		        
-		        String cbuCuentaDestino = movNeg.ObtenerCbu(tipoCuentaReceptora, cuenta);
-		        String cbuCuentaEmisor = movNeg.ObtenerCbu(tipoCuentaEmisora, cuenta);
+		        String cbuCuentaDestino = movNeg.ObtenerCbu(idR);
+		        String cbuCuentaEmisor = movNeg.ObtenerCbu(idE);
 		        
 		        if(cbuCuentaDestino != "" && cbuCuentaEmisor != "") {
 			        exitoCuentas = movNeg.TransferirEntreCuentas(cuenta, cbuCuentaDestino, cbuCuentaEmisor, montoCuenta);

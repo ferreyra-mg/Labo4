@@ -23,8 +23,8 @@ public class MovimientoNegocioImpl implements MovimientoNegocio{
 	}
 
 	@Override
-	public String ObtenerCbu(String tipoCuenta, Cuenta cuenta) {
-		return mvDao.ObtenerCbu(tipoCuenta, cuenta);
+	public String ObtenerCbu(int id) {
+		return mvDao.ObtenerCbu(id);
 	}
 
 	@Override

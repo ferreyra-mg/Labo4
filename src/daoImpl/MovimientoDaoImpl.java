@@ -20,11 +20,11 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	private static final String query = "SELECT M.id AS id, M.id_Cuenta AS cuenta, M.fecha AS fec, M.concepto AS con, M.importe AS imp, TM.descripcion AS descr from bdbanco.movimiento M JOIN bdbanco.tipo_movimiento TM on TM.id = M.tipo WHERE M.id_Cuenta = ?";
 	private static final String sqlSaldo = "SELECT saldo FROM bdbanco.cuenta WHERE usuario = ?";
 	
-	private static final String sqlResta = "UPDATE bdbanco.cuenta c JOIN tipo_cuenta tc on c.tipoCuenta = tc.id SET c.saldo = c.saldo - ? WHERE c.usuario = ? and tc.descripcion = ?";
+	private static final String sqlResta = "UPDATE bdbanco.cuenta SET saldo = saldo - ? WHERE id=?";
 	
 	private static final String sqlSuma = "UPDATE bdbanco.cuenta SET saldo = saldo + ? WHERE cbu = ?";
 	private static final String sqlMovimiento = "INSERT INTO bdbanco.movimiento (id_Cuenta, fecha, concepto, importe, tipo) VALUES (?, ?, ?, ?, ?)";
-	private static final String sqlCbu = "SELECT cbu FROM bdbanco.cuenta c JOIN tipo_cuenta tc on tc.id = c.tipoCuenta WHERE c.usuario = ? and tc.descripcion = ?";
+	private static final String sqlCbu = "SELECT cbu FROM bdbanco.cuenta WHERE id = ?";
 	
 	private static final String sqlRestaCuenta = "UPDATE bdbanco.cuenta SET saldo = saldo - ? WHERE cbu = ?";
 	private static final String sqlSumaCuenta = "UPDATE bdbanco.cuenta SET saldo = saldo + ? WHERE cbu = ?";
@@ -34,6 +34,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	private static final String sqlSaldoxCuenta = "SELECT saldo FROM bdbanco.cuenta WHERE id = ?";
 	private static final String sqlMovimientosFecha = "SELECT COUNT(*) AS total_movimientos FROM movimiento WHERE fecha BETWEEN ? AND ?;";
 	private static final String sqlTraerTipos = "SELECT * FROM tipo_movimiento";
+	private static final String sqlCbuEnviar = "SELECT id FROM cuenta where cbu = ? ";
 	
 	@Override
 	public ArrayList<Movimiento> traerMovimientos(int id) {
@@ -80,16 +81,17 @@ public class MovimientoDaoImpl implements MovimientoDao{
 		PreparedStatement stmtDebito;
 		PreparedStatement stmtCredito;
 		PreparedStatement stmtMov;
+		ResultSet rs;
 		boolean exitoDebito = false;
 		boolean exitoCredito = false;
 		boolean exitoMov = false;
+		boolean exitoMov1 = false;
 		boolean exito = false;
         
 		try {
 			stmtDebito = conexion.prepareStatement(sqlResta);
 			stmtDebito.setFloat(1, monto);
-			stmtDebito.setString(2, cuenta.getUsuario());
-			stmtDebito.setString(3, tipoCuenta);
+			stmtDebito.setInt(2, cuenta.getId());
 			if(stmtDebito.executeUpdate() > 0) {
 				conexion.commit();
 				exitoDebito = true;
@@ -107,15 +109,34 @@ public class MovimientoDaoImpl implements MovimientoDao{
 				stmtMov.setInt(1, cuenta.getId());
 				stmtMov.setDate(2, new java.sql.Date(System.currentTimeMillis()));
 				stmtMov.setString(3, "Transferencia por CBU");
-				stmtMov.setFloat(4, monto);
+				stmtMov.setFloat(4, -monto);
 				stmtMov.setInt(5, 4);
 				if(stmtMov.executeUpdate() > 0) {
 					conexion.commit();
 					exitoMov = true;
 				}
+				
+				stmtMov = conexion.prepareStatement(sqlCbuEnviar);
+				stmtMov.setString(1, cbuDestino);
+				rs = stmtMov.executeQuery();
+				int id = 0;
+				while(rs.next()){	
+					id = rs.getInt("id");
+				}
+				
+				stmtMov = conexion.prepareStatement(sqlMovimiento);
+				stmtMov.setInt(1, id);
+				stmtMov.setDate(2, new java.sql.Date(System.currentTimeMillis()));
+				stmtMov.setString(3, "Transferencia por CBU");
+				stmtMov.setFloat(4, monto);
+				stmtMov.setInt(5, 4);
+				if(stmtMov.executeUpdate() > 0) {
+					conexion.commit();
+					exitoMov1 = true;
+				}
 			}
 			
-			if(exitoDebito == true && exitoCredito == true && exitoMov == true) {
+			if(exitoDebito && exitoCredito && exitoMov && exitoMov1) {
 				exito = true;
 			}
 			
@@ -127,7 +148,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
 	}
 
 	@Override
-	public String ObtenerCbu(String tipoCuenta, Cuenta cuenta) {
+	public String ObtenerCbu(int id) {
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		PreparedStatement stmtCbu = null;
 		ResultSet rs = null;
@@ -135,8 +156,7 @@ public class MovimientoDaoImpl implements MovimientoDao{
 		
 		try {
 			stmtCbu = conexion.prepareStatement(sqlCbu);
-			stmtCbu.setString(1, cuenta.getUsuario());
-			stmtCbu.setString(2, tipoCuenta);
+			stmtCbu.setInt(1, id);
 			rs = stmtCbu.executeQuery();
 			
 			if(rs.next()) {
@@ -156,9 +176,11 @@ public class MovimientoDaoImpl implements MovimientoDao{
 		PreparedStatement stmtRestaCuenta;
 		PreparedStatement stmtSumaCuenta;
 		PreparedStatement stmtMov;
+		ResultSet rs;
 		boolean exitoResta = false;
 		boolean exitoSuma = false;
 		boolean exitoMov = false;
+		boolean exitoMov1 = false;
 		boolean exito = false;
 		
 		try {
@@ -177,21 +199,39 @@ public class MovimientoDaoImpl implements MovimientoDao{
 				conexion.commit();
 				exitoSuma = true;
 			}
-			
 			if(exitoResta == true && exitoSuma == true) {
 				stmtMov = conexion.prepareStatement(sqlMovimiento);
 				stmtMov.setInt(1, cuenta.getId());
 				stmtMov.setDate(2, new java.sql.Date(System.currentTimeMillis()));
 				stmtMov.setString(3, "Transferencia entre cuentas");
-				stmtMov.setFloat(4, monto);
+				stmtMov.setFloat(4, -monto);
 				stmtMov.setInt(5, 4);
 				if(stmtMov.executeUpdate() > 0) {
 					conexion.commit();
 					exitoMov = true;
 				}
+				
+				stmtMov = conexion.prepareStatement(sqlCbuEnviar);
+				stmtMov.setString(1, cbuDestino);
+				rs = stmtMov.executeQuery();
+				int id = 0;
+				while(rs.next()){	
+					id = rs.getInt("id");
+				}
+				
+				stmtMov = conexion.prepareStatement(sqlMovimiento);
+				stmtMov.setInt(1, id);
+				stmtMov.setDate(2, new java.sql.Date(System.currentTimeMillis()));
+				stmtMov.setString(3, "Transferencia por CBU");
+				stmtMov.setFloat(4, monto);
+				stmtMov.setInt(5, 4);
+				if(stmtMov.executeUpdate() > 0) {
+					conexion.commit();
+					exitoMov1 = true;
+				}
 			}
 			
-			if(exitoResta == true && exitoSuma == true && exitoMov == true) {
+			if(exitoResta && exitoSuma && exitoMov && exitoMov1 ) {
 				exito = true;
 			}
 			
