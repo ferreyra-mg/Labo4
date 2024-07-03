@@ -10,18 +10,35 @@
 <link rel="stylesheet" type="text/css" href="CSS/styles.css">
 <title>Historial</title>
 
-<link rel="stylesheet" type="text/css"
-	href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
-<script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script type="text/javascript" charset="utf8"
-	src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+<!-- Para usar el datatables -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('#table_id').DataTable();
-	});
-</script>
+<!-- Para usar el datatables y ponerlo en español-->
+    
+    <script type="text/javascript">
+		$(document).ready( function () {
+			$('#tabla').DataTable({
+				//cambiar lo que esta en ingles a español
+				"language":{
+					"lengthMenu": "Mostrar _MENU_ registros",
+					"zeroRecords": "No se encontraron resultados",
+					"info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+					"infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+					"infoFiltered": "(filtrado de un total de _MAX_ registros)",
+					"sSearch": "Buscar:",
+					"oPaginate": {
+						"sFirst": "Primero",
+						"sLast": "Ultimo",
+						"sNext": "Siguiente",
+						"sPrevious": "Anterior"
+					},
+					"sProcessing": "Procesando...",
+				}
+			});
+		});
+	</script>
 </head>
 <body class="cl">
 
@@ -62,7 +79,7 @@
             <select name="cuenta" id="cuenta">
                 <% if (cuentas != null) {
                     for (Cuenta cuenta : cuentas) { %>
-                        <option value="<%= cuenta.getId() %>"><%= cuenta.getUsuario() %></option>
+                        <option value="<%= cuenta.getId() %>"><%= cuenta.getTipo() %></option>
                 <%    }
                     }
                 %>
@@ -77,35 +94,21 @@
     </form>
     
     
-    
+<div class="tr2">
     <% 
         ArrayList<Movimiento> listMovimiento = (ArrayList<Movimiento>) request.getAttribute("listMovimientos");
-        
-        /*int MOVIMIENTOS_POR_PAGINA = 10;
-        int totalMovimientos = (listMovimiento != null) ? listMovimiento.size() : 0;
-        int totalPages = (int) Math.ceil((double) totalMovimientos / MOVIMIENTOS_POR_PAGINA);
-        int pageNumber = 1;
-
-        if (request.getParameter("page") != null) {
-            pageNumber = Integer.parseInt(request.getParameter("page"));
-        }
-
-        int start = (pageNumber - 1) * MOVIMIENTOS_POR_PAGINA;
-        int end = Math.min(start + MOVIMIENTOS_POR_PAGINA, totalMovimientos);
-        ArrayList<Movimiento> paginatedList = new ArrayList<>();
-
-        if (listMovimiento != null) {
-            paginatedList = new ArrayList<>(listMovimiento.subList(start, end));
-        }*/
      %>
+     
 
-    <table border="1" id="table_id" class="table table-striped table-bordered display" style="width:100%; color:black;">
-        <tr> 
-            <th>Fecha</th>
-            <th>Detalle</th>
-            <th>Importe</th>
-            <th>Tipo de Movimiento</th>
-        </tr>
+    <table border="1" id="tabla" class="table table-striped table-bordered" style="width:100%; color:black;">
+    	<thead>
+	        <tr> 
+	            <th>Fecha</th>
+	            <th>Detalle</th>
+	            <th>Importe</th>
+	            <th>Tipo de Movimiento</th>
+	        </tr>
+        </thead>
         <tbody>
             <% if (listMovimiento != null) { %>
                 <% for (Movimiento mv : listMovimiento) { %>
@@ -120,6 +123,7 @@
             %>
         </tbody>
     </table>
+</div>
 
 </body>
 </html>

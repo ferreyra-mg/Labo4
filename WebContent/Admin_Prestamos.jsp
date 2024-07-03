@@ -102,25 +102,27 @@
 	</form>	
 	<div class="tr2">
 	<table id="tabla" class="table table-striped table-bordered" style="width:100%; color: black;" border="1">
-    <tr>
+	<thead>
+    	<tr>
     
-    <th>Id Cuenta</th><th>Capital</th><th>Meses</th><th>Valor Cuota</th><th>Aceptar</th><th>Rechazar</th>
+    		<th>Id Cuenta</th><th>Capital</th><th>Meses</th><th>Valor Cuota</th><th>Aceptar</th><th>Rechazar</th>
     
-    </tr>
+    	</tr>
+    </thead>
     <!--  for (MovimientoXTransferencia movimiento : pageItems) {   -->
     <tbody>
     <% if(listaPrestamos != null) {
         for(Prestamo prestamo : listaPrestamos) { %>
-    <tr>
-    	<form action="ServletPrestamos" method="post">
-        	<td> <%=prestamo.getIdCuenta() %><input type="hidden" name="idCuenta" value="<%=prestamo.getIdCuenta() %>">	</td>
-        	<td> <%=prestamo.getMontoTotal() %></td>
-        	<td> <%=prestamo.getCantMeses() %></td>
-       		<td> <%=prestamo.getMontoMensual() %></td>
-        	<td> <input type="submit" name="aceptar" value="aceptar"></td>
-        	<td> <input type="submit" name="rechazar" value="rechazar"></td>
-    	</form>
-    </tr>
+    	<tr>
+    		<form action="ServletPrestamos" method="post">
+	        	<td> <%=prestamo.getIdCuenta() %><input type="hidden" name="idCuenta" value="<%=prestamo.getIdCuenta() %>">	</td>
+	        	<td> <%=prestamo.getMontoTotal() %></td>
+	        	<td> <%=prestamo.getCantMeses() %></td>
+	       		<td> <%=prestamo.getMontoMensual() %></td>
+	        	<td> <input type="submit" name="aceptar" value="aceptar"></td>
+	        	<td> <input type="submit" name="rechazar" value="rechazar"></td>
+    		</form>
+    	</tr>
             <% }
     } %>
     <!-- } --> 

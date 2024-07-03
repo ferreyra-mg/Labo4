@@ -11,6 +11,37 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" type="text/css" href="CSS/styles.css">
 <title>Prestamo</title>
+
+<!-- Para usar el datatables -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+<!-- Para usar el datatables y ponerlo en español-->
+    
+    <script type="text/javascript">
+		$(document).ready( function () {
+			$('#tabla').DataTable({
+				//cambiar lo que esta en ingles a español
+				"language":{
+					"lengthMenu": "Mostrar _MENU_ registros",
+					"zeroRecords": "No se encontraron resultados",
+					"info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+					"infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+					"infoFiltered": "(filtrado de un total de _MAX_ registros)",
+					"sSearch": "Buscar:",
+					"oPaginate": {
+						"sFirst": "Primero",
+						"sLast": "Ultimo",
+						"sNext": "Siguiente",
+						"sPrevious": "Anterior"
+					},
+					"sProcessing": "Procesando...",
+				}
+			});
+		});
+	</script>
+
 </head>
 <body class="cl">
 
@@ -112,7 +143,7 @@
 					<select name="cuentas" id="cuentas">
 					<%	if (cuentas != null) {
 						for (Cuenta cuenta : cuentas) {	%>
-					<option value="<%= cuenta.getId() %>"><%= cuenta.getUsuario()%></option>
+					<option value="<%= cuenta.getId() %>"><%= cuenta.getUsuario() %></option>
 					<%	}
 					}	%>
 					</select>
@@ -125,31 +156,12 @@
 			 if(request.getAttribute("prestamos") != null) {
 				 prestamos = (ArrayList<Prestamo>) request.getAttribute("prestamos");
 			 } 
-			 
-			 int MOVIMIENTOS_POR_PAGINA = 10;
-			 int totalMovimientos = (prestamos != null) ? prestamos.size() : 0;
-			 int totalPages = (int) Math.ceil((double) totalMovimientos / MOVIMIENTOS_POR_PAGINA);
-			 int pageNumber = 1;
-
-			 if (request.getParameter("page") != null) {
-			     pageNumber = Integer.parseInt(request.getParameter("page"));
-			 }
-
-			 int start = (pageNumber - 1) * MOVIMIENTOS_POR_PAGINA;
-			 int end = Math.min(start + MOVIMIENTOS_POR_PAGINA, totalMovimientos);
-			 ArrayList<Prestamo> paginatedList = new ArrayList<>();
-
-			 if (prestamos != null) {
-			     paginatedList = new ArrayList<>(prestamos.subList(start, end));
-			 }
 			%>
-			
-			<%if(prestamos != null) {%>
-			<table class="tabla-prestamos">
-    <thead>
-        <tr>
-            <th colspan="5">Historial de Prestamos</th>
-        </tr>
+	<table id="tabla" class="table table-striped table-bordered" style="width:100%; color: black;" border="1">
+    	<thead>
+        	<tr>
+           		<th colspan="5">Historial de Prestamos</th>
+        	</tr>
         <tr>
             <th>Prestamo Nro.</th>
             <th>Fecha</th>
@@ -157,9 +169,10 @@
             <th>Monto Total</th>
             <th>Pagar</th>
         </tr>
-    </thead>
+        </thead>
     <tbody>
-        <% for (Prestamo prestamo : prestamos) { %>
+        <% if(prestamos != null) {
+        for (Prestamo prestamo : prestamos) { %>
             <tr>
                 <form action="ServletPrestamos" method="post">
                     <td><%= prestamo.getId() %><input type="hidden" name="idPrestamo" value="<%= prestamo.getId() %>"></td>
@@ -169,17 +182,12 @@
                     <td><input type="submit" name="pagarCuota" value="Pagar"></td>
                 </form>
             </tr>
-        <% } %>
+        <% } 
+       	} %>
     </tbody>
 </table>
 
-			<div class="pagination">
-				<% for (int i = 1; i <= totalPages; i++) { %>
-				<a href="?page=<%= i %>"
-					class="<%= (i == pageNumber) ? "active" : "" %>"><%= i %></a>
-				<% } %>
-			</div>
-<%} %>
+
 		</div>
 	</div>
 
