@@ -4,9 +4,38 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <head>
+
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <link rel="stylesheet" type="text/css" href="CSS/styles.css">
 <title>Insert title here</title>
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+<script type="text/javascript">
+		$(document).ready( function () {
+			$('#tabla').DataTable({
+				//cambiar lo que esta en ingles a español
+				"language":{
+					"lengthMenu": "Mostrar _MENU_ registros",
+					"zeroRecords": "No se encontraron resultados",
+					"info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+					"infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+					"infoFiltered": "(filtrado de un total de _MAX_ registros)",
+					"sSearch": "Buscar:",
+					"oPaginate": {
+						"sFirst": "Primero",
+						"sLast": "Ultimo",
+						"sNext": "Siguiente",
+						"sPrevious": "Anterior"
+					},
+					"sProcessing": "Procesando...",
+				}
+			});
+		});
+	</script>
+
 </head>
 <body class="cl">
 
@@ -71,15 +100,12 @@
 	<form action="ServletPrestamos" method="post">
 	<input type="submit" name="btn_traerPrestamos" value="Traer Prestamos Pendientes">
 	</form>	
-	
-	<table>
+	<div class="tr2">
+	<table id="tabla" class="table table-striped table-bordered" style="width:100%; color: black;" border="1">
     <tr>
-        <th>Id Cuenta</th>
-        <th>Capital</th>
-        <th>Meses</th>
-        <th>Valor Cuota</th>
-        <th>Aceptar</th>
-        <th>Rechazar</th>
+    
+    <th>Id Cuenta</th><th>Capital</th><th>Meses</th><th>Valor Cuota</th><th>Aceptar</th><th>Rechazar</th>
+    
     </tr>
     <!--  for (MovimientoXTransferencia movimiento : pageItems) {   -->
     <tbody>
@@ -100,7 +126,7 @@
     <!-- } --> 
     </tbody>
 	</table>
-	
+	</div>
 	<div class="error-message">
 		<%= request.getAttribute("msj_error") != null ? request.getAttribute("msj_error") : "" %>
 	</div>

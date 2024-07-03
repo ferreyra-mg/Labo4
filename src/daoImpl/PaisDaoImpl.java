@@ -29,8 +29,6 @@ public class PaisDaoImpl implements PaisDao{
 				Pais p = new Pais();
 				p.setId(rs.getInt("id"));
 				p.setPais(rs.getString("pais"));
-				
-				
 				paises.add(p);
 			}
 		} catch (Exception e5) {

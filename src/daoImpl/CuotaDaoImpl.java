@@ -56,8 +56,25 @@ public class CuotaDaoImpl implements CuotaDao{
 	            stmtCheckAndUpdate.setInt(2, idPrestamo);
 	            stmtCheckAndUpdate.executeUpdate();
 	            
-	            conexion.commit();
-	            exito = true;
+	            stmtCheckAndUpdate = conexion.prepareStatement("SELECT p.id_Cuenta AS ID FROM bdbanco.prestamo p JOIN bdbanco.cuota c ON p.id = c.id_prestamo WHERE c.id_prestamo = ? LIMIT 1; ");
+	            stmtCheckAndUpdate.setInt(1, idPrestamo);
+	            rs = stmtCheckAndUpdate.executeQuery();
+	            int id_cuenta = 0;
+	            if(rs.next())
+	            {
+	            	id_cuenta = rs.getInt("ID");
+	            }
+	            
+	            stmtInsertCuota = conexion.prepareStatement("INSERT INTO bdbanco.movimiento (id_Cuenta, fecha, concepto, importe, tipo) VALUES (?, ?, ?, ?, ?)");
+	            stmtInsertCuota.setInt(1, id_cuenta);
+	            stmtInsertCuota.setDate(2, new java.sql.Date(System.currentTimeMillis()));
+	            stmtInsertCuota.setString(3, "Pagar prestamo");
+	            stmtInsertCuota.setFloat(4, montoMensual);
+	            stmtInsertCuota.setInt(5, 3);
+	            if(stmtInsertCuota.executeUpdate() > 0) {
+					conexion.commit();
+					exito = true;
+				}
 	        } catch (SQLException e) {
 	            if (conexion != null) {
 	                try {

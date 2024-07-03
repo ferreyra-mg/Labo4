@@ -179,7 +179,6 @@ public class PrestamoDaoImpl implements PrestamoDao {
 	            ResultSet rs = statement.executeQuery();
 	            if (rs.next()) {
 	                float capitalPedido = rs.getFloat("capitalPedido");
-
 	                // Actualizar el saldo de la cuenta sumando el capitalPedido
 	                statement = conexion.prepareStatement("UPDATE cuenta SET saldo = saldo + ? WHERE id = ?");
 	                statement.setFloat(1, capitalPedido);
@@ -187,8 +186,18 @@ public class PrestamoDaoImpl implements PrestamoDao {
 
 	                int updateCuenta = statement.executeUpdate();
 	                if (updateCuenta > 0) {
-	                    conexion.commit();
-	                    esExitoso = true;
+	                    statement = conexion.prepareStatement("INSERT INTO bdbanco.movimiento (id_Cuenta, fecha, concepto, importe, tipo) VALUES (?, ?, ?, ?, ?)");
+	                    statement.setInt(1, idCuenta);
+	                    statement.setDate(2, new java.sql.Date(System.currentTimeMillis()));
+	                    statement.setString(3, "Prestamo aceptado");
+	                    statement.setFloat(4, capitalPedido);
+	                    statement.setInt(5, 2);
+	    				if(statement.executeUpdate() > 0) {
+	    					conexion.commit();
+		                    esExitoso = true;
+	    				}
+	                	
+	                	
 	                } else {
 	                    conexion.rollback();
 	                }
