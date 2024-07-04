@@ -37,6 +37,15 @@ public class ServletBanco extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		if (request.getParameter("logout") != null) {
+			HttpSession session = request.getSession();
+			session.removeAttribute("nm_user");
+			session.removeAttribute("usuarioLogueado");
+			session.removeAttribute("tipoUsuario");
+			request.getRequestDispatcher("/Login.jsp").forward(request, response);
+			return;
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

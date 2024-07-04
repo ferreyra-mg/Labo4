@@ -27,6 +27,7 @@
 			<li><a href="Admin_Prestamos.jsp">Prestamos</a></li>
 			<li><a href="Admin_Estadisticas.jsp">estadisticas</a></li>
 			<li><a href="Admin_Cuentas.jsp">Cuentas</a></li>
+			<li><a href="ServletBanco?logout=">Cerrar Sesión</a></li>
 			
 		</ul>
 	</nav>
