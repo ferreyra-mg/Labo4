@@ -69,6 +69,7 @@
 			<li><a href="Cliente_Home.jsp">Historial</a></li>
 			<li><a href="Cliente_Prestamo.jsp">Prestamo</a></li>
 			<li><a href="Cliente_Perfil.jsp">Perfil</a></li>
+			<li><a href="ServletBanco?logout=">Cerrar Sesión</a></li>
 		</ul>
 	</nav>
 
